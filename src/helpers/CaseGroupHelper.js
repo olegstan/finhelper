@@ -548,9 +548,6 @@ class CaseGroupHelper
       data[itemKey]['value1'] += parseFloat(item.valuation);
     });
 
-
-    console.log(data)
-
     return data;
   }
 }
