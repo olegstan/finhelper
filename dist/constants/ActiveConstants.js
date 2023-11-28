@@ -1,7 +1,7 @@
 import React from 'react';
 import AccountConstants from "./AccountConstants";
-import Active from "#app/helpers/Active";
-import CurrencyConstants from "#app/constants/CurrencyConstants";
+import Active from "../helpers/Active";
+import CurrencyConstants from "./CurrencyConstants";
 import moment from "moment/moment";
 export default class ActiveConstants {
   static TINKOFF = 1;

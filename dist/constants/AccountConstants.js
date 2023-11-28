@@ -2,9 +2,9 @@ import React from 'react';
 import Money from '../helpers/Money';
 import ModelHelper from "../helpers/ModelHelper";
 import moment from "moment/moment";
-import ActiveConstants from "#app/constants/ActiveConstants";
-import CurrencyConstants from "#app/constants/CurrencyConstants";
-import { ActiveModel } from "finhelper";
+import ActiveConstants from "./ActiveConstants";
+import CurrencyConstants from "./CurrencyConstants";
+import ActiveModel from "../models/Active";
 let types = [1, 2, 3, 4];
 if (process.env.REACT_APP_ENV === 'test') {
   // types.push(5)
@@ -114,27 +114,28 @@ export default class AccountConstants {
     });
   }
   static selectAccountHelper() {
-    const importCreate = async callback => {
-      try {
-        await import("../pages/Accounting/Accounts/HiddenAccountCreate").then(module => callback(module).catch(e => {
-          console.warn(e);
-        }));
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    const importEdit = async callback => {
-      try {
-        await import("../pages/Accounting/Accounts/HiddenAccountEdit").then(module => callback(module).catch(e => {
-          console.warn(e);
-        }));
-      } catch (e) {
-        console.log(e);
-      }
-    };
+    // const importCreate = async (callback) => {
+    //   try {
+    //     await import("../pages/Accounting/Accounts/HiddenAccountCreate").then(module => callback(module).catch((e) => {
+    //       console.warn(e)
+    //     }))
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }
+    // const importEdit = async (callback) => {
+    //   try {
+    //     await import("../pages/Accounting/Accounts/HiddenAccountEdit").then(module => callback(module).catch((e) => {
+    //       console.warn(e)
+    //     }))
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }
+
     return {
-      importCreate: importCreate,
-      importEdit: importEdit,
+      // importCreate: importCreate,
+      // importEdit: importEdit,
       getText: account => {
         return AccountConstants.getText(account);
       }

@@ -1,4 +1,4 @@
-import ActiveConstants from "#app/constants/ActiveConstants";
+import ActiveConstants from "./ActiveConstants";
 export default class CurrencyConstants {
   static RUBBLE_ID = 1;
   static DOLLAR_ID = 12;
