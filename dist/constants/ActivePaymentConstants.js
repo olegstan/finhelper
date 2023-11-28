@@ -1,4 +1,3 @@
-import React from 'react';
 export default class ActivePaymentConstants {
   static DEPOSIT_PAYMENT = 3001;
   static DEPOSIT_REFUND = 3002;

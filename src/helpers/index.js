@@ -16,6 +16,8 @@ import Plan from './Plan';
 import Text from './Text';
 import Tracker from './Tracker';
 import Url from './Url';
+import GroupHelper from './GroupHelper';
+import CaseGroupHelper from './CaseGroupHelper';
 
 export {
   Account,
@@ -36,4 +38,6 @@ export {
   Text,
   Tracker,
   Url,
+  GroupHelper,
+  CaseGroupHelper,
 };

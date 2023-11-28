@@ -15,7 +15,10 @@ import {
   TradeConstants,
   TransferConstants,
   UserNotificationConstants,
-  ActiveTagConstants
+  ActiveTagConstants,
+  ContactConstants,
+  ContactTaskRepeatConstants,
+  UserTaskTypeConstants,
 } from './constants';
 import {
   Account,
@@ -36,6 +39,8 @@ import {
   Text,
   Tracker,
   Url,
+  GroupHelper,
+  CaseGroupHelper,
 } from './helpers';
 
 export {
@@ -62,6 +67,9 @@ export {
   TransferConstants,
   UserNotificationConstants,
   ActiveTagConstants,
+  ContactConstants,
+  ContactTaskRepeatConstants,
+  UserTaskTypeConstants,
 
   Account,
   Active,
@@ -81,4 +89,6 @@ export {
   Text,
   Tracker,
   Url,
+  GroupHelper,
+  CaseGroupHelper,
 }

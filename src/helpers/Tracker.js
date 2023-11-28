@@ -27,7 +27,7 @@ export default class Tracker
 
   static init()
   {
-    if(window.location.host === 'whiteswan.finance' && Tracker.isBot() === false)
+    if(process.env.REACT_APP_ENV === 'production' && Tracker.isBot() === false)
     {
       Tracker.ym = window.ym;
     }
@@ -36,7 +36,7 @@ export default class Tracker
   static reachGoal(action, params = {})
   {
     try {
-      if(window.location.host === 'whiteswan.finance' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
+      if(process.env.REACT_APP_ENV === 'production' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
       {
         Tracker.ym(Tracker.id, 'reachGoal', action, params);
       }
@@ -48,7 +48,7 @@ export default class Tracker
   static hit(url)
   {
     try {
-      if(window.location.host === 'whiteswan.finance' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
+      if(process.env.REACT_APP_ENV === 'production' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
       {
         Tracker.ym(Tracker.id, 'hit', url);
       }

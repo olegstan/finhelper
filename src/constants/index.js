@@ -14,6 +14,9 @@ import TradeConstants from './TradeConstants';
 import TransferConstants from './TransferConstants';
 import UserNotificationConstants from './UserNotificationConstants';
 import ActiveTagConstants from './ActiveTagConstants';
+import ContactConstants from './ContactConstants';
+import ContactTaskRepeatConstants from './ContactTaskRepeatConstants';
+import UserTaskTypeConstants from './UserTaskTypeConstants';
 
 export {
   AccountCommissionConstants,
@@ -32,4 +35,7 @@ export {
   TransferConstants,
   UserNotificationConstants,
   ActiveTagConstants,
+  ContactConstants,
+  ContactTaskRepeatConstants,
+  UserTaskTypeConstants,
 };
