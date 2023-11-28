@@ -1400,5 +1400,5 @@ class InvestCalc {
 }
 
 
-export {InvestCalc};
+export default InvestCalc;
 

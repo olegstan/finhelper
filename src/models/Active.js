@@ -1,6 +1,6 @@
 import BaseModel from "./BaseModel";
 import ActiveHelper from "../helpers/Active";
-import {InvestCalc} from "../helpers/InvestCalc";
+import InvestCalc from "../helpers/InvestCalc";
 import BuyTrade from "./BuyTrade";
 import SellTrade from "./SellTrade";
 import Payment from "./Payment";

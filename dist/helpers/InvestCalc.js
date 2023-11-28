@@ -1060,4 +1060,4 @@ class InvestCalc {
     return sum / diffDays;
   }
 }
-export { InvestCalc };
+export default InvestCalc;
