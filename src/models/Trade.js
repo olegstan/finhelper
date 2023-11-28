@@ -47,9 +47,11 @@ export default class Trade extends BaseModel
     return this.attributes['from_account'] = x;
   }
 
+  //TODO pass user_id for manager
   static getById(id, callback)
   {
     Api.get('active-trade', 'index')
+      .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
       .where('id', id)
       .with('currency')
       .with('to_account', 'to_account.currency', 'to_account.user_account')

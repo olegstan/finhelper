@@ -999,18 +999,18 @@ export default class Active {
       return diff;
     }
   }
-  static getAccountsByDate(self, bindString, currencyData, clientId, date = moment(), callback) {
-    Api.get('user-account', 'index', currencyData).where('user_id', clientId).where('is_visible', 1).with('accounts', 'accounts.currency').all(() => {
+  static getAccountsByDate(self, bindString, data, clientId, date = moment(), callback) {
+    Api.get('user-account', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('user_id', clientId).where('is_visible', 1).with('accounts', 'accounts.currency').all(() => {
       callback();
     }).bind(self, bindString);
   }
-  static getBalanceByDate(self, currencyData, clientId, date = moment(), callback, types, courses) {
+  static getBalanceByDate(self, accounts, currencyData, clientId, date = moment(), callback, types, courses) {
     self.setState(prv => {
       prv.brokerBalance.sum = 0;
       prv.cashBalance.sum = 0;
       prv.bankBalance.sum = 0;
       prv.digitBalance.sum = 0;
-      self.props?.accounts?.map(item => {
+      accounts.map(item => {
         item.accounts.map(account => {
           try {
             if (account.sum > 0) {
@@ -1041,11 +1041,11 @@ export default class Active {
       }
     });
   }
-  static getActivesByDate(self, bindString, currencyData, clientId, date = moment(), callback) {
+  static getActivesByDate(self, bindString, data, clientId, date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
-    currencyData.user_id = clientId;
-    Api.get('active', 'index', currencyData).where(query => {
+    data.user_id = clientId;
+    Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where(query => {
       return query.where('type_id', ActiveConstants.OBLIGATION).whereDate('sell_at', '<=', before).whereDoesntHave('sell_trades', query => {
         return query.whereDate('trade_at', '<=', now);
       });
@@ -1063,14 +1063,14 @@ export default class Active {
       });
     });
   }
-  static getInvestsByDate(self, bindString, currencyData, clientId, date = moment(), callback) {
+  static getInvestsByDate(self, bindString, data, clientId, date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
-    currencyData.user_id = clientId;
-    currencyData.exchange_valuation = 1;
-    currencyData.with_convert_trade = 1;
-    currencyData.profitability = 1;
-    Api.get('active', 'invest-grid-index', currencyData).where(query => {
+    data.user_id = clientId;
+    data.exchange_valuation = 1;
+    data.with_convert_trade = 1;
+    data.profitability = 1;
+    Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where(query => {
       return query.where('type_id', ActiveConstants.OBLIGATION).whereDoesntHave('sell_trades', query => {
         return query.whereDate('trade_at', '<=', now);
       });
@@ -1101,10 +1101,10 @@ export default class Active {
       });
     });
   }
-  static getPropertiesByDate(self, bindString, currencyData, clientId, date = moment(), callback) {
+  static getPropertiesByDate(self, bindString, data, clientId, date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
-    currencyData.user_id = clientId;
-    Api.get('active', 'index', currencyData).where('buy_at', '<=', now).where(query => {
+    data.user_id = clientId;
+    Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', now).where(query => {
       return query.where('sell_at', '>', now).orWhereNull('sell_at').whereDoesntHave('sell');
     }).where('group_id', ActiveConstants.OWN).wherePropertyType(true).with('sell_trades').with('valuations').with('last_valuation', 'last_valuation.currency').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').all(response => {
       self.setState(prv => {
@@ -1115,15 +1115,15 @@ export default class Active {
       });
     });
   }
-  static getSpendingsByDate(self, bindString, currencyData, clientId, date = moment(), callback) {
-    currencyData.user_id = clientId;
-    Api.get('active', 'index', currencyData).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereSpendingType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(() => {
+  static getSpendingsByDate(self, bindString, data, clientId, date = moment(), callback) {
+    data.user_id = clientId;
+    Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereSpendingType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(() => {
       callback();
     }).bind(self, bindString);
   }
-  static getObligationsByDate(self, bindString, currencyData, clientId, date = moment(), callback) {
-    currencyData.user_id = clientId;
-    Api.get('active', 'invest-grid-index', currencyData).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereObligationType(true).with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(response => {
+  static getObligationsByDate(self, bindString, data, clientId, date = moment(), callback) {
+    data.user_id = clientId;
+    Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereObligationType(true).with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(response => {
       self.setState(prv => {
         prv[bindString] = ActiveModel.load(response.data);
         return prv;
