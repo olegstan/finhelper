@@ -14,7 +14,8 @@ import {
   TradeCommissionConstants,
   TradeConstants,
   TransferConstants,
-  UserNotificationConstants
+  UserNotificationConstants,
+  ActiveTagConstants
 } from './constants';
 
 export {
@@ -38,5 +39,6 @@ export {
   TradeCommissionConstants,
   TradeConstants,
   TransferConstants,
-  UserNotificationConstants
+  UserNotificationConstants,
+  ActiveTagConstants
 }

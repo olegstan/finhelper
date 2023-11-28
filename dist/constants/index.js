@@ -13,4 +13,5 @@ import TradeCommissionConstants from './TradeCommissionConstants';
 import TradeConstants from './TradeConstants';
 import TransferConstants from './TransferConstants';
 import UserNotificationConstants from './UserNotificationConstants';
-export { AccountCommissionConstants, AccountConstants, ActiveConstants, ActiveGoalConstants, ActivePaymentConstants, ClientConstants, CreditLogConstants, CurrencyConstants, InsuranceCompanyConstants, StrategyConstants, TacticsConstants, TradeCommissionConstants, TradeConstants, TransferConstants, UserNotificationConstants };
+import ActiveTagConstants from './ActiveTagConstants';
+export { AccountCommissionConstants, AccountConstants, ActiveConstants, ActiveGoalConstants, ActivePaymentConstants, ClientConstants, CreditLogConstants, CurrencyConstants, InsuranceCompanyConstants, StrategyConstants, TacticsConstants, TradeCommissionConstants, TradeConstants, TransferConstants, UserNotificationConstants, ActiveTagConstants };

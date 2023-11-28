@@ -13,6 +13,7 @@ import TradeCommissionConstants from './TradeCommissionConstants';
 import TradeConstants from './TradeConstants';
 import TransferConstants from './TransferConstants';
 import UserNotificationConstants from './UserNotificationConstants';
+import ActiveTagConstants from './ActiveTagConstants';
 
 export {
   AccountCommissionConstants,
@@ -30,4 +31,5 @@ export {
   TradeConstants,
   TransferConstants,
   UserNotificationConstants,
+  ActiveTagConstants,
 };
