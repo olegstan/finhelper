@@ -251,6 +251,8 @@ export default class Active extends BaseModel
     {
       let obj = ActiveHelper.getValuation(this.attributes);
 
+      console.log(obj)
+
       if(obj)
       {
         this['tmp_valuation'] = obj.sum;

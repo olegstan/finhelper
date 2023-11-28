@@ -523,9 +523,12 @@ class CaseGroupHelper
 
       if (index.indexOf(name) === -1) {
         index.push(name);
+      }
 
-        let itemKey = index.indexOf(name);
+      let itemKey = index.indexOf(name);
 
+      if(typeof data[itemKey] === 'undefined')
+      {
         data[itemKey] = {};
         data[itemKey]['name'] = name;
         data[itemKey]['type'] = 'group';
@@ -541,63 +544,12 @@ class CaseGroupHelper
         data[itemKey]['color'] = Color.colors[colorIndex].color;
         colorIndex++;
       }
+
+      data[itemKey]['value1'] += parseFloat(item.valuation);
     });
 
-    let key = index.length;
-    sortedItems.map((item) => {
-      let name = '';
 
-      if (groupType === ActiveConstants.BY_TYPE) {
-        name = ActiveConstants.getActiveNameByType(item);
-      } else if (groupType === ActiveConstants.BY_GROUP) {
-        name = ActiveConstants.getActiveNameByGroup(item);
-      } else if (groupType === ActiveConstants.BY_ACCOUNT) {
-        name = ActiveConstants.getAccountNameByActive(item);
-      } else if (groupType === ActiveConstants.BY_COMPANY) {
-        name = ActiveConstants.getActiveCompany(item);
-      } else if (groupType === ActiveConstants.BY_NAME) {
-        name = Active.getName(item);
-      }
-
-      if (item.valuation > 0) {
-        let percent = item.factPercent;
-
-        let type = Active.getName(item);
-        let shortName = type;
-        if (type.length > 38) {
-          shortName = type.slice(0, 39) + '...';
-        }
-
-        let itemKey = index.indexOf(name);
-        data[itemKey]['value2'] += parseFloat(item.valuation);
-
-        if (index.indexOf(shortName) === -1) {
-          index.push(shortName);
-
-          let childKey = index.indexOf(shortName);
-
-          data[childKey] = {};
-          data[childKey]['name'] = shortName + ' - дох.: ' + Money.format((percent - 1) * 100, 2, ".", "") + '%';
-          data[childKey]['type'] = 'active';
-          data[childKey]['value1'] = 0;
-          data[childKey]['value2'] = 0;
-          data[childKey]['value3'] = 0;
-
-          colorIndex = data[itemKey]['colorIndex'];
-
-          if (typeof Color.colors[colorIndex].subColors[subColorIndex] === 'undefined') {
-            subColorIndex = 0;
-          }
-          data[childKey]['color'] = Color.colors[colorIndex].subColors[subColorIndex];
-          subColorIndex++;
-
-          key++
-        }
-
-        let childKey = index.indexOf(shortName);
-        data[childKey]['value1'] += parseFloat(item.valuation);
-      }
-    })
+    console.log(data)
 
     return data;
   }

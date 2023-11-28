@@ -193,6 +193,7 @@ export default class Active extends BaseModel {
   get valuation() {
     if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined') {
       let obj = ActiveHelper.getValuation(this.attributes);
+      console.log(obj);
       if (obj) {
         this['tmp_valuation'] = obj.sum;
       } else {
