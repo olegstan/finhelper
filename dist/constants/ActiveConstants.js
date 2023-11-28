@@ -611,8 +611,8 @@ export default class ActiveConstants {
   static getAccountIdByActive(item) {
     //TODO correct grouping
     if (item.buy_trades?.length) {
-      if (item.buy_trades[0] && item.buy_trades[0].from_account) {
-        return item.buy_trades[0].from_account.id;
+      if (item.buy_trades[0] && item.buy_trades[0].from_account_id) {
+        return item.buy_trades[0].from_account_id;
       }
     }
     return '';

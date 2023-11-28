@@ -681,9 +681,9 @@ export default class ActiveConstants
     //TODO correct grouping
     if(item.buy_trades?.length)
     {
-      if(item.buy_trades[0] && item.buy_trades[0].from_account)
+      if(item.buy_trades[0] && item.buy_trades[0].from_account_id)
       {
-        return item.buy_trades[0].from_account.id;
+        return item.buy_trades[0].from_account_id;
       }
     }
 
