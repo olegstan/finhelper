@@ -113,34 +113,6 @@ export default class AccountConstants {
       stateActives.push(new ActiveModel(newItem));
     });
   }
-  static selectAccountHelper() {
-    // const importCreate = async (callback) => {
-    //   try {
-    //     await import("../pages/Accounting/Accounts/HiddenAccountCreate").then(module => callback(module).catch((e) => {
-    //       console.warn(e)
-    //     }))
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }
-    // const importEdit = async (callback) => {
-    //   try {
-    //     await import("../pages/Accounting/Accounts/HiddenAccountEdit").then(module => callback(module).catch((e) => {
-    //       console.warn(e)
-    //     }))
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }
-
-    return {
-      // importCreate: importCreate,
-      // importEdit: importEdit,
-      getText: account => {
-        return AccountConstants.getText(account);
-      }
-    };
-  }
   static getSubAccountById(subAccountId) {
     let account = null;
     for (let i = 0; i < ModelHelper.accounts.length; i++) {

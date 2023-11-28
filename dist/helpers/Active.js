@@ -14,7 +14,7 @@ export default class Active {
    */
   static getName(item) {
     if (ActiveConstants.isPackage(item.type_id)) {
-      return item.name_text ? item.name_text : '';
+      return item.name_text ? item.name_text : 'Без названия';
     }
     if (item.type_text && item.name_text) {
       return item.type_text + ' ' + item.name_text;
@@ -22,7 +22,7 @@ export default class Active {
     if (item.type_text) {
       return item.type_text;
     }
-    return 'Без категории';
+    return 'Без названия';
   }
   static getGroup(items) {
     let stocks = [];

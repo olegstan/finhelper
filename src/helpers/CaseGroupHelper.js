@@ -25,6 +25,8 @@ class CaseGroupHelper
       name = ActiveConstants.getActiveCurrency(item);
     } else if (groupType === ActiveConstants.BY_BOND_DATE) {
       name = ActiveConstants.getBondDate(item);
+    } else if (groupType === ActiveConstants.BY_BROKER_NAME) {
+      name = ActiveConstants.getBondDate(item);
     }
 
     return name;

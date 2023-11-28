@@ -122,6 +122,7 @@ export default class ActiveConstants
   static BY_NAME = 5;
   static BY_BOND_DATE = 6;
   static BY_CURRENCY = 7;
+  static BY_BROKER_NAME = 8;
 
   static GROUP_QUERY_CATALOG = [
     ActiveConstants.STOCK,
