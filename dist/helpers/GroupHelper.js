@@ -220,8 +220,8 @@ class GroupHelper {
       groups.map(group => {
         group.groups.map(subGroup => {
           subGroup.actives?.sort((c1, c2) => {
-            let valuation1 = c1.attributes['valuation'];
-            let valuation2 = c2.attributes['valuation'];
+            let valuation1 = c1.valuation;
+            let valuation2 = c2.valuation;
             return valuation1 < valuation2 ? 1 : valuation1 > valuation2 ? -1 : 0;
           });
         });
