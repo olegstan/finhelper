@@ -41,7 +41,7 @@ export default class AccountConstants {
   static OTKRITIE_BROKER = 3009;
   static FREEDOM_BROKER = 3010;
   static CUSTOM_BROKER = 4001;
-  static appendCurrencyActives(stateActives, accounts, currency) {
+  static appendCurrencyActives(accounts, currency) {
     let preparedAccounts = [];
     let index = [];
     accounts.filter(account => {
@@ -110,9 +110,7 @@ export default class AccountConstants {
         }
       });
     });
-    preparedAccounts.map(newItem => {
-      stateActives.push(new ActiveModel(newItem));
-    });
+    return preparedAccounts;
   }
   static getSubAccountById(subAccountId) {
     let account = null;
