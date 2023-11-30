@@ -1092,8 +1092,8 @@ export default class Active {
     }).all(response => {
       self.setState(prv => {
         prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) => {
-          let valuation1 = c1.attributes['valuation'];
-          let valuation2 = c2.attributes['valuation'];
+          let valuation1 = c1.valuation;
+          let valuation2 = c2.valuation;
           return valuation1 < valuation2 ? 1 : valuation1 > valuation2 ? -1 : 0;
         });
         return prv;

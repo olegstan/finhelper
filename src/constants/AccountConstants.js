@@ -96,6 +96,7 @@ export default class AccountConstants
             type_id: ActiveConstants.CURRENCY,
             type_text: 'Валюта',
             name_text: name,
+            user_id: account.user_id,
             buy_trades: [
               {
                 "id": null ,
