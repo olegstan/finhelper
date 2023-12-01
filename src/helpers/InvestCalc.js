@@ -10,17 +10,54 @@ import BuyTrade from "../models/BuyTrade";
 import SellTrade from "../models/SellTrade";
 
 class InvestCalc {
+  static getRoundPrice(item, field){
+    let number = 2;
+
+    let smallestNumberPrice = null;
+    if(item.buy_trades?.length)
+    {
+      item.buy_trades.map((trade) => {
+        if(smallestNumberPrice > trade[field] || smallestNumberPrice === null)
+        {
+          smallestNumberPrice = trade[field]
+        }
+      })
+      item.sell_trades.map((trade) => {
+        if(smallestNumberPrice > trade[field] || smallestNumberPrice === null)
+        {
+          smallestNumberPrice = trade[field]
+        }
+      })
+
+      if(smallestNumberPrice)
+      {
+        let parts = String(smallestNumberPrice).split('.')
+
+        if(parts.length > 1)
+        {
+          return parts[1].length;
+        }
+      }
+    }
+
+    if (item.type_id === ActiveConstants.CRYPTO) {
+      number = 8;
+    }
+    if (item.item && item.item.type === 'CRYPTOCURRENCY') {
+      number = 8;
+    }
+    return number;
+  }
+
   static getRound(item) {
     let number = 2;
 
     if (item.type_id === ActiveConstants.CRYPTO) {
       number = 8;
     }
-
     if (item.item && item.item.type === 'CRYPTOCURRENCY') {
       number = 8;
     }
-
     return number;
   }
 
@@ -32,7 +69,7 @@ class InvestCalc {
 
   static getBuyPrice(item, now, self) {
     if (item.buy_trades?.length) {
-      return Money.format(Active.getAvgPrice(item, item.buy_trades)) + ' ' + self.props.currency.sign;
+      return Money.format(Active.getAvgPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1) {
       return '';
     }
@@ -40,7 +77,7 @@ class InvestCalc {
 
   static getBuyOriginalPrice(item, now, self) {
     if (item.buy_trades?.length) {
-      return Money.format(Active.getAvgOriginalPrice(item, item.buy_trades)) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
+      return Money.format(Active.getAvgOriginalPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1) {
       return '';
     }
@@ -48,7 +85,7 @@ class InvestCalc {
 
   static getBuySum(item, now, self) {
     if (item.buy_trades?.length) {
-      return Money.format(Active.getSum(item.buy_trades)) + ' ' + self.props.currency.sign;
+      return Money.format(Active.getSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1) {
       let sum = item.buy_sum;
       return Money.format(sum) + ' ' + self.props.currency.sign;
@@ -59,23 +96,13 @@ class InvestCalc {
 
   static getBuyOriginalSum(item, now, self) {
     if (item.buy_trades?.length) {
-      return Money.format(Active.getOriginalSum(item.buy_trades)) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
+      return Money.format(Active.getOriginalSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1) {
-      let sign = '';
-
-      if(item.buy_currency)
-      {
-        sign = item.buy_currency.sign;
-      }
+      let sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id)
 
       return Money.format(item.original_buy_sum) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1) {
-      let sign = '';
-
-      if(item.buy_currency)
-      {
-        sign = item.buy_currency.sign;
-      }
+      let sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id)
 
       return Money.format(item.original_buy_sum) + ' ' + sign;
     }
@@ -131,7 +158,7 @@ class InvestCalc {
 
   static getSellSum(item, now, self) {
     if (item.sell_trades?.length) {
-      return Money.format(Active.getSum(item.sell_trades)) + ' ' + self.props.currency.sign;
+      return Money.format(Active.getSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length) {
       let sellDate = moment(item.sell_at_date, 'DD.MM.YYYY');
       if (sellDate.isBefore(now)) {
@@ -178,23 +205,13 @@ class InvestCalc {
         }
       }
 
-      return Money.format(Active.getOriginalSum(item.sell_trades)) + ' ' + sign;
+      return Money.format(Active.getOriginalSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1) {
-      let sign = '';
-
-      if(item.sell_currency)
-      {
-        sign = CurrencyConstants.getCurrencySignById(item.sell_currency_id);
-      }
+      let sign = CurrencyConstants.getCurrencySignById(item.sell_currency_id);
 
       return Money.format(item.original_sell_sum) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1) {
-      let sign = '';
-
-      if(item.sell_currency)
-      {
-        sign = CurrencyConstants.getCurrencySignById(item.sell_currency_id);
-      }
+      let sign = CurrencyConstants.getCurrencySignById(item.sell_currency_id);
 
       return Money.format(item.original_sell_sum) + ' ' + sign;
     }
