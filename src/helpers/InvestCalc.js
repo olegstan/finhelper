@@ -150,7 +150,7 @@ class InvestCalc {
         }
       }
 
-      return Money.format(Active.getAvgOriginalPrice(item, item.sell_trades)) + ' ' + sign;
+      return Money.format(Active.getAvgOriginalPrice(item, item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1) {
       return '';
     }
