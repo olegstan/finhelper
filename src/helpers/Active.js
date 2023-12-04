@@ -1285,7 +1285,6 @@ export default class Active
       .with('sell_account')
       .with('income_account')
       .with('valuations')//TODO
-      .with('last_valuation', 'last_valuation.currency')
       .with('payments', 'payments.currency')
       .with('buy_trades', (query) =>
       {
@@ -1413,7 +1412,6 @@ export default class Active
       .wherePropertyType(true)
       .with('sell_trades')
       .with('valuations')
-      .with('last_valuation', 'last_valuation.currency')
       .with('buy_currency')
       .with('sell_currency')
       .with('income_currency')
