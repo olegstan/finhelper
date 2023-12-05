@@ -1051,7 +1051,7 @@ export default class Active {
         return query.whereDate('trade_at', '<=', now);
       });
     }).with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('valuations') //TODO
-    .with('last_valuation', 'last_valuation.currency').with('payments', 'payments.currency').with('buy_trades', query => {
+    .with('payments', 'payments.currency').with('buy_trades', query => {
       return query.with('currency', 'commissions').where('trade_at', '<=', now);
     }).with('sell_trades', query => {
       return query.with('currency', 'commissions').where('trade_at', '<=', now);
@@ -1107,7 +1107,7 @@ export default class Active {
     data.user_id = clientId;
     Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', now).where(query => {
       return query.where('sell_at', '>', now).orWhereNull('sell_at').whereDoesntHave('sell');
-    }).where('group_id', ActiveConstants.OWN).wherePropertyType(true).with('sell_trades').with('valuations').with('last_valuation', 'last_valuation.currency').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').all(response => {
+    }).where('group_id', ActiveConstants.OWN).wherePropertyType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').all(response => {
       self.setState(prv => {
         prv[bindString] = ActiveModel.load(response.data);
         return prv;

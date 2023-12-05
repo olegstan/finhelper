@@ -25,7 +25,7 @@ class InvestCalc {
       });
       if (smallestNumberPrice) {
         let parts = String(smallestNumberPrice).split('.');
-        if (parts.length > 1) {
+        if (parts.length > 1 && parseInt(parts[0]) === 0) {
           return parts[1].length;
         }
       }
