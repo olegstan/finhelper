@@ -960,7 +960,7 @@ class InvestCalc {
     let grid = [];
 
     if(ActiveConstants.isPackage(active.type_id)){
-      if(active.attributes.valuations.length)
+      if(active.attributes?.valuations?.length)
       {
         active.attributes.valuations?.map((valuation) => {
           grid.push({
@@ -1002,7 +1002,7 @@ class InvestCalc {
         })
       }
 
-      if(active.attributes.valuations.length === 0 && active.attributes.sell_trades.length === 0 && active.attributes.buy_trades.length > 0)
+      if(active.attributes?.valuations?.length === 0 && active.attributes.sell_trades?.length === 0 && active.attributes.buy_trades.length > 0)
       {
         let lastTrade = active.attributes.buy_trades[active.attributes.buy_trades.length - 1];
         grid.push({

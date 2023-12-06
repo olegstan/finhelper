@@ -91,47 +91,101 @@ export default class AccountConstants
 
           let key = index.indexOf(keyName);
 
-          let newItem = {
-            id: subAccount.id,
-            type_id: ActiveConstants.CURRENCY,
-            type_text: 'Валюта',
-            name_text: name,
-            user_id: account.user_id,
-            buy_trades: [
-              {
-                "id": null ,
-                "active_id": subAccount.id,
-                "from_account_id": subAccount.id,
-                "currency_id": subAccount.currency_id,
-                "type_id": 1,
-                "original_price": 0,
-                "price": 0,
-                "original_sum": sum,
-                "sum": sum,
-                "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
-                "trade_at_date": date.format('DD.MM.YYYY'),
-                "trade_at_datetime": date.format('DD.MM.YYYY HH:mm:ss'),
-                "count": subAccount.sum,
-                "morph": "active.trade",
-                "sum_course": 1,
-                "sum_rub_course": 1,
-                "price_course": 1,
-                "price_rub_course": 1,
-                "currency": {
-                  "id": 1,
-                  "name": "Российский рубль",
-                  "code": "RUB",
-                  "sign": "₽",
-                  "order": 1
-                },
+          let newItem = {};
+          switch (name)
+          {
+            case 'GLD':
+            case 'SLV':
+              newItem = {
+                id: subAccount.id,
+                type_id: ActiveConstants.PRECIOUS_METAL,
+                type_text: 'Драгоценные металлы',
+                name_text: name,
+                user_id: account.user_id,
+                valuations: [],
+                sell_trades: [],
+                buy_trades: [
+                  {
+                    "id": null ,
+                    "active_id": subAccount.id,
+                    "from_account_id": subAccount.id,
+                    "currency_id": subAccount.currency_id,
+                    "type_id": 1,
+                    "original_price": 0,
+                    "price": 0,
+                    "original_sum": sum,
+                    "sum": sum,
+                    "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
+                    "trade_at_date": date.format('DD.MM.YYYY'),
+                    "trade_at_datetime": date.format('DD.MM.YYYY HH:mm:ss'),
+                    "count": subAccount.sum,
+                    "morph": "active.trade",
+                    "sum_course": 1,
+                    "sum_rub_course": 1,
+                    "price_course": 1,
+                    "price_rub_course": 1,
+                    "currency": {
+                      "id": 1,
+                      "name": "Российский рубль",
+                      "code": "RUB",
+                      "sign": "₽",
+                      "order": 1
+                    },
+                  }
+                ],
+                item: cbCurrency,
+                item_id: cbCurrency?.id,
+                item_type: cbCurrency?.ticker,
               }
-            ],
-            item: cbCurrency,
-            item_id: cbCurrency?.id,
-            item_type: cbCurrency?.ticker,
-          }
 
-          preparedAccounts[key] = newItem;
+              preparedAccounts[key] = newItem;
+              break;
+            default:
+              newItem = {
+                id: subAccount.id,
+                type_id: ActiveConstants.CURRENCY,
+                type_text: 'Валюта',
+                name_text: name,
+                user_id: account.user_id,
+                valuations: [],
+                sell_trades: [],
+                buy_trades: [
+                  {
+                    "id": null ,
+                    "active_id": subAccount.id,
+                    "from_account_id": subAccount.id,
+                    "currency_id": subAccount.currency_id,
+                    "type_id": 1,
+                    "original_price": 0,
+                    "price": 0,
+                    "original_sum": sum,
+                    "sum": sum,
+                    "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
+                    "trade_at_date": date.format('DD.MM.YYYY'),
+                    "trade_at_datetime": date.format('DD.MM.YYYY HH:mm:ss'),
+                    "count": subAccount.sum,
+                    "morph": "active.trade",
+                    "sum_course": 1,
+                    "sum_rub_course": 1,
+                    "price_course": 1,
+                    "price_rub_course": 1,
+                    "currency": {
+                      "id": 1,
+                      "name": "Российский рубль",
+                      "code": "RUB",
+                      "sign": "₽",
+                      "order": 1
+                    },
+                  }
+                ],
+                item: cbCurrency,
+                item_id: cbCurrency?.id,
+                item_type: cbCurrency?.ticker,
+              }
+
+              preparedAccounts[key] = newItem;
+              break;
+          }
         }else{
           let key = index.indexOf(keyName);
 
