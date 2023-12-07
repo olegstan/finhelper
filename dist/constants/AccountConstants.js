@@ -33,7 +33,7 @@ export default class AccountConstants {
   static SBER_BROKER = 3001;
   static VTB_BROKER = 3002;
   static TINKOFF_BROKER = 3003;
-  static BKS_BROKER = 3004;
+  static BCS_BROKER = 3004;
   static ALPHA_BROKER = 3005;
   static FINAM_BROKER = 3006;
   static ATON_BROKER = 3007;
@@ -333,7 +333,7 @@ export default class AccountConstants {
               return require('../assets/banks/otkrytie.png');
             case AccountConstants.TINKOFF_BROKER:
               return require('../assets/banks/tinkoff.png');
-            case AccountConstants.BKS_BROKER:
+            case AccountConstants.BCS_BROKER:
               return require('../assets/banks/bks.png');
             case AccountConstants.FINAM_BROKER:
               return require('../assets/banks/finam.png');
@@ -470,7 +470,7 @@ export default class AccountConstants {
                 src: require('../assets/banks/tinkoff.png'),
                 alt: ""
               });
-            case AccountConstants.BKS_BROKER:
+            case AccountConstants.BCS_BROKER:
               return /*#__PURE__*/React.createElement("img", {
                 className: "bank",
                 src: require('../assets/banks/bks.png'),
