@@ -239,7 +239,6 @@ class CaseGroupHelper {
         // colorIndex++;
       }
     });
-
     sortedItems.map(item => {
       let name = CaseGroupHelper.getNameByGroup(item, thirdGroupType);
       if (index.indexOf(name) === -1) {
@@ -260,7 +259,6 @@ class CaseGroupHelper {
         // colorIndex++;
       }
     });
-
     let key = index.length;
     sortedItems.map(item => {
       let firstName = CaseGroupHelper.getNameByGroup(item, firstGroupType);

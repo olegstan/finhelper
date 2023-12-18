@@ -4,7 +4,6 @@ export default class Cache {
       data: data,
       expiry: new Date().getTime() + time // Сохраняем данные на 24 часа
     };
-
     window.localStorage.setItem(key, JSON.stringify(dataToStore));
   }
   static getItem(key) {

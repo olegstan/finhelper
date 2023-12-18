@@ -121,7 +121,6 @@ export default class ActiveConstants {
   static CREDIT_GROUP = [ActiveConstants.CAR_CREDIT, ActiveConstants.FLAT_CREDIT, ActiveConstants.CREDIT
   // ActiveConstants.CUSTOM_OBLIGATION не должно быть тут, так как форма создания обязательств отличается
   ];
-
   static OBLIGATION_GROUP = [ActiveConstants.RENT_CAR, ActiveConstants.RENT_FLAT, ActiveConstants.SPEND_LIFE];
   static PACKAGE_GROUP = [ActiveConstants.COMMODITY, ActiveConstants.PRECIOUS_METAL, ActiveConstants.CURRENCY, ActiveConstants.CRYPTO, ActiveConstants.ETF, ActiveConstants.PIF, ActiveConstants.BPIF, ActiveConstants.HEDGE_FUND, ActiveConstants.STOCK, ActiveConstants.STRATEGY_DU, ActiveConstants.FUTURES, ActiveConstants.OPTION, ActiveConstants.OBLIGATION, ActiveConstants.STRUCTURE_PRODUCT, ActiveConstants.EXCHANGE_NOTE, ActiveConstants.OBLIGATION_NOTE];
   static CB = 1;

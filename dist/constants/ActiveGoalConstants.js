@@ -100,7 +100,6 @@ export default class ActiveGoalConstants {
     // {id: ActiveGoalConstants.PORTFOLIO, name: 'Портфель'}
     ];
   }
-
   static getScenarios(i18n = {}) {
     return [{
       id: 1,

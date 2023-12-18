@@ -585,7 +585,6 @@ class InvestCalc {
         //   });
         // }
       }
-
       let profit = 1;
       while (cloneFirstBuyDate && cloneFirstBuyDate.isSameOrBefore(nowDate)) {
         let formatedDate = cloneFirstBuyDate.format('DD.MM.YYYY');
@@ -597,7 +596,6 @@ class InvestCalc {
           for (const index in sums[dateIndex]) {
             sum += sums[dateIndex][index]; //сумма на дату с учетом выплат и оценки
           }
-
           let activeProfitByDate = InvestCalc.getFactMultiplierByDate(grids[gridKey], cloneFirstBuyDate);
           if (activeProfitByDate !== 1) {
             try {

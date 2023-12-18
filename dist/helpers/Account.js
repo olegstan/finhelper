@@ -51,7 +51,6 @@ export default class Account {
       //   }
       // }
     });
-
     return currencies;
   }
 
