@@ -1,6 +1,6 @@
 {
   "name": "finhelper",
-  "version": "1.1.18",
+  "version": "1.1.21",
   "description": "",
   "main": "dist/index.js",
   "repository": {
@@ -21,9 +21,7 @@
   },
   "homepage": "https://github.com/olegstan/finhelper#readme",
   "dependencies": {
-    "moment": "^2.29.1",
-    "react-flatpickr": "^3.10.7",
-    "react-input-mask": "^2.0.4"
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",

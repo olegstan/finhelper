@@ -530,6 +530,12 @@ export default class Active {
         let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
         let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
         let buySum = 0;
+        if (!lastTradeDate.isValid()) {
+          console.warn('not valid date', lastTrade);
+        }
+        if (!lastValuationDate.isValid()) {
+          console.warn('not valid date', lastValuationDate);
+        }
         if (lastTradeDate.isBefore(lastValuationDate)) {
           buySum = lastValuation.current_sum * count + Active.getCouponSellSum(item) + Active.getDividendSum(item);
         } else {
@@ -576,6 +582,12 @@ export default class Active {
         let code = CurrencyConstants.getCurrencyCodeByActive(item);
         let sign = CurrencyConstants.getCurrencySignByActive(item);
         let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+        if (!sellDate.isValid()) {
+          console.warn('not valid date', sellDate);
+        }
+        if (!date.isValid()) {
+          console.warn('not valid date', date);
+        }
         if (date && sellDate && sellDate.isBefore(date)) {
           let count = Active.getCountSum(item, item.buy_trades);
           let buySum = item.original_buy_sum * count + Active.getCouponSellOriginalSum(item);
@@ -647,6 +659,12 @@ export default class Active {
         let lastValuation = item.last_valuation;
         let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
         let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
+        if (!lastTradeDate.isValid()) {
+          console.warn('not valid date', lastTradeDate);
+        }
+        if (!lastValuationDate.isValid()) {
+          console.warn('not valid date', lastValuationDate);
+        }
         let buySum = 0;
         if (lastTradeDate.isBefore(lastValuationDate)) {
           buySum = lastValuation.original_current_sum * count + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
@@ -704,6 +722,12 @@ export default class Active {
       };
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length) {
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+      if (!sellDate.isValid()) {
+        console.warn('not valid date', sellDate);
+      }
+      if (!now.isValid()) {
+        console.warn('not valid date', now);
+      }
       if (sellDate.isBefore(now)) {
         //высчитываем сумму продажи по номиналу облигации
         let count = Active.getCountSum(item, item.buy_trades);
@@ -842,6 +866,12 @@ export default class Active {
       return calcDiff;
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length) {
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+      if (!sellDate.isValid()) {
+        console.warn('not valid date', sellDate);
+      }
+      if (!now.isValid()) {
+        console.warn('not valid date', now);
+      }
       if (sellDate.isBefore(now)) {
         //высчитываем сумму продажи по номиналу облигации
         let count = Active.getCountSum(item, item.buy_trades);
@@ -899,6 +929,12 @@ export default class Active {
       let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
       let diff = 0;
       let course = 0;
+      if (!lastTradeDate.isValid()) {
+        console.warn('not valid date', lastTradeDate);
+      }
+      if (!lastValuationDate.isValid()) {
+        console.warn('not valid date', lastValuationDate);
+      }
       if (lastTradeDate.isBefore(lastValuationDate)) {
         diff = lastValuation.original_current_sum * count - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
         course = lastValuation.current_sum_rub_course;
@@ -930,6 +966,12 @@ export default class Active {
       return diff;
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length) {
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+      if (!sellDate.isValid()) {
+        console.warn('not valid date', sellDate);
+      }
+      if (!now.isValid()) {
+        console.warn('not valid date', now);
+      }
       if (sellDate.isBefore(now)) {
         //высчитываем сумму продажи по номиналу облигации
         let count = Active.getCountSum(item, item.buy_trades);
@@ -979,6 +1021,12 @@ export default class Active {
       let lastValuation = item.last_valuation;
       let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
       let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
+      if (!lastTradeDate.isValid()) {
+        console.warn('not valid date', lastTradeDate);
+      }
+      if (!lastValuationDate.isValid()) {
+        console.warn('not valid date', lastValuationDate);
+      }
       let diff = 0;
       if (lastTradeDate.isBefore(lastValuationDate)) {
         diff = lastValuation.current_sum * count - Active.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);

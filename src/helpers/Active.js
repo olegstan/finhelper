@@ -665,6 +665,17 @@ export default class Active
         let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
 
         let buySum = 0;
+
+        if(!lastTradeDate.isValid())
+        {
+          console.warn('not valid date', lastTrade)
+        }
+
+        if(!lastValuationDate.isValid())
+        {
+          console.warn('not valid date', lastValuationDate)
+        }
+
         if(lastTradeDate.isBefore(lastValuationDate))
         {
           buySum = (lastValuation.current_sum * count) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
@@ -709,6 +720,16 @@ export default class Active
         let sign = CurrencyConstants.getCurrencySignByActive(item);
 
         let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+
+        if(!sellDate.isValid())
+        {
+          console.warn('not valid date', sellDate)
+        }
+
+        if(!date.isValid())
+        {
+          console.warn('not valid date', date)
+        }
 
         if (date && sellDate && sellDate.isBefore(date))
         {
@@ -770,6 +791,16 @@ export default class Active
         let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
         let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
 
+        if(!lastTradeDate.isValid())
+        {
+          console.warn('not valid date', lastTradeDate)
+        }
+
+        if(!lastValuationDate.isValid())
+        {
+          console.warn('not valid date', lastValuationDate)
+        }
+
         let buySum = 0;
         if(lastTradeDate.isBefore(lastValuationDate))
         {
@@ -829,6 +860,18 @@ export default class Active
     {
 
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+
+      if(!sellDate.isValid())
+      {
+        console.warn('not valid date', sellDate)
+      }
+
+      if(!now.isValid())
+      {
+        console.warn('not valid date', now)
+      }
+
+
       if (sellDate.isBefore(now))
       {
         //высчитываем сумму продажи по номиналу облигации
@@ -973,6 +1016,17 @@ export default class Active
     {
 
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+
+      if(!sellDate.isValid())
+      {
+        console.warn('not valid date', sellDate)
+      }
+
+      if(!now.isValid())
+      {
+        console.warn('not valid date', now)
+      }
+
       if (sellDate.isBefore(now))
       {
         //высчитываем сумму продажи по номиналу облигации
@@ -1054,6 +1108,17 @@ export default class Active
 
       let diff = 0;
       let course = 0;
+
+      if(!lastTradeDate.isValid())
+      {
+        console.warn('not valid date', lastTradeDate)
+      }
+
+      if(!lastValuationDate.isValid())
+      {
+        console.warn('not valid date', lastValuationDate)
+      }
+
       if(lastTradeDate.isBefore(lastValuationDate))
       {
         diff = (lastValuation.original_current_sum * count) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
@@ -1097,6 +1162,17 @@ export default class Active
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length)
     {
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+
+      if(!sellDate.isValid())
+      {
+        console.warn('not valid date', sellDate)
+      }
+
+      if(!now.isValid())
+      {
+        console.warn('not valid date', now)
+      }
+
       if (sellDate.isBefore(now))
       {
         //высчитываем сумму продажи по номиналу облигации
@@ -1172,6 +1248,16 @@ export default class Active
 
       let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
       let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
+
+      if(!lastTradeDate.isValid())
+      {
+        console.warn('not valid date', lastTradeDate)
+      }
+
+      if(!lastValuationDate.isValid())
+      {
+        console.warn('not valid date', lastValuationDate)
+      }
 
       let diff = 0;
       if(lastTradeDate.isBefore(lastValuationDate))
