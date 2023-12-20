@@ -113,7 +113,7 @@ export default class Money {
       } else {
         if(fix === 0)
         {
-          return Math.trunc(num)
+          return Math.trunc(num).toString();
         }
 
         // Получаем подстроку числа, включая нужное количество знаков после точки
