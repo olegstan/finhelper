@@ -18,6 +18,8 @@ import Tracker from './Tracker';
 import Url from './Url';
 import GroupHelper from './GroupHelper';
 import CaseGroupHelper from './CaseGroupHelper';
+import UserValuation from './UserValuation';
+import Cache from './Cache';
 
 export {
   Account,
@@ -40,4 +42,6 @@ export {
   Url,
   GroupHelper,
   CaseGroupHelper,
+  UserValuation,
+  Cache,
 };

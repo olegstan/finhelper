@@ -18,4 +18,6 @@ import Tracker from './Tracker';
 import Url from './Url';
 import GroupHelper from './GroupHelper';
 import CaseGroupHelper from './CaseGroupHelper';
-export { Account, Active, ActiveCustomType, ChatLoad, Color, FixDate, IntegerHelper, DateHelper, InvestCalc, Keyboard, ModelHelper, Money, Multi, NewActive, Plan, Text, Tracker, Url, GroupHelper, CaseGroupHelper };
+import UserValuation from './UserValuation';
+import Cache from './Cache';
+export { Account, Active, ActiveCustomType, ChatLoad, Color, FixDate, IntegerHelper, DateHelper, InvestCalc, Keyboard, ModelHelper, Money, Multi, NewActive, Plan, Text, Tracker, Url, GroupHelper, CaseGroupHelper, UserValuation, Cache };
