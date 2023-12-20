@@ -109,8 +109,13 @@ export default class Money {
 
       // Если десятичная точка не найдена, выводим исходное число
       if (decimalIndex === -1) {
-        return num;
+        return num.replace('.', '');//удалим точку
       } else {
+        if(fix === 0)
+        {
+          return Math.trunc(num)
+        }
+
         // Получаем подстроку числа, включая нужное количество знаков после точки
         return num.toString().substring(0, decimalIndex + fix + 1);
       }
