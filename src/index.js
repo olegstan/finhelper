@@ -41,6 +41,8 @@ import {
   Url,
   GroupHelper,
   CaseGroupHelper,
+  Cache,
+  UserValuation,
 } from './helpers';
 
 export {
@@ -91,4 +93,6 @@ export {
   Url,
   GroupHelper,
   CaseGroupHelper,
+  Cache,
+  UserValuation,
 }
