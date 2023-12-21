@@ -296,7 +296,12 @@ class InvestCalc {
         }
       });
       active.attributes.valuations?.map(value => {
-        let valueDate = moment(value.value_at_date, 'DD.MM.YYYY');
+        let valueDate;
+        if (value.morph === 'active.user.valuation') {
+          valueDate = moment();
+        } else {
+          valueDate = moment(value.value_at_date, 'DD.MM.YYYY');
+        }
         if (lastValuations[currencyKey].olderDate === null) {
           lastValuations[currencyKey].olderDate = valueDate;
           lastValuations[currencyKey].olderPrice = value.current_sum;

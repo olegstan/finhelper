@@ -656,6 +656,28 @@ export default class Active
         return {sum: item.buy_sum, code: '', sign: sign};
       }
 
+      if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+      {
+        let count = Active.getCountSum(item, item.buy_trades);
+
+        let lastValuation = item.last_valuation;
+
+        let lotsize = item?.item ? item.item.lotsize : 1;
+
+        let buySum = (lastValuation.current_sum * count / lotsize) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
+
+        let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
+        let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+
+        if (!code && !sign)
+        {
+          code = CurrencyConstants.getCurrencyCodeByActive(item);
+          sign = CurrencyConstants.getCurrencySignByActive(item);
+        }
+
+        return {sum: buySum, code: '', sign: sign};
+      }
+
       if (item.last_valuation && item.buy_trades?.length)
       {
         let count = Active.getCountSum(item, item.buy_trades);
@@ -785,6 +807,27 @@ export default class Active
         let sign = item.buy_currency_id ? CurrencyConstants.getCurrencySignById(item.buy_currency_id) : null;
 
         return {sum: item.original_buy_sum, code: '', sign: sign};
+      }
+
+      if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+      {
+        let count = Active.getCountSum(item, item.buy_trades);
+
+        let lastValuation = item.last_valuation;
+
+        let lotsize = item?.item ? item.item.lotsize : 1;
+        let buySum = (lastValuation.original_current_sum * count / lotsize) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+
+        let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
+        let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+
+        if (!code && !sign)
+        {
+          code = CurrencyConstants.getCurrencyCodeByActive(item);
+          sign = CurrencyConstants.getCurrencySignByActive(item);
+        }
+
+        return {sum: buySum, code: code, sign: sign};
       }
 
       if (item.last_valuation && item.buy_trades?.length)
@@ -960,11 +1003,57 @@ export default class Active
       return {sum: 0, code: code, sign: sign};
     }
 
+    if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+    {
+      let count = Active.getCountSum(item, item.buy_trades);
+
+      let lastValuation = item.last_valuation;
+
+      let lotsize = item?.item ? item.item.lotsize : 1;
+      let diff = (lastValuation.original_current_sum * count / lotsize) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+
+      let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
+      let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+
+      if (!code && !sign)
+      {
+        code = CurrencyConstants.getCurrencyCodeByActive(item);
+        sign = CurrencyConstants.getCurrencySignByActive(item);
+      }
+
+      return {sum: diff, code: code, sign: sign};
+    }
+
     if (item.last_valuation && item.buy_trades?.length)
     {
-      let lotsize = item?.item ? item.item.lotsize : 1;
       let count = Active.getCountSum(item, item.buy_trades);
-      let diff = (item.last_valuation.original_current_sum * count / lotsize) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+
+      let lastTrade = item.buy_trades[item.buy_trades?.length - 1];
+      let lastValuation = item.last_valuation;
+
+      let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
+      let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
+
+      if(!lastTradeDate.isValid())
+      {
+        console.warn('not valid date', lastTradeDate)
+      }
+
+      if(!lastValuationDate.isValid())
+      {
+        console.warn('not valid date', lastValuationDate)
+      }
+
+      let diff = 0;
+      if(lastTradeDate.isBefore(lastValuationDate))
+      {
+        let lotsize = item?.item ? item.item.lotsize : 1;
+
+        diff = (lastValuation.original_current_sum * count / lotsize) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+      }else{
+        diff = (lastTrade.original_price * count) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+      }
+
       let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
       let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
 
@@ -1249,6 +1338,27 @@ export default class Active
       }
 
       return 0;
+    }
+
+    if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+    {
+      let count = Active.getCountSum(item, item.buy_trades);
+
+      let lastValuation = item.last_valuation;
+
+      let lotsize = item?.item ? item.item.lotsize : 1;
+      let diff = (lastValuation.current_sum * count / lotsize) - Active.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
+
+      let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
+      let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+
+      if (!code && !sign)
+      {
+        code = CurrencyConstants.getCurrencyCodeByActive(item);
+        sign = CurrencyConstants.getCurrencySignByActive(item);
+      }
+
+      return {sum: diff, code: code, sign: sign};
     }
 
     if (item.last_valuation && item.buy_trades?.length)

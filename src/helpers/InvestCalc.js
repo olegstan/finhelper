@@ -397,7 +397,14 @@ class InvestCalc {
 
       active.attributes.valuations?.map((value) =>
       {
-        let valueDate = moment(value.value_at_date, 'DD.MM.YYYY');
+        let valueDate;
+        if(value.morph === 'active.user.valuation')
+        {
+          valueDate = moment();
+        }else{
+          valueDate = moment(value.value_at_date, 'DD.MM.YYYY');
+        }
+
 
         if(lastValuations[currencyKey].olderDate === null)
         {
@@ -411,7 +418,6 @@ class InvestCalc {
           lastValuations[currencyKey].olderPrice = value.current_sum;
         }
       });
-
 
       active.attributes.sell_trades.map((trade) =>
       {

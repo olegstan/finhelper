@@ -55,6 +55,9 @@ export default class CurrencyConstants
   {
     let currency = null;
 
+    console.log(CurrencyConstants.currencies)
+    console.log(id)
+
     CurrencyConstants.currencies.map((item) => {
       if (item.id === id)
       {
