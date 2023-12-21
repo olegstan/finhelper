@@ -529,12 +529,6 @@ export default class Active {
         let lastValuation = item.last_valuation;
         let lotsize = item?.item ? item.item.lotsize : 1;
         let buySum = lastValuation.current_sum * count / lotsize + Active.getCouponSellSum(item) + Active.getDividendSum(item);
-        let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-        let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
-        if (!code && !sign) {
-          code = CurrencyConstants.getCurrencyCodeByActive(item);
-          sign = CurrencyConstants.getCurrencySignByActive(item);
-        }
         return {
           sum: buySum,
           code: '',

@@ -548,7 +548,13 @@ class InvestCalc {
 
             active.attributes.valuations?.map((valuation) => {
 
-              let valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+              let valueDate;
+              if(valuation.morph === 'active.user.valuation')
+              {
+                valueDate = moment();
+              }else{
+                valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+              }
 
               lastValueDate = valueDate;
 
@@ -652,7 +658,13 @@ class InvestCalc {
 
             active.attributes.valuations?.map((valuation) => {
 
-              let valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+              let valueDate;
+              if(valuation.morph === 'active.user.valuation')
+              {
+                valueDate = moment();
+              }else{
+                valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+              }
 
               lastValueDate = valueDate;
 
@@ -920,6 +932,11 @@ class InvestCalc {
       case 'sell_trade':
         return moment(item.item.trade_at_date, 'DD.MM.YYYY');
       case 'valuation':
+        if(item.morph === 'active.user.valuation')
+        {
+          return moment();
+        }
+
         return moment(item.item.value_at_date, 'DD.MM.YYYY');
       case 'payment':
         return moment(item.item.paid_at_date, 'DD.MM.YYYY');
@@ -1334,7 +1351,13 @@ class InvestCalc {
 
 
           active.attributes.valuations?.map((valuation) => {
-            let valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+            let valueDate;
+            if(valuation.morph === 'active.user.valuation')
+            {
+              valueDate = moment();
+            }else{
+              valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+            }
 
             lastValueDate = valueDate;
 
@@ -1383,7 +1406,13 @@ class InvestCalc {
           }
 
           active.attributes.valuations?.map((valuation) => {
-            let valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+            let valueDate;
+            if(valuation.morph === 'active.user.valuation')
+            {
+              valueDate = moment();
+            }else{
+              valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
+            }
 
             lastValueDate = valueDate;
 
