@@ -92,6 +92,7 @@ export default class Active extends BaseModel
     return this.attributes['tmp_avg_own_date_by_value'];
   }
 
+
   get avg_own_date()
   {
     if (this['tmp_avg_own_date'] === null || typeof this['tmp_avg_own_date'] === 'undefined')
@@ -107,22 +108,7 @@ export default class Active extends BaseModel
         {
           let trade = buyTrades[i];
 
-          if (trade.trade_at)
-          {
-            if (date)
-            {
-              let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
-
-              let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
-
-              //каждая следующая дата будет больше прошлой,
-              //поэтому всегда двигаемся вперед
-              date.add(diffInDays / 2, 'days');
-            } else
-            {
-              date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
-            }
-          }
+          date = ActiveHelper.getAvgDate(trade, date);
         }
 
         this['tmp_avg_own_date'] = date ? date.format('DD.MM.YYYY') : '';
@@ -134,22 +120,7 @@ export default class Active extends BaseModel
         {
           let trade = sellTrades[i];
 
-          if (trade.trade_at)
-          {
-            if (date)
-            {
-              let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
-
-              let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
-
-              //каждая следующая дата будет больше прошлой,
-              //поэтому всегда двигаемся вперед
-              date.add(diffInDays / 2, 'days');
-            } else
-            {
-              date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
-            }
-          }
+          date = ActiveHelper.getAvgDate(trade, date);
         }
 
         this['tmp_avg_own_date'] = date ? date.format('DD.MM.YYYY') : '';

@@ -14,10 +14,9 @@ export default class Money
         return '';
       }
 
-      decimalCount = Math.abs(decimalCount);
-      decimalCount = isNaN(decimalCount) ? '' : decimalCount;
-
-      const negativeSign = amount < 0 ? "-" : "";
+      const __ret = this.getDecimal(decimalCount, amount);
+      decimalCount = __ret.decimalCount;
+      const negativeSign = __ret.negativeSign;
 
       let amountInt = parseInt(amount = Math.abs(Number(amount) || '').toFixed(decimalCount)).toString();
       let amountFloat = Math.abs(amount - amountInt);
@@ -32,7 +31,16 @@ export default class Money
     }
   }
 
-  //TODO написать проверку, если цифра заканчивается на больше e+20, такие числа toFixed не может правильно обработать
+  static getDecimal(decimalCount, amount)
+  {
+    decimalCount = Math.abs(decimalCount);
+    decimalCount = isNaN(decimalCount) ? '' : decimalCount;
+
+    const negativeSign = amount < 0 ? "-" : "";
+    return {decimalCount, negativeSign};
+  }
+
+//TODO написать проверку, если цифра заканчивается на больше e+20, такие числа toFixed не может правильно обработать
   static format = (amount, decimalCount = 2, decimalSign = ".", thousands = " ") =>
   {
     // console.log('number format input')
@@ -77,10 +85,9 @@ export default class Money
       }
 
 
-      decimalCount = Math.abs(decimalCount);
-      decimalCount = isNaN(decimalCount) ? '' : decimalCount;
-
-      const negativeSign = amount < 0 ? "-" : "";
+      const __ret = this.getDecimal(decimalCount, amount);
+      decimalCount = __ret.decimalCount;
+      const negativeSign = __ret.negativeSign;
 
       let amountInt = parseInt(amount = Math.abs(Number(amount) || '')).toString();
 

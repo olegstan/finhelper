@@ -82,6 +82,26 @@ export default class Active
     return ranges;
   }
 
+  static getAvgDate(trade, date)
+  {
+    if (trade.trade_at)
+    {
+      if (date)
+      {
+        let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+
+        let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
+
+        //каждая следующая дата будет больше прошлой,
+        //поэтому всегда двигаемся вперед
+        return date.add(diffInDays / 2, 'days');
+      } else
+      {
+        return moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
+      }
+    }
+  }
+
   /**
    *
    * @param active
@@ -801,14 +821,7 @@ export default class Active
         let lotsize = item?.item ? item.item.lotsize : 1;
         let buySum = (lastValuation.original_current_sum * count / lotsize) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
 
-        let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-        let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
-
-        if (!code && !sign)
-        {
-          code = CurrencyConstants.getCurrencyCodeByActive(item);
-          sign = CurrencyConstants.getCurrencySignByActive(item);
-        }
+        let {code, sign} = this.getCodeAndSign(item);
 
         return {sum: buySum, code: code, sign: sign};
       }
@@ -844,14 +857,7 @@ export default class Active
           buySum = (lastTrade.original_price * count) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
         }
 
-        let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-        let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
-
-        if (!code && !sign)
-        {
-          code = CurrencyConstants.getCurrencyCodeByActive(item);
-          sign = CurrencyConstants.getCurrencySignByActive(item);
-        }
+        let {code, sign} = this.getCodeAndSign(item);
 
         return {sum: buySum, code: code, sign: sign};
       } else if (item.buy_trades?.length)
@@ -997,14 +1003,7 @@ export default class Active
       let lotsize = item?.item ? item.item.lotsize : 1;
       let diff = (lastValuation.original_current_sum * count / lotsize) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
 
-      let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-      let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
-
-      if (!code && !sign)
-      {
-        code = CurrencyConstants.getCurrencyCodeByActive(item);
-        sign = CurrencyConstants.getCurrencySignByActive(item);
-      }
+      let {code, sign} = this.getCodeAndSign(item);
 
       return {sum: diff, code: code, sign: sign};
     }
@@ -1040,14 +1039,7 @@ export default class Active
         diff = (lastTrade.original_price * count) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
       }
 
-      let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-      let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
-
-      if (!code && !sign)
-      {
-        code = CurrencyConstants.getCurrencyCodeByActive(item);
-        sign = CurrencyConstants.getCurrencySignByActive(item);
-      }
+      let {code, sign} = this.getCodeAndSign(item);
 
       return {sum: diff, code: code, sign: sign};
     } else if (item.buy_trades?.length)
@@ -1069,6 +1061,19 @@ export default class Active
     return {sum: 0, code: self.props.currency.code, sign: self.props.currency.sign}
   }
 
+  static getCodeAndSign(item)
+  {
+    let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
+    let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+
+    if (!code && !sign)
+    {
+      code = CurrencyConstants.getCurrencyCodeByActive(item);
+      sign = CurrencyConstants.getCurrencySignByActive(item);
+    }
+    return {code, sign};
+  }
+
   /**
    * метод для того чтобы если были переводы на счёт, то цена внесения 0 будет, получается
    * что это будет учитываться при оценке, нужно это исключить, проверкой > 0
@@ -1078,7 +1083,7 @@ export default class Active
    */
   static getNotNullPrice(array, field)
   {
-    for (var i = array.length - 1; i >= 0; i--)
+    for (let i = array.length - 1; i >= 0; i--)
     {
       if (array[i][field] > 0)
       {

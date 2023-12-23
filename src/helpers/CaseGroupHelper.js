@@ -40,13 +40,8 @@ class CaseGroupHelper
     return name;
   }
 
-  static groupThreeLevels(actives, firstGroupType, secondGroupType, getNameFunc)
+  static prepareSortedItems(actives)
   {
-    let index = [];
-    let indexSecond = [];
-    let indexThird = [];
-    let data = [];
-
     let sortedItems = [];
     let activeIndex = [];
 
@@ -74,8 +69,6 @@ class CaseGroupHelper
           }
 
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
-
-
         });
 
         item.attributes.sell_trades.map((trade) =>
@@ -120,10 +113,19 @@ class CaseGroupHelper
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
         }
       }
-
-
     });
 
+    return [sortedItems, activeIndex];
+  }
+
+  static groupThreeLevels(actives, firstGroupType, secondGroupType, getNameFunc)
+  {
+    let index = [];
+    let indexSecond = [];
+    let indexThird = [];
+    let data = [];
+
+    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems()
 
     sortedItems.map((item) =>
     {
@@ -212,91 +214,13 @@ class CaseGroupHelper
     let indexSecond = [];
     let data = [];
 
-    let sortedItems = [];
-    let activeIndex = [];
-
-    actives.map((item) =>
-    {
-      if (ActiveConstants.isPackage(item.type_id))
-      {
-        item.attributes.buy_trades.map((trade) =>
-        {
-          let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
-
-          let key = item.id + name;
-
-          if (activeIndex.indexOf(key) === -1)
-          {
-            activeIndex.push(key);
-          }
-
-          if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined')
-          {
-            sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({...item}.attributes);
-
-            sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
-            sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
-          }
-
-          sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
-
-
-        });
-
-        item.attributes.sell_trades.map((trade) =>
-        {
-          let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
-
-          let key = item.id + name;
-
-          if (activeIndex.indexOf(key) === -1)
-          {
-            activeIndex.push(key);
-          }
-
-          if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined')
-          {
-            sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({...item}.attributes);
-
-            sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
-            sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
-          }
-
-          sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({...trade});
-
-
-        });
-      } else
-      {
-        let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
-
-        let key = item.id + name + 'none';
-
-
-        if (activeIndex.indexOf(key) === -1)
-        {
-          activeIndex.push(key);
-        }
-
-        if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined')
-        {
-          sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({...item}.attributes);
-
-          sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
-          sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
-        }
-      }
-
-
-    });
-
+    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems()
 
     let colorIndex = 0;
     let subColorIndex = 0;
     sortedItems.map((item) =>
     {
       let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
-
 
       if (index.indexOf(name) === -1)
       {

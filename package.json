@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/olegstan/finhelper#readme",
   "dependencies": {
+    "laravel-request": "^1.1.14",
     "moment": "^2.29.1"
   },
   "devDependencies": {

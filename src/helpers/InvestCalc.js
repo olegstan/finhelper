@@ -166,25 +166,7 @@ class InvestCalc
   {
     if (item.sell_trades?.length)
     {
-      let sign = '';
-
-      if (item.type_id === ActiveConstants.CURRENCY)
-      {
-        let account = AccountConstants.getSubAccountById(item.sell_trades[0].to_account_id);
-
-        if (account)
-        {
-          sign = CurrencyConstants.getCurrencySignById(account.currency_id);
-        }
-      } else
-      {
-        let account = AccountConstants.getSubAccountById(item.sell_trades[0].from_account_id);
-
-        if (account)
-        {
-          sign = CurrencyConstants.getCurrencySignById(account.currency_id);
-        }
-      }
+      let sign = this.getSign(item);
 
       return Money.format(Active.getAvgOriginalPrice(item, item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
@@ -231,25 +213,7 @@ class InvestCalc
   {
     if (item.sell_trades?.length)
     {
-      let sign = '';
-
-      if (item.type_id === ActiveConstants.CURRENCY)
-      {
-        let account = AccountConstants.getSubAccountById(item.sell_trades[0].to_account_id);
-
-        if (account)
-        {
-          sign = CurrencyConstants.getCurrencySignById(account.currency_id);
-        }
-      } else
-      {
-        let account = AccountConstants.getSubAccountById(item.sell_trades[0].from_account_id);
-
-        if (account)
-        {
-          sign = CurrencyConstants.getCurrencySignById(account.currency_id);
-        }
-      }
+      let sign = this.getSign(item);
 
       return Money.format(Active.getOriginalSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
@@ -263,6 +227,30 @@ class InvestCalc
 
       return Money.format(item.original_sell_sum) + ' ' + sign;
     }
+  }
+
+  static getSign(item)
+  {
+    let sign = '';
+
+    if (item.type_id === ActiveConstants.CURRENCY)
+    {
+      let account = AccountConstants.getSubAccountById(item.sell_trades[0].to_account_id);
+
+      if (account)
+      {
+        sign = CurrencyConstants.getCurrencySignById(account.currency_id);
+      }
+    } else
+    {
+      let account = AccountConstants.getSubAccountById(item.sell_trades[0].from_account_id);
+
+      if (account)
+      {
+        sign = CurrencyConstants.getCurrencySignById(account.currency_id);
+      }
+    }
+    return sign;
   }
 
   static getSellDate(item, now, self)
@@ -617,7 +605,6 @@ class InvestCalc
 
             active.attributes.valuations?.map((valuation) =>
             {
-
               let valueDate;
               if (valuation.morph === 'active.user.valuation')
               {
