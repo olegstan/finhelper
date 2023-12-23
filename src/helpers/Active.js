@@ -600,8 +600,6 @@ export default class Active
         sum += Math.abs(payment.sum);
         count++
       }
-
-
     });
 
     return {sum: sum, code: ''};
