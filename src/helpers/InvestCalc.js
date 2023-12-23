@@ -8,6 +8,7 @@ import exactMath from "exact-math";
 import CurrencyConstants from "../constants/CurrencyConstants";
 import BuyTrade from "../models/BuyTrade";
 import SellTrade from "../models/SellTrade";
+import ActiveValueCalculator from "src/helpers/Active/ActiveValueCalculator";
 
 class InvestCalc
 {
@@ -82,7 +83,7 @@ class InvestCalc
   {
     if (item.buy_trades?.length)
     {
-      return Money.format(Active.getAvgPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
+      return Money.format(ActiveValueCalculator.getAvgPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
       return '';
@@ -93,7 +94,7 @@ class InvestCalc
   {
     if (item.buy_trades?.length)
     {
-      return Money.format(Active.getAvgOriginalPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
+      return Money.format(ActiveValueCalculator.getAvgOriginalPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
       return '';
@@ -104,7 +105,7 @@ class InvestCalc
   {
     if (item.buy_trades?.length)
     {
-      return Money.format(Active.getSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
+      return Money.format(ActiveValueCalculator.getSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
     {
       let sum = item.buy_sum;
@@ -119,7 +120,7 @@ class InvestCalc
   {
     if (item.buy_trades?.length)
     {
-      return Money.format(Active.getOriginalSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
+      return Money.format(ActiveValueCalculator.getOriginalSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
     {
       let sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id)
@@ -151,7 +152,7 @@ class InvestCalc
   {
     if (item.sell_trades?.length)
     {
-      return Money.format(Active.getAvgPrice(item, item.sell_trades));
+      return Money.format(ActiveValueCalculator.getAvgPrice(item, item.sell_trades));
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length)
     {
       let sellDate = moment(item.sell_at_date, 'DD.MM.YYYY');
@@ -168,7 +169,7 @@ class InvestCalc
     {
       let sign = this.getSign(item);
 
-      return Money.format(Active.getAvgOriginalPrice(item, item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
+      return Money.format(ActiveValueCalculator.getAvgOriginalPrice(item, item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
       return '';
@@ -179,7 +180,7 @@ class InvestCalc
   {
     if (item.sell_trades?.length)
     {
-      return Money.format(Active.getSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
+      return Money.format(ActiveValueCalculator.getSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length)
     {
       let sellDate = moment(item.sell_at_date, 'DD.MM.YYYY');
@@ -215,7 +216,7 @@ class InvestCalc
     {
       let sign = this.getSign(item);
 
-      return Money.format(Active.getOriginalSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
+      return Money.format(ActiveValueCalculator.getOriginalSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + sign;
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
     {
       let sign = CurrencyConstants.getCurrencySignById(item.sell_currency_id);
