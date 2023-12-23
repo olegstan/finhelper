@@ -568,9 +568,10 @@ export default class Active {
             sign: sign
           };
         }
+        let lotsize = item?.item ? item.item.lotsize : 1;
         let count = Active.getCountSum(item, item.buy_trades);
         let lastPrice = Active.getNotNullPrice(item.buy_trades, 'price');
-        let buySum = lastPrice * count + Active.getCouponSellSum(item) + Active.getDividendSum(item);
+        let buySum = lastPrice * count / lotsize + Active.getCouponSellSum(item) + Active.getDividendSum(item);
         return {
           sum: buySum,
           code: '',
@@ -727,7 +728,8 @@ export default class Active {
         }
         let count = Active.getCountSum(item, item.buy_trades);
         let lastPrice = Active.getNotNullPrice(item.buy_trades, 'original_price');
-        let buySum = lastPrice * count + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+        let lotsize = item?.item ? item.item.lotsize : 1;
+        let buySum = lastPrice * count / lotsize + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
         let code = CurrencyConstants.getCurrencyCodeByActive(item);
         let sign = CurrencyConstants.getCurrencySignByActive(item);
         return {
@@ -892,7 +894,8 @@ export default class Active {
       let buySum = Active.getOriginalSum(item.buy_trades);
       let count = Active.getCountSum(item, item.buy_trades);
       let lastPrice = Active.getNotNullPrice(item.buy_trades, 'original_price');
-      let sellSum = lastPrice * count;
+      let lotsize = item?.item ? item.item.lotsize : 1;
+      let sellSum = lastPrice * count / lotsize;
       let diff = sellSum - buySum + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
       let code = CurrencyConstants.getCurrencyCodeByActive(item);
       let sign = CurrencyConstants.getCurrencySignByActive(item);
@@ -1119,7 +1122,8 @@ export default class Active {
       let buySum = Active.getSum(item.buy_trades);
       let count = Active.getCountSum(item, item.buy_trades);
       let lastPrice = Active.getNotNullPrice(item.buy_trades, 'price');
-      let sellSum = lastPrice * count;
+      let lotsize = item?.item ? item.item.lotsize : 1;
+      let sellSum = lastPrice * count / lotsize;
       let diff = sellSum - buySum + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
       return diff;
     }
