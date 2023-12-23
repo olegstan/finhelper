@@ -1,4 +1,3 @@
-
 export default class ActivePaymentConstants
 {
   static DEPOSIT_PAYMENT = 3001;

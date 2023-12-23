@@ -2,7 +2,8 @@ import moment from "moment/moment";
 import DateHelper from "../helpers/DateHelper";
 import Money from "../helpers/Money";
 
-export default class ActiveGoalConstants {
+export default class ActiveGoalConstants
+{
   static WITH_PLAN = 1;
   static WITHOUT_PLAN = 2;
 
@@ -102,8 +103,11 @@ export default class ActiveGoalConstants {
       "item_slug": "sector"
     }
   ];
+  static NOW = 1;
+  static AFTER = 0;
 
-  static getTypes(i18n = {}) {
+  static getTypes(i18n = {})
+  {
     return [
       {id: ActiveGoalConstants.SHORT, name: i18n.shortGoal},
       {id: ActiveGoalConstants.MIDDLE, name: i18n.middleGoal},
@@ -113,7 +117,8 @@ export default class ActiveGoalConstants {
     ];
   }
 
-  static getScenarios(i18n= {}) {
+  static getScenarios(i18n = {})
+  {
     return [
       {id: 1, name: i18n.positive},
       {id: 2, name: i18n.neutral},
@@ -122,7 +127,8 @@ export default class ActiveGoalConstants {
     ];
   }
 
-  static getRetireTypes(i18n= {}) {
+  static getRetireTypes(i18n = {})
+  {
     return [
       {id: 1, name: i18n.rentier},
       {id: 2, name: i18n.rentierWithInflation},
@@ -130,49 +136,54 @@ export default class ActiveGoalConstants {
     ];
   }
 
-  static getConsiderTypes(i18n= {}) {
+  static getConsiderTypes(i18n = {})
+  {
     return [
       {id: 1, name: i18n.control},
       {id: 2, name: i18n.notControl},
     ];
   }
 
-  static getPlanTypes() {
+  static getPlanTypes()
+  {
     return [
       {id: ActiveGoalConstants.WITH_PLAN, name: ''},
       {id: ActiveGoalConstants.WITHOUT_PLAN, name: ''},
     ];
   }
 
-  static getCalcTypes() {
+  static getCalcTypes()
+  {
     return [
       {id: 1, name: 'Знаю итоговую сумму'},
       {id: 2, name: 'Знаю сумму платежа'},
     ]
   }
 
-  static NOW = 1;
-  static AFTER = 0;
-
-  static getPeriods() {
+  static getPeriods()
+  {
     return [
       {id: ActiveGoalConstants.NOW, name: 'Сейчас'},
       {id: ActiveGoalConstants.AFTER, name: 'Через месяц'},
     ];
   }
 
-  static getBindTypes(i18n= {}) {
+  static getBindTypes(i18n = {})
+  {
     return [
       {id: 1, name: i18n.withBind},
       {id: 2, name: i18n.withoutBind},
     ];
   }
 
-  static getTypeById(id) {
+  static getTypeById(id)
+  {
     let type = null;
 
-    ActiveGoalConstants.getTypes().map((item) => {
-      if (item.id === id) {
+    ActiveGoalConstants.getTypes().map((item) =>
+    {
+      if (item.id === id)
+      {
         type = item
       }
 
@@ -182,11 +193,14 @@ export default class ActiveGoalConstants {
     return type;
   }
 
-  static getPlanTypeById(id) {
+  static getPlanTypeById(id)
+  {
     let type = null;
 
-    ActiveGoalConstants.getPlanTypes().map((item) => {
-      if (item.id === id) {
+    ActiveGoalConstants.getPlanTypes().map((item) =>
+    {
+      if (item.id === id)
+      {
         type = item
       }
 
@@ -196,11 +210,14 @@ export default class ActiveGoalConstants {
     return type;
   }
 
-  static getCalcTypeById(id) {
+  static getCalcTypeById(id)
+  {
     let type = null;
 
-    ActiveGoalConstants.getCalcTypes().map((item) => {
-      if (item.id === id) {
+    ActiveGoalConstants.getCalcTypes().map((item) =>
+    {
+      if (item.id === id)
+      {
         type = item
       }
 
@@ -210,19 +227,23 @@ export default class ActiveGoalConstants {
     return type;
   }
 
-  static defaultMask(income) {
+  static defaultMask(income)
+  {
     let data = [];
     let newIncome = 0;
     let currentYear = moment().format('YYYY');
 
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 12; i++)
+    {
       let validDay = DateHelper.getValidDate(currentYear, (i + 1), 31);
       let sum = 0;
 
       //если последнии, то вычтем из суммы, чтобы получилось целое число
-      if (i === 11) {
+      if (i === 11)
+      {
         sum = income - newIncome;
-      } else {
+      } else
+      {
         sum = Math.floor(income / 12);
 
         newIncome += sum;
@@ -240,44 +261,56 @@ export default class ActiveGoalConstants {
     return data;
   }
 
-  static defaultPlan() {
+  static defaultPlan()
+  {
     return []
   }
 
-  static recalcByPrevIncome(item, prevPlanIncome, newPlanIncome) {
+  static recalcByPrevIncome(item, prevPlanIncome, newPlanIncome)
+  {
     //лучше чтобы сумма была больше 12, тогда распределение по месяцам будет корректно,
     //иначе на последний месяц будет переноситься остаток, а 11 месяцев будут по 0
     //следующее пропорциональное распределение в этом случае сделает
     // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ,1, 8] если сумма 21, не пропорционально
 
-    if (newPlanIncome >= 12) {
+    if (newPlanIncome >= 12)
+    {
       let proportion = Math.floor(newPlanIncome / prevPlanIncome * 100000000) / 100000000;
       let allSum = 0;
 
       let i = 0;
       let n = 0;
-      item.months.map((month, monthKey) => {
-        if (parseInt(month.month) && month.rows && month.rows.length) {
-          month.rows.map(() => {
+      item.months.map((month, monthKey) =>
+      {
+        if (parseInt(month.month) && month.rows && month.rows.length)
+        {
+          month.rows.map(() =>
+          {
             i++;
           })
         }
       });
 
-      item.months = item.months.map((month) => {
+      item.months = item.months.map((month) =>
+      {
         let sum = 0;
-        if (parseInt(month.month) && month.rows && month.rows.length) {
-          month.rows = month.rows.map((row) => {
+        if (parseInt(month.month) && month.rows && month.rows.length)
+        {
+          month.rows = month.rows.map((row) =>
+          {
             n++;
             //если последняя и сумма предыдущих не равна 0
-            if (i === n) {
-              if (allSum !== 0) {
+            if (i === n)
+            {
+              if (allSum !== 0)
+              {
                 row.sum = newPlanIncome - allSum;
                 sum += row.sum;
                 allSum += row.sum;
                 row.sum = Money.format(row.sum);
               }
-            } else {
+            } else
+            {
               row.sum = Math.floor(Money.toDigits(row.sum) * proportion);
               sum += row.sum;
               allSum += Money.toDigits(row.sum);
@@ -293,23 +326,29 @@ export default class ActiveGoalConstants {
         return month;
       });
 
-      if (allSum === 0) {
+      if (allSum === 0)
+      {
         n = 0;
 
         let part = Math.floor(newPlanIncome / 12);
 
-        item.months = item.months.map((month) => {
+        item.months = item.months.map((month) =>
+        {
           let sum = 0;
-          if (parseInt(month.month) && month.rows && month.rows.length) {
-            month.rows = month.rows.map((row) => {
+          if (parseInt(month.month) && month.rows && month.rows.length)
+          {
+            month.rows = month.rows.map((row) =>
+            {
               n++;
 
-              if (i === n) {
+              if (i === n)
+              {
                 row.sum = newPlanIncome - allSum;
                 sum += row.sum;
                 allSum += row.sum;
                 row.sum = Money.format(row.sum);
-              } else {
+              } else
+              {
                 row.sum = part;
                 sum += row.sum;
                 allSum += Money.toDigits(row.sum);

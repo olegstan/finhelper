@@ -17,6 +17,7 @@ export default class TradeConstants
       {id: TradeConstants.SELL, name: 'Продажа'}
     ]
   }
+
   /**
    *
    * @returns {*[]}
@@ -30,7 +31,6 @@ export default class TradeConstants
   }
 
 
-
   /**
    *
    * @param id
@@ -40,8 +40,9 @@ export default class TradeConstants
   {
     let type = null;
 
-    TradeConstants.actions().map((item) => {
-      if(item.id === id)
+    TradeConstants.actions().map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }
@@ -61,8 +62,9 @@ export default class TradeConstants
   {
     let type = null;
 
-    TradeConstants.items().map((item) => {
-      if(item.id === id)
+    TradeConstants.items().map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }

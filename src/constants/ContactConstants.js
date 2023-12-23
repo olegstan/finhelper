@@ -1,5 +1,3 @@
-
-
 export default class ContactConstants
 {
   static CALL = 1001;
@@ -12,12 +10,12 @@ export default class ContactConstants
   static statuses()
   {
     return [
-      { id: ContactConstants.CALL, name: 'Звонок' },
-      { id: ContactConstants.MEETINGS, name: 'Встреча' },
-      { id: ContactConstants.CONSULTATION, name: 'Консультация' },
-      { id: ContactConstants.CONTRACT_PENDING, name: 'Договор на рассмотрении' },
-      { id: ContactConstants.CONTRACT_CONFIRMED, name: 'Договор подписан' },
-      { id: ContactConstants.CONTRACT_REFUSED, name: 'Договор отклонён' },
+      {id: ContactConstants.CALL, name: 'Звонок'},
+      {id: ContactConstants.MEETINGS, name: 'Встреча'},
+      {id: ContactConstants.CONSULTATION, name: 'Консультация'},
+      {id: ContactConstants.CONTRACT_PENDING, name: 'Договор на рассмотрении'},
+      {id: ContactConstants.CONTRACT_CONFIRMED, name: 'Договор подписан'},
+      {id: ContactConstants.CONTRACT_REFUSED, name: 'Договор отклонён'},
     ]
   }
 
@@ -25,8 +23,9 @@ export default class ContactConstants
   {
     let status = null;
 
-    ContactConstants.statuses().map((item) => {
-      if(item.id === id)
+    ContactConstants.statuses().map((item) =>
+    {
+      if (item.id === id)
       {
         status = item
       }

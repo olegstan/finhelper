@@ -1,8 +1,7 @@
-
-
 export default class Keyboard
 {
-  static func = () => {
+  static func = () =>
+  {
 
   };
 

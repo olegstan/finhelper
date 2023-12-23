@@ -5,7 +5,7 @@ export default class SellTrade extends Trade
 {
   get currency()
   {
-    if(!this.modelFields.currency.loaded && this.attributes['currency_id'])
+    if (!this.modelFields.currency.loaded && this.attributes['currency_id'])
     {
       this.attributes['currency'] = ModelHelper.getCurrencyById(this.attributes['currency_id']);
       this.modelFields.currency.loaded = true;
@@ -21,7 +21,7 @@ export default class SellTrade extends Trade
 
   get from_account()
   {
-    if(!this.modelFields.from_account.loaded && this.attributes['from_account_id'])
+    if (!this.modelFields.from_account.loaded && this.attributes['from_account_id'])
     {
       this.attributes['from_account'] = ModelHelper.getUserAccountById(this.attributes['from_account_id']);
       this.modelFields.from_account.loaded = true;

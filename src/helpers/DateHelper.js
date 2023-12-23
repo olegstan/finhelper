@@ -19,10 +19,11 @@ export default class DateHelper
     //TODO если 1 число месяца
     let date = moment(year + '-' + month + '-' + day, 'YYYY-MM-DD');
 
-    if(date.isValid())
+    if (date.isValid())
     {
       return day;
-    }else{
+    } else
+    {
       return DateHelper.getValidDate(year, month, day - 1);
     }
   }

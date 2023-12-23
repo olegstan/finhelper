@@ -25,8 +25,9 @@ export default class TradeCommissionConstants
   {
     let type = null;
 
-    TradeCommissionConstants.types().map((item) => {
-      if(item.id === id)
+    TradeCommissionConstants.types().map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }

@@ -19,7 +19,7 @@ export default class ModelHelper
     let res = null;
     CurrencyConstants.currencies.forEach((item) =>
     {
-      if(item.id === id)
+      if (item.id === id)
       {
         res = item;
       }
@@ -33,8 +33,9 @@ export default class ModelHelper
     let res = null;
     ModelHelper.accounts.forEach((account) =>
     {
-      account.accounts.forEach((item) => {
-        if(item.id === id)
+      account.accounts.forEach((item) =>
+      {
+        if (item.id === id)
         {
           res = item;
         }

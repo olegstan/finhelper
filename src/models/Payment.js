@@ -16,7 +16,7 @@ export default class Payment extends BaseModel
 
   get currency()
   {
-    if(!this.modelFields.currency.loaded && this.attributes['currency_id'])
+    if (!this.modelFields.currency.loaded && this.attributes['currency_id'])
     {
       this.attributes['currency'] = ModelHelper.getCurrencyById(this.attributes['currency_id']);
       this.modelFields.currency.loaded = true;
@@ -32,7 +32,7 @@ export default class Payment extends BaseModel
 
   get account()
   {
-    if(!this.modelFields.account.loaded && this.attributes['account_id'])
+    if (!this.modelFields.account.loaded && this.attributes['account_id'])
     {
       this.attributes['account'] = ModelHelper.getUserAccountById(this.attributes['account_id']);
       this.modelFields.account.loaded = true;

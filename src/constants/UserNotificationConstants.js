@@ -1,4 +1,3 @@
-
 export default class UserNotificationConstants
 {
   static CREATED = 1001;

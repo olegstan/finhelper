@@ -16,17 +16,17 @@ export default class Active
    */
   static getName(item)
   {
-    if(ActiveConstants.isPackage(item.type_id))
+    if (ActiveConstants.isPackage(item.type_id))
     {
       return (item.name_text ? item.name_text : 'Без названия');
     }
 
-    if(item.type_text && item.name_text)
+    if (item.type_text && item.name_text)
     {
       return item.type_text + ' ' + item.name_text;
     }
 
-    if(item.type_text)
+    if (item.type_text)
     {
       return item.type_text;
     }
@@ -38,13 +38,15 @@ export default class Active
   {
     let stocks = [];
 
-    items.map((group, key) => {
+    items.map((group, key) =>
+    {
       stocks[key] = {};
       stocks[key].id = group.id;
       stocks[key].name = group.name;
       stocks[key].items = [];
 
-      group.items.map((item, groupKey) => {
+      group.items.map((item, groupKey) =>
+      {
         stocks[key].items[groupKey] = {...item};
         stocks[key].items[groupKey].id = item.id + '-' + item.type_id + (item.ticker ? '-' + item.ticker : '');
       })
@@ -57,18 +59,20 @@ export default class Active
   {
     let preparedValue = value > 100 ? Math.abs(value) : 100;
     let ranges = [];
-    if(preparedValue <= 500)
+    if (preparedValue <= 500)
     {
       ranges.push(0);
       ranges.push(preparedValue);
       ranges.push(preparedValue);
       ranges.push(preparedValue);
-    }else if(preparedValue <= 1500){
+    } else if (preparedValue <= 1500)
+    {
       ranges.push(0);
       ranges.push(500);
       ranges.push(Math.floor(preparedValue));
       ranges.push(Math.floor(preparedValue));
-    }else{
+    } else
+    {
       ranges.push(0);
       ranges.push(Math.floor(preparedValue / 100 * 30));
       ranges.push(Math.floor(preparedValue / 100 * 30) + Math.floor(preparedValue / 100 * 30));
@@ -233,7 +237,7 @@ export default class Active
     {
       payments.map((payment) =>
       {
-        if(payment.is_confirmed)
+        if (payment.is_confirmed)
         {
           sum += payment.sum;
         }
@@ -257,7 +261,7 @@ export default class Active
     {
       payments.map((payment) =>
       {
-        if(payment.is_confirmed)
+        if (payment.is_confirmed)
         {
           sum += payment.original_sum;
         }
@@ -301,7 +305,7 @@ export default class Active
 
     if (item.buy_trades?.length)
     {
-      for(let n = 0; n < item.buy_trades.length; n++)
+      for (let n = 0; n < item.buy_trades.length; n++)
       {
         sum -= item.buy_trades[n].accumulated_coupon
       }
@@ -321,7 +325,7 @@ export default class Active
 
     if (item.buy_trades?.length)
     {
-      for(let n = 0; n < item.buy_trades.length; n++)
+      for (let n = 0; n < item.buy_trades.length; n++)
       {
         sum -= item.buy_trades[n].original_accumulated_coupon
       }
@@ -439,7 +443,7 @@ export default class Active
 
     if (item.sell_trades?.length)
     {
-      for(let n = 0; n < item.sell_trades.length; n++)
+      for (let n = 0; n < item.sell_trades.length; n++)
       {
         sum += item.sell_trades[n].accumulated_coupon
       }
@@ -460,7 +464,7 @@ export default class Active
 
     if (item.sell_trades?.length)
     {
-      for(let n = 0; n < item.sell_trades.length; n++)
+      for (let n = 0; n < item.sell_trades.length; n++)
       {
         sum += item.sell_trades[n].original_accumulated_coupon
       }
@@ -541,21 +545,6 @@ export default class Active
     return sum;
   }
 
-
-  getSumRubble(items)
-  {
-    let now = moment();
-    let sum = 0;
-    items.map((item) =>
-    {
-      sum += Active.getDiffRubble(item, now);
-
-
-    });
-
-    return sum;
-  }
-
   static getObligationCurrent(item, date)
   {
     let sum = 0;
@@ -565,7 +554,7 @@ export default class Active
     {
       let paymentDate = moment(payment.paid_at_date, 'DD.MM.YYYY').startOf('day');
 
-      if(payment.is_confirmed === false && paymentDate.isBefore(futureDate))
+      if (payment.is_confirmed === false && paymentDate.isBefore(futureDate))
       {
         sum += Math.abs(payment.sum);
       }
@@ -586,7 +575,7 @@ export default class Active
     {
       let paymentDate = moment(payment.paid_at_date, 'DD.MM.YYYY').startOf('day');
 
-      if(payment.is_confirmed === false && paymentDate.isSameOrAfter(futureDate))
+      if (payment.is_confirmed === false && paymentDate.isSameOrAfter(futureDate))
       {
         sum += Math.abs(payment.sum);
         count++
@@ -597,7 +586,6 @@ export default class Active
 
     return {sum: sum, code: ''};
   }
-
 
   static getValuation(item, date, sign)
   {
@@ -622,7 +610,7 @@ export default class Active
       {
         let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
         let sellSum = 0;
-        switch(item.rate_type_id)
+        switch (item.rate_type_id)
         {
           case ActiveConstants.SIMPLE:
             sellSum = Active.getConfirmedPaymentsSum(item.payments) + item.buy_sum;
@@ -651,12 +639,13 @@ export default class Active
       } else if ([[...ActiveConstants.CREDIT_GROUP], ...[ActiveConstants.CUSTOM_OBLIGATION]].indexOf(item.type_id) !== -1)
       {
         return {sum: item.income * 12, code: '', sign: sign};
-      } else if(item.type_id === ActiveConstants.MONEY_ACTIVE){
+      } else if (item.type_id === ActiveConstants.MONEY_ACTIVE)
+      {
 
         return {sum: item.buy_sum, code: '', sign: sign};
       }
 
-      if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+      if (item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
       {
         let count = Active.getCountSum(item, item.buy_trades);
 
@@ -681,29 +670,30 @@ export default class Active
 
         let buySum = 0;
 
-        if(!lastTradeDate.isValid())
+        if (!lastTradeDate.isValid())
         {
           console.warn('not valid date', lastTrade)
         }
 
-        if(!lastValuationDate.isValid())
+        if (!lastValuationDate.isValid())
         {
           console.warn('not valid date', lastValuationDate)
         }
 
-        if(lastTradeDate.isBefore(lastValuationDate))
+        if (lastTradeDate.isBefore(lastValuationDate))
         {
           let lotsize = item?.item ? item.item.lotsize : 1;
 
           buySum = (lastValuation.current_sum * count / lotsize) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
-        }else{
+        } else
+        {
           buySum = (lastTrade.price * count) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
         }
 
         return {sum: buySum, code: '', sign: sign};
       } else if (item.buy_trades?.length)
       {
-        if(item.buy_trades?.length === 1)
+        if (item.buy_trades?.length === 1)
         {
           let buySum = item.buy_trades[item.buy_trades?.length - 1].sum + Active.getCouponSellSum(item) + Active.getDividendSum(item);
 
@@ -739,12 +729,12 @@ export default class Active
 
         let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
 
-        if(!sellDate.isValid())
+        if (!sellDate.isValid())
         {
           console.warn('not valid date', sellDate)
         }
 
-        if(!date.isValid())
+        if (!date.isValid())
         {
           console.warn('not valid date', date)
         }
@@ -760,7 +750,7 @@ export default class Active
         let sellSum = 0;
         let code = item.buy_currency_id ? CurrencyConstants.getCurrencyCodeById(item.buy_currency_id) : null;
         let sign = item.buy_currency_id ? CurrencyConstants.getCurrencySignById(item.buy_currency_id) : null;
-        switch(item.rate_type_id)
+        switch (item.rate_type_id)
         {
           case ActiveConstants.SIMPLE:
             sellSum = Active.getConfirmedPaymentsOriginalSum(item.payments) + item.original_buy_sum;
@@ -794,14 +784,15 @@ export default class Active
         let sign = CurrencyConstants.getCurrencySignByActive(item);
 
         return {sum: item.original_income * 12, code: code, sign: sign};
-      } else if(item.type_id === ActiveConstants.MONEY_ACTIVE){
+      } else if (item.type_id === ActiveConstants.MONEY_ACTIVE)
+      {
 
         let sign = item.buy_currency_id ? CurrencyConstants.getCurrencySignById(item.buy_currency_id) : null;
 
         return {sum: item.original_buy_sum, code: '', sign: sign};
       }
 
-      if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+      if (item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
       {
         let count = Active.getCountSum(item, item.buy_trades);
 
@@ -832,23 +823,24 @@ export default class Active
         let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
         let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
 
-        if(!lastTradeDate.isValid())
+        if (!lastTradeDate.isValid())
         {
           console.warn('not valid date', lastTradeDate)
         }
 
-        if(!lastValuationDate.isValid())
+        if (!lastValuationDate.isValid())
         {
           console.warn('not valid date', lastValuationDate)
         }
 
         let buySum = 0;
-        if(lastTradeDate.isBefore(lastValuationDate))
+        if (lastTradeDate.isBefore(lastValuationDate))
         {
           let lotsize = item?.item ? item.item.lotsize : 1;
 
           buySum = (lastValuation.original_current_sum * count / lotsize) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
-        }else{
+        } else
+        {
           buySum = (lastTrade.original_price * count) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
         }
 
@@ -864,7 +856,7 @@ export default class Active
         return {sum: buySum, code: code, sign: sign};
       } else if (item.buy_trades?.length)
       {
-        if(item.buy_trades?.length === 1)
+        if (item.buy_trades?.length === 1)
         {
           let buySum = item.buy_trades[item.buy_trades?.length - 1].original_sum + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
           let code = CurrencyConstants.getCurrencyCodeByActive(item);
@@ -893,7 +885,7 @@ export default class Active
       let code = CurrencyConstants.getCurrencyCodeByActive(item);
       let sign = CurrencyConstants.getCurrencySignByActive(item);
 
-      if(item.type_id === ActiveConstants.CURRENCY)
+      if (item.type_id === ActiveConstants.CURRENCY)
       {
         //TODO если куплена валюта, то нужно получать валюту покупки и сравнивать
         //если это шорт, то null будет в разнице
@@ -905,12 +897,12 @@ export default class Active
 
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
 
-      if(!sellDate.isValid())
+      if (!sellDate.isValid())
       {
         console.warn('not valid date', sellDate)
       }
 
-      if(!now.isValid())
+      if (!now.isValid())
       {
         console.warn('not valid date', now)
       }
@@ -934,7 +926,7 @@ export default class Active
       let code = item.buy_currency_id ? CurrencyConstants.getCurrencyCodeById(item.buy_currency_id) : null;
       let sign = item.buy_currency_id ? CurrencyConstants.getCurrencySignById(item.buy_currency_id) : null;
       let diff = 0;
-      switch(item.rate_type_id)
+      switch (item.rate_type_id)
       {
         case ActiveConstants.SIMPLE:
           sellSum = Active.getConfirmedPaymentsOriginalSum(item.payments) + item.original_buy_sum;
@@ -951,7 +943,7 @@ export default class Active
       return {sum: diff, code: code, sign: sign};
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
-      if(item.sell_at_date)
+      if (item.sell_at_date)
       {
         let sellSum = item.original_sell_sum;
         let buySum = item.original_buy_sum;
@@ -963,7 +955,7 @@ export default class Active
         return {sum: diff, code: code, sign: sign};
       }
 
-      if(item.sell)
+      if (item.sell)
       {
         let sell = item.sell.child_item;
 
@@ -977,7 +969,7 @@ export default class Active
         return {sum: diff, code: code, sign: sign};
       }
 
-      if(item.last_valuation)
+      if (item.last_valuation)
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
         let sellSum = item.last_valuation.original_current_sum / lotsize;
@@ -996,7 +988,7 @@ export default class Active
       return {sum: 0, code: code, sign: sign};
     }
 
-    if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+    if (item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
     {
       let count = Active.getCountSum(item, item.buy_trades);
 
@@ -1027,23 +1019,24 @@ export default class Active
       let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
       let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
 
-      if(!lastTradeDate.isValid())
+      if (!lastTradeDate.isValid())
       {
         console.warn('not valid date', lastTradeDate)
       }
 
-      if(!lastValuationDate.isValid())
+      if (!lastValuationDate.isValid())
       {
         console.warn('not valid date', lastValuationDate)
       }
 
       let diff = 0;
-      if(lastTradeDate.isBefore(lastValuationDate))
+      if (lastTradeDate.isBefore(lastValuationDate))
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
 
         diff = (lastValuation.original_current_sum * count / lotsize) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
-      }else{
+      } else
+      {
         diff = (lastTrade.original_price * count) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
       }
 
@@ -1087,7 +1080,8 @@ export default class Active
   {
     for (var i = array.length - 1; i >= 0; i--)
     {
-      if(array[i][field] > 0){
+      if (array[i][field] > 0)
+      {
         return array[i][field];
       }
     }
@@ -1111,12 +1105,12 @@ export default class Active
 
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
 
-      if(!sellDate.isValid())
+      if (!sellDate.isValid())
       {
         console.warn('not valid date', sellDate)
       }
 
-      if(!now.isValid())
+      if (!now.isValid())
       {
         console.warn('not valid date', now)
       }
@@ -1139,7 +1133,7 @@ export default class Active
       let sellSum = 0;
       let diff = 0;
       let course = 0;
-      switch(item.rate_type_id)
+      switch (item.rate_type_id)
       {
         case ActiveConstants.SIMPLE:
           sellSum = Active.getConfirmedPaymentsOriginalSum(item.payments) + item.original_buy_sum;
@@ -1159,7 +1153,7 @@ export default class Active
       return calcDiff;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
-      if(item.sell_at_date)
+      if (item.sell_at_date)
       {
         let sellSum = item.original_sell_sum;
         let buySum = item.original_buy_sum;
@@ -1173,7 +1167,7 @@ export default class Active
         return calcDiff;
       }
 
-      if(item.sell)
+      if (item.sell)
       {
         let sell = item.sell.child_item;
 
@@ -1203,22 +1197,23 @@ export default class Active
       let diff = 0;
       let course = 0;
 
-      if(!lastTradeDate.isValid())
+      if (!lastTradeDate.isValid())
       {
         console.warn('not valid date', lastTradeDate)
       }
 
-      if(!lastValuationDate.isValid())
+      if (!lastValuationDate.isValid())
       {
         console.warn('not valid date', lastValuationDate)
       }
 
-      if(lastTradeDate.isBefore(lastValuationDate))
+      if (lastTradeDate.isBefore(lastValuationDate))
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
         diff = (lastValuation.original_current_sum * count / lotsize) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
         course = lastValuation.current_sum_rub_course;
-      }else{
+      } else
+      {
         diff = (lastTrade.original_price * count) - Active.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
         course = lastTrade.price_rub_course;
       }
@@ -1258,12 +1253,12 @@ export default class Active
     {
       let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
 
-      if(!sellDate.isValid())
+      if (!sellDate.isValid())
       {
         console.warn('not valid date', sellDate)
       }
 
-      if(!now.isValid())
+      if (!now.isValid())
       {
         console.warn('not valid date', now)
       }
@@ -1282,7 +1277,7 @@ export default class Active
     {
       let sellSum = 0;
       let diff = 0;
-      switch(item.rate_type_id)
+      switch (item.rate_type_id)
       {
         case ActiveConstants.SIMPLE:
           sellSum = Active.getConfirmedPaymentsSum(item.payments) + item.buy_sum;
@@ -1299,7 +1294,7 @@ export default class Active
       return diff;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
-      if(item.sell_at_date)
+      if (item.sell_at_date)
       {
         let sellSum = item.sell_sum;
         let buySum = item.buy_sum;
@@ -1309,7 +1304,7 @@ export default class Active
         return diff;
       }
 
-      if(item.sell)
+      if (item.sell)
       {
         let sell = item.sell.child_item;
 
@@ -1321,7 +1316,7 @@ export default class Active
         return diff;
       }
 
-      if(item.last_valuation)
+      if (item.last_valuation)
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
         let valuationSum = item.last_valuation.current_sum / lotsize;
@@ -1335,7 +1330,7 @@ export default class Active
       return 0;
     }
 
-    if(item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+    if (item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
     {
       let count = Active.getCountSum(item, item.buy_trades);
 
@@ -1358,22 +1353,23 @@ export default class Active
       let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
       let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
 
-      if(!lastTradeDate.isValid())
+      if (!lastTradeDate.isValid())
       {
         console.warn('not valid date', lastTradeDate)
       }
 
-      if(!lastValuationDate.isValid())
+      if (!lastValuationDate.isValid())
       {
         console.warn('not valid date', lastValuationDate)
       }
 
       let diff = 0;
-      if(lastTradeDate.isBefore(lastValuationDate))
+      if (lastTradeDate.isBefore(lastValuationDate))
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
         diff = (lastValuation.current_sum * count / lotsize) - Active.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
-      }else{
+      } else
+      {
         diff = (lastTrade.price * count) - Active.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
       }
 
@@ -1413,49 +1409,51 @@ export default class Active
 
   static getBalanceByDate(self, accounts, currencyData, clientId, date = moment(), callback, types, courses)
   {
-      self.setState((prv) =>
+    self.setState((prv) =>
+    {
+      prv.brokerBalance.sum = 0;
+      prv.cashBalance.sum = 0;
+      prv.bankBalance.sum = 0;
+      prv.digitBalance.sum = 0;
+      accounts.map((item) =>
       {
-        prv.brokerBalance.sum = 0;
-        prv.cashBalance.sum = 0;
-        prv.bankBalance.sum = 0;
-        prv.digitBalance.sum = 0;
-        accounts.map((item) =>
+        item.accounts.map((account) =>
         {
-          item.accounts.map((account) =>
+          try
           {
-            try{
-              if(account.sum > 0)
-              {
-                switch(item.type_id)
-                {
-                  case AccountConstants.BROKER_ACCOUNT:
-                    prv.brokerBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                    break;
-                  case AccountConstants.CASH:
-                    prv.cashBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                    break;
-                  case AccountConstants.BANK_ACCOUNT:
-                    prv.bankBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                    break;
-                  case AccountConstants.DIGIT_MONEY:
-                    prv.digitBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                    break;
-                }
-              }
-            }catch (e)
+            if (account.sum > 0)
             {
-              console.log(e)
+              switch (item.type_id)
+              {
+                case AccountConstants.BROKER_ACCOUNT:
+                  prv.brokerBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  break;
+                case AccountConstants.CASH:
+                  prv.cashBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  break;
+                case AccountConstants.BANK_ACCOUNT:
+                  prv.bankBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  break;
+                case AccountConstants.DIGIT_MONEY:
+                  prv.digitBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  break;
+              }
             }
-          })
-        });
+          } catch (e)
+          {
+            console.log(e)
+          }
+        })
+      });
 
-        return prv;
-      }, () => {
-        if(typeof callback === 'function')
-        {
-          callback();
-        }
-      })
+      return prv;
+    }, () =>
+    {
+      if (typeof callback === 'function')
+      {
+        callback();
+      }
+    })
   }
 
   static getActivesByDate(self, bindString, data, clientId, date = moment(), callback)
@@ -1499,11 +1497,13 @@ export default class Active
       .with('dividends')
       .all((response) =>
       {
-        self.setState((prv) => {
+        self.setState((prv) =>
+        {
           prv[bindString] = ActiveModel.load(response.data);
 
           return prv;
-        }, () => {
+        }, () =>
+        {
           callback()
         });
       });
@@ -1532,22 +1532,22 @@ export default class Active
       .orWhere((query) =>
       {
         return query.whereIn('type_id', [
-            ActiveConstants.DEPOSIT,
-            ActiveConstants.DEBT,
-            ActiveConstants.FUNDED_LIFE_INSURANCE,
-          ])
+          ActiveConstants.DEPOSIT,
+          ActiveConstants.DEBT,
+          ActiveConstants.FUNDED_LIFE_INSURANCE,
+        ])
       })
       .orWhere((query) =>
       {
         return query.whereIn('type_id', [
-            ActiveConstants.COMMODITY,
-            ActiveConstants.PRECIOUS_METAL,
-            ActiveConstants.CRYPTO,
-            ActiveConstants.ETF,
-            ActiveConstants.PIF,
-            ActiveConstants.BPIF,
-            ActiveConstants.HEDGE_FUND,
-          ])
+          ActiveConstants.COMMODITY,
+          ActiveConstants.PRECIOUS_METAL,
+          ActiveConstants.CRYPTO,
+          ActiveConstants.ETF,
+          ActiveConstants.PIF,
+          ActiveConstants.BPIF,
+          ActiveConstants.HEDGE_FUND,
+        ])
           .whereDoesntHave('sell_trades', (query) =>
           {
             return query.whereDate('trade_at', '<=', now);
@@ -1576,8 +1576,10 @@ export default class Active
       .all((response) =>
       {
 
-        self.setState((prv) => {
-          prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) => {
+        self.setState((prv) =>
+        {
+          prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) =>
+          {
             let valuation1 = c1.valuation;
             let valuation2 = c2.valuation;
 
@@ -1585,7 +1587,8 @@ export default class Active
           });
 
           return prv;
-        }, () => {
+        }, () =>
+        {
           callback()
         });
       });
@@ -1618,11 +1621,13 @@ export default class Active
       .with('income_account')
       .all((response) =>
       {
-        self.setState((prv) => {
+        self.setState((prv) =>
+        {
           prv[bindString] = ActiveModel.load(response.data);
 
           return prv;
-        }, () => {
+        }, () =>
+        {
           callback()
         });
       });
@@ -1669,11 +1674,13 @@ export default class Active
       .with('payments')
       .all((response) =>
       {
-        self.setState((prv) => {
+        self.setState((prv) =>
+        {
           prv[bindString] = ActiveModel.load(response.data);
 
           return prv;
-        }, () => {
+        }, () =>
+        {
           callback()
         });
       });
@@ -1689,5 +1696,19 @@ export default class Active
     {
       return true;
     }
+  }
+
+  getSumRubble(items)
+  {
+    let now = moment();
+    let sum = 0;
+    items.map((item) =>
+    {
+      sum += Active.getDiffRubble(item, now);
+
+
+    });
+
+    return sum;
   }
 }

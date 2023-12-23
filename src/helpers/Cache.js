@@ -1,6 +1,8 @@
-export default class Cache {
+export default class Cache
+{
 
-  static setItem(key, data, time = 24 * 60 * 60 * 1000) {
+  static setItem(key, data, time = 24 * 60 * 60 * 1000)
+  {
     const dataToStore = {
       data: data,
       expiry: new Date().getTime() + time, // Сохраняем данные на 24 часа
@@ -8,21 +10,25 @@ export default class Cache {
     window.localStorage.setItem(key, JSON.stringify(dataToStore));
   }
 
-  static getItem(key) {
+  static getItem(key)
+  {
     let data = null;
 
     try
     {
       data = JSON.parse(window.localStorage.getItem(key));
-    }catch (e){
+    } catch (e)
+    {
       return null;
     }
 
-    if (typeof data === 'undefined' || data === null) {
+    if (typeof data === 'undefined' || data === null)
+    {
       return null;
     }
 
-    if (new Date().getTime() > data.expiry) {
+    if (new Date().getTime() > data.expiry)
+    {
       // Данные устарели
       window.localStorage.removeItem(key);
       return null;

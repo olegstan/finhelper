@@ -1,5 +1,7 @@
-export default class Url {
-  static getCurrentUrl() {
+export default class Url
+{
+  static getCurrentUrl()
+  {
     var sourceURL = window.location.href.replace(window.location.protocol + "//" + window.location.hostname, '');
 
     sourceURL = sourceURL.replace(':3000', '');
@@ -8,9 +10,11 @@ export default class Url {
       // param,
       params_arr = [],
       queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
-    if (queryString !== "") {
+    if (queryString !== "")
+    {
       params_arr = queryString.split("&");
-      for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+      for (var i = params_arr.length - 1; i >= 0; i -= 1)
+      {
         // param = params_arr[i].split("=")[0];
         params_arr.splice(i, 1);
       }
@@ -27,7 +31,8 @@ export default class Url {
     {
       var parts = window.location.search.substring(1).split('&');
 
-      for (var i = 0; i < parts.length; i++) {
+      for (var i = 0; i < parts.length; i++)
+      {
         var nv = parts[i].split('=');
         if (!nv[0]) continue;
         params[nv[0]] = nv[1] || true;
@@ -47,7 +52,7 @@ export default class Url {
 
     var parts = rtn.split('#');
 
-    if(parts.length > 0)
+    if (parts.length > 0)
     {
       return parts[1];
     }
@@ -55,7 +60,8 @@ export default class Url {
     return null;
   }
 
-  static getLangCode() {
+  static getLangCode()
+  {
 
     let sourceURL = window.location.href.replace(window.location.protocol + "//" + window.location.hostname, '');
 
@@ -63,9 +69,11 @@ export default class Url {
 
     let parts = sourceURL.split('/');
 
-    if (parts.length > 1 && parts[1].length === 2) {
+    if (parts.length > 1 && parts[1].length === 2)
+    {
       return parts[1];
-    } else {
+    } else
+    {
       return 'ru'
     }
   }

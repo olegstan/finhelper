@@ -6,27 +6,27 @@ export default class Plan
   {
     let balance = 0;
 
-    if(item.plan_income)
+    if (item.plan_income)
     {
       balance += Money.toDigits(item.plan_income)
     }
-    if(item.outcome)
+    if (item.outcome)
     {
       balance -= Money.toDigits(item.outcome)
     }
-    if(item.obligation)
+    if (item.obligation)
     {
       balance -= Money.toDigits(item.obligation)
     }
-    if(item.additional_outcome)
+    if (item.additional_outcome)
     {
       balance -= Money.toDigits(item.additional_outcome)
     }
-    if(item.plan_goals)
+    if (item.plan_goals)
     {
       balance -= Money.toDigits(item.plan_goals)
     }
-    if(item.retired_goals)
+    if (item.retired_goals)
     {
       balance -= Money.toDigits(item.retired_goals)
     }
@@ -49,23 +49,23 @@ export default class Plan
     let percent_negative = Money.toDigits(user['percent_negative']);
     let percent_positive = Money.toDigits(user['percent_positive']);
 
-    if(percent_neutral === 0 && percent_negative === 0)
+    if (percent_neutral === 0 && percent_negative === 0)
     {
       percent_positive = 100;
     }
 
-    if(percent_neutral === 0 && percent_positive === 0)
+    if (percent_neutral === 0 && percent_positive === 0)
     {
       percent_negative = 100;
     }
 
-    if(percent_negative === 0 && percent_positive === 0)
+    if (percent_negative === 0 && percent_positive === 0)
     {
       percent_neutral = 100;
     }
 
     //пропорция если одно ищ полей не заполнено, то оставшиеся два будут  делиться
-    if(percent_neutral !== 0 && percent_negative !== 0 && percent_positive === 0)
+    if (percent_neutral !== 0 && percent_negative !== 0 && percent_positive === 0)
     {
       let sum = percent_neutral + percent_negative;
 
@@ -73,7 +73,7 @@ export default class Plan
       percent_negative = 100 / sum * percent_negative;
     }
 
-    if(percent_neutral !== 0 && percent_positive !== 0 && percent_negative === 0)
+    if (percent_neutral !== 0 && percent_positive !== 0 && percent_negative === 0)
     {
       let sum = percent_neutral + percent_positive;
 
@@ -81,7 +81,7 @@ export default class Plan
       percent_positive = 100 / sum * percent_positive;
     }
 
-    if(percent_negative !== 0 && percent_positive !== 0 && percent_neutral === 0)
+    if (percent_negative !== 0 && percent_positive !== 0 && percent_neutral === 0)
     {
       let sum = percent_negative + percent_positive;
 
@@ -96,16 +96,18 @@ export default class Plan
     {
       //по закону если доход больше 5 млн, то подоходный налог будет 15%
       //работает в том случае, если пользователь указано стандартный 13% налог на доходы
-      if(tax === 13 && income >= 5000000)
+      if (tax === 13 && income >= 5000000)
       {
         let firstPart = 5000000;
         let secondPart = income - 5000000;
 
         return income - ((firstPart / 100 * 13) + (secondPart / 100 * 15)) + add_income;
-      }else{
+      } else
+      {
         return income - (income / 100 * tax) + add_income;
       }
-    }else{
+    } else
+    {
       return add_income;
     }
   }

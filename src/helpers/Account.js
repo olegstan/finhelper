@@ -17,14 +17,16 @@ export default class Account
   {
     let accounts = [];
 
-    propsAccounts.map((item) => {
-      if(types.indexOf(item.type_id) !== -1)
+    propsAccounts.map((item) =>
+    {
+      if (types.indexOf(item.type_id) !== -1)
       {
         accounts.push(item);
-      }else if(item.type_id === AccountConstants.TEMP){
+      } else if (item.type_id === AccountConstants.TEMP)
+      {
         item.accounts.map((subAccount) =>
         {
-          if(subAccount.id === value)
+          if (subAccount.id === value)
           {
             let copyItem = {...item};
             copyItem.accounts = [];
@@ -49,10 +51,11 @@ export default class Account
   {
     let currencies = [];
 
-    propCurrencies.map((item) => {
+    propCurrencies.map((item) =>
+    {
       // if(['RUB', 'USD', 'EUR'].indexOf(item.code) !== -1)
       // {
-        currencies.push(item);
+      currencies.push(item);
       // }else{
       //   if(value && value.id === item.id)
       //   {
@@ -78,39 +81,44 @@ export default class Account
     accounts.map((account) =>
     {
       let name = '';
-      if(currency){
+      if (currency)
+      {
 
         account.accounts.map((subAccount) =>
         {
-          if(currency.id === subAccount.currency_id){
+          if (currency.id === subAccount.currency_id)
+          {
             name = '';
-            if(subAccount.name && subAccount.name.length > textLength)
+            if (subAccount.name && subAccount.name.length > textLength)
             {
               name = subAccount.name.substr(0, textLength - 1) + '...';
-            }else{
+            } else
+            {
               name = subAccount.name ? subAccount.name : 'Счёт без названия';
             }
 
             preparedAccounts.push({
               id: subAccount.id,
-              name: name.capitalize() + ': ' +  Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
+              name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
             });
           }
         });
-      }else{
+      } else
+      {
         account.accounts.map((subAccount) =>
         {
           name = '';
-          if(subAccount.name && subAccount.name.length > textLength)
+          if (subAccount.name && subAccount.name.length > textLength)
           {
             name = subAccount.name.substr(0, textLength - 1) + '...';
-          }else{
+          } else
+          {
             name = subAccount.name ? subAccount.name : 'Счёт без названия';
           }
 
           preparedAccounts.push({
             id: subAccount.id,
-            name: name.capitalize() + ': ' +  Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
+            name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
           });
         });
       }

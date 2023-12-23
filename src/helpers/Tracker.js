@@ -10,16 +10,18 @@ export default class Tracker
   {
     let code = '';
     let params = Url.getParams();
-    if(params && typeof params.bot === 'string')
+    if (params && typeof params.bot === 'string')
     {
       localStorage.setItem('bot', JSON.stringify(params.bot));
       return params.bot;
-    }else{
+    } else
+    {
       code = localStorage.getItem('bot');
-      if(code)
+      if (code)
       {
         return JSON.parse(code);
-      }else{
+      } else
+      {
         return false;
       }
     }
@@ -27,7 +29,7 @@ export default class Tracker
 
   static init()
   {
-    if(process.env.REACT_APP_ENV === 'production' && Tracker.isBot() === false)
+    if (process.env.REACT_APP_ENV === 'production' && Tracker.isBot() === false)
     {
       Tracker.ym = window.ym;
     }
@@ -35,24 +37,28 @@ export default class Tracker
 
   static reachGoal(action, params = {})
   {
-    try {
-      if(process.env.REACT_APP_ENV === 'production' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
+    try
+    {
+      if (process.env.REACT_APP_ENV === 'production' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
       {
         Tracker.ym(Tracker.id, 'reachGoal', action, params);
       }
-    }catch (e) {
+    } catch (e)
+    {
       console.error(e);
     }
   }
 
   static hit(url)
   {
-    try {
-      if(process.env.REACT_APP_ENV === 'production' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
+    try
+    {
+      if (process.env.REACT_APP_ENV === 'production' && typeof Tracker.ym === 'function' && Tracker.isBot() === false)
       {
         Tracker.ym(Tracker.id, 'hit', url);
       }
-    }catch (e) {
+    } catch (e)
+    {
       console.error(e);
     }
   }

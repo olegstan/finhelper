@@ -33,21 +33,22 @@ export default class Active extends BaseModel
 
   get avg_own_date_by_value()
   {
-    if(this['tmp_avg_own_date_by_value'] === null || typeof this['tmp_avg_own_date_by_value'] === 'undefined')
+    if (this['tmp_avg_own_date_by_value'] === null || typeof this['tmp_avg_own_date_by_value'] === 'undefined')
     {
       let trades = this.buy_trades;
 
       let date = null;
       let value = 0;
-      if(trades.length)
+      if (trades.length)
       {
-        for(let i = 0; i < trades.length; i++)
+        for (let i = 0; i < trades.length; i++)
         {
           let trade = trades[i];
 
-          if(trade.trade_at)
+          if (trade.trade_at)
           {
-            if(date){
+            if (date)
+            {
               //каждая следующая дата будет больше прошлой,
               //поэтому всегда двигаемся вперед
               //разница в днях
@@ -68,13 +69,16 @@ export default class Active extends BaseModel
               //для следующей итерации сохраняем объём по текущей дате
               value = sumValue;
 
-              if(diffValue > 0){
+              if (diffValue > 0)
+              {
                 date.add(avgDays, 'days');
-              }else{
+              } else
+              {
                 date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
                 date.add(avgDays, 'days');
               }
-            }else{
+            } else
+            {
               value = trade.count;
               date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
             }
@@ -90,22 +94,22 @@ export default class Active extends BaseModel
 
   get avg_own_date()
   {
-    if(this['tmp_avg_own_date'] === null || typeof this['tmp_avg_own_date'] === 'undefined')
+    if (this['tmp_avg_own_date'] === null || typeof this['tmp_avg_own_date'] === 'undefined')
     {
       let buyTrades = this.buy_trades;
       let sellTrades = this.sell_trades;
 
       let date = null;
 
-      if(buyTrades?.length)
+      if (buyTrades?.length)
       {
-        for(let i = 0; i < buyTrades.length; i++)
+        for (let i = 0; i < buyTrades.length; i++)
         {
           let trade = buyTrades[i];
 
-          if(trade.trade_at)
+          if (trade.trade_at)
           {
-            if(date)
+            if (date)
             {
               let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
 
@@ -114,7 +118,8 @@ export default class Active extends BaseModel
               //каждая следующая дата будет больше прошлой,
               //поэтому всегда двигаемся вперед
               date.add(diffInDays / 2, 'days');
-            }else{
+            } else
+            {
               date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
             }
           }
@@ -123,15 +128,15 @@ export default class Active extends BaseModel
         this['tmp_avg_own_date'] = date ? date.format('DD.MM.YYYY') : '';
       }
 
-      if(sellTrades?.length)
+      if (sellTrades?.length)
       {
-        for(let i = 0; i < sellTrades.length; i++)
+        for (let i = 0; i < sellTrades.length; i++)
         {
           let trade = sellTrades[i];
 
-          if(trade.trade_at)
+          if (trade.trade_at)
           {
-            if(date)
+            if (date)
             {
               let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
 
@@ -140,7 +145,8 @@ export default class Active extends BaseModel
               //каждая следующая дата будет больше прошлой,
               //поэтому всегда двигаемся вперед
               date.add(diffInDays / 2, 'days');
-            }else{
+            } else
+            {
               date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
             }
           }
@@ -153,13 +159,18 @@ export default class Active extends BaseModel
     return this['tmp_avg_own_date'];
   }
 
+  set avg_own_date(x)
+  {
+    this['tmp_avg_own_date'] = x;
+  }
+
   get trades()
   {
-    if(!this.related.trades.loaded)
+    if (!this.related.trades.loaded)
     {
       this['tmp_trades'] = [];
 
-      if(this.attributes['sell_trades'] && this.attributes['sell_trades'].length)
+      if (this.attributes['sell_trades'] && this.attributes['sell_trades'].length)
       {
         this.attributes['sell_trades'].map((item) =>
         {
@@ -169,7 +180,7 @@ export default class Active extends BaseModel
         });
       }
 
-      if(this.attributes['buy_trades'] && this.attributes['buy_trades'].length)
+      if (this.attributes['buy_trades'] && this.attributes['buy_trades'].length)
       {
         this.attributes['buy_trades'].map((item) =>
         {
@@ -179,20 +190,25 @@ export default class Active extends BaseModel
         });
       }
 
-      this['tmp_trades']?.sort((a, b) => {
+      this['tmp_trades']?.sort((a, b) =>
+      {
         let aDate = moment(a.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss')
         let bDate = moment(b.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss')
 
-        if (a.active_id < b.active_id) {
+        if (a.active_id < b.active_id)
+        {
           return -1;
         }
-        if (b.active_id < a.active_id) {
+        if (b.active_id < a.active_id)
+        {
           return 1;
         }
-        if (aDate.isBefore(bDate)) {
+        if (aDate.isBefore(bDate))
+        {
           return -1;
         }
-        if (bDate.isBefore(aDate)) {
+        if (bDate.isBefore(aDate))
+        {
           return 1;
         }
         return 0;
@@ -205,11 +221,17 @@ export default class Active extends BaseModel
     return this['tmp_trades'] ? this['tmp_trades'] : [];
   }
 
+  set trades(x)
+  {
+    this['tmp_trades'] = x;
+  }
+
   get payments()
   {
-    if(!this.related.payments.loaded && this.attributes['payments'] && this.attributes['payments'].length)
+    if (!this.related.payments.loaded && this.attributes['payments'] && this.attributes['payments'].length)
     {
-      this['tmp_payments'] = this.attributes['payments'].map((item) => {
+      this['tmp_payments'] = this.attributes['payments'].map((item) =>
+      {
         return Payment.create(item);
       });
       this.related.payments.loaded = true;
@@ -218,11 +240,17 @@ export default class Active extends BaseModel
     return this['tmp_payments'] ? this['tmp_payments'] : [];
   }
 
+  set payments(x)
+  {
+    this['tmp_payments'] = x;
+  }
+
   get buy_trades()
   {
-    if(!this.related.buy_trades.loaded && this.attributes['buy_trades'] && this.attributes['buy_trades'].length)
+    if (!this.related.buy_trades.loaded && this.attributes['buy_trades'] && this.attributes['buy_trades'].length)
     {
-      this['tmp_buy_trades'] = this.attributes['buy_trades'].map((item) => {
+      this['tmp_buy_trades'] = this.attributes['buy_trades'].map((item) =>
+      {
         return new BuyTrade(item);
       });
       this.related.buy_trades.loaded = true;
@@ -231,9 +259,14 @@ export default class Active extends BaseModel
     return this['tmp_buy_trades'] ? this['tmp_buy_trades'] : [];
   }
 
+  set buy_trades(x)
+  {
+    this['tmp_buy_trades'] = x;
+  }
+
   get sell_trades()
   {
-    if(!this.related.sell_trades.loaded && this.attributes['sell_trades'] && this.attributes['sell_trades'].length)
+    if (!this.related.sell_trades.loaded && this.attributes['sell_trades'] && this.attributes['sell_trades'].length)
     {
       this['tmp_sell_trades'] = this.attributes['sell_trades'].map((item) =>
       {
@@ -245,16 +278,22 @@ export default class Active extends BaseModel
     return this['tmp_sell_trades'] ? this['tmp_sell_trades'] : [];
   }
 
+  set sell_trades(x)
+  {
+    this['tmp_sell_trades'] = x;
+  }
+
   get valuation()
   {
-    if(this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined')
+    if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined')
     {
       let obj = ActiveHelper.getValuation(this.attributes);
 
-      if(obj)
+      if (obj)
       {
         this['tmp_valuation'] = obj.sum;
-      }else{
+      } else
+      {
         this['tmp_valuation'] = 0;
       }
     }
@@ -269,14 +308,15 @@ export default class Active extends BaseModel
 
   get originValuation()
   {
-    if(this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined')
+    if (this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined')
     {
       let obj = ActiveHelper.getOriginalValuation(this.attributes, moment());
 
-      if(obj)
+      if (obj)
       {
         this['tmp_originValuation'] = obj.sum;
-      }else{
+      } else
+      {
         this['tmp_originValuation'] = 0;
       }
     }
@@ -291,7 +331,7 @@ export default class Active extends BaseModel
 
   get factPercent()
   {
-    if((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
+    if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
     {
       this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
       this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
@@ -307,7 +347,7 @@ export default class Active extends BaseModel
 
   get annuallyPercent()
   {
-    if((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
+    if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
     {
       this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
       this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
@@ -319,30 +359,5 @@ export default class Active extends BaseModel
   set annuallyPercent(x)
   {
     this['tmp_annuallyPercent'] = x;
-  }
-
-  set payments(x)
-  {
-    this['tmp_payments'] = x;
-  }
-
-  set trades(x)
-  {
-    this['tmp_trades'] = x;
-  }
-
-  set buy_trades(x)
-  {
-    this['tmp_buy_trades'] = x;
-  }
-
-  set sell_trades(x)
-  {
-    this['tmp_sell_trades'] = x;
-  }
-
-  set avg_own_date(x)
-  {
-    this['tmp_avg_own_date'] = x;
   }
 }

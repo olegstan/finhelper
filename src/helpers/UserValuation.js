@@ -20,7 +20,7 @@ class ReactComponentEmulator
       this.state = param;
     }
 
-    if(typeof callback === 'function')
+    if (typeof callback === 'function')
     {
       callback();
     }
@@ -29,21 +29,23 @@ class ReactComponentEmulator
 
 export default class UserValuation
 {
-  static getAccountValuation(array) {
-      return array.sum > 0 ? array.sum : 0;
+  static getAccountValuation(array)
+  {
+    return array.sum > 0 ? array.sum : 0;
   }
 
-  static getWholeActivesSum(state) {
-      let sum = 0;
+  static getWholeActivesSum(state)
+  {
+    let sum = 0;
 
-      sum += InvestCalc.getValuation(state.properties);
-      sum += InvestCalc.getValuation(state.invests);
-      sum += UserValuation.getAccountValuation(state.bankBalance);
-      sum += UserValuation.getAccountValuation(state.brokerBalance);
-      sum += UserValuation.getAccountValuation(state.cashBalance);
-      sum += UserValuation.getAccountValuation(state.digitBalance);
+    sum += InvestCalc.getValuation(state.properties);
+    sum += InvestCalc.getValuation(state.invests);
+    sum += UserValuation.getAccountValuation(state.bankBalance);
+    sum += UserValuation.getAccountValuation(state.brokerBalance);
+    sum += UserValuation.getAccountValuation(state.cashBalance);
+    sum += UserValuation.getAccountValuation(state.digitBalance);
 
-      return sum;
+    return sum;
   }
 
   static async getValuation(clientId, currencyId, courses)

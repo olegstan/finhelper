@@ -91,8 +91,8 @@ export default class ActiveConstants
 
   static SALARY_INCOME = 12001;
   static BONUS_INCOME = 12002;
-  static RETIRE_INCOME =  12003;
-  static RENT_INCOME =  12004;
+  static RETIRE_INCOME = 12003;
+  static RENT_INCOME = 12004;
   static RELATIVES_INCOME = 12005;
   static PASSIVE_INCOME = 12006;
   static AGENT_INCOME = 12007;
@@ -252,24 +252,16 @@ export default class ActiveConstants
 
   static SIMPLE = 1;
   static DIFFERENTIAL = 2;
-
-  static getName(item)
-  {
-
-  }
-
   static MONEY = 1;
   static INVEST = 2;
   static INVEST_TRADED = 4;
   static OWN = 3;
-
   /**
    * способ получения актива - покупка или добавление (без списания со счёта сумма за покупку)
    *
    */
   static BUY = 1;
   static GET = 2;
-
   static STOCK_GROUP_TYPE = 1001;
   static OBLIGATION_GROUP_TYPE = 1002;
   static METAL_GROUP_TYPE = 1003;
@@ -278,64 +270,126 @@ export default class ActiveConstants
   static DIRECT_GROUP_TYPE = 1006;
   static INSTRUMENT_CASH_FLOW_GROUP_TYPE = 1007;
   static CUSTOM_GROUP_TYPE = 2001;
-
   static CUSTOM_CLASS_TYPE = 2001;
+  static INSURANCE_RISK_STEAL = 1001;
+  static INSURANCE_RISK_FIRE = 1002;
+  static INSURANCE_RISK_DISASTER = 1003;
+  static INSURANCE_RISK_TOTAL = 1004;
+  static INSURANCE_RISK_FLOODING = 1005;
+  static INSURANCE_RISK_ILLEGAL_ACTIONS = 1006;
+  static INSURANCE_RISK_DEATH = 2001;
+  static INSURANCE_RISK_SURGICAL_INTERVENTION = 2002;
+  static INSURANCE_RISK_SPORT_INJURY = 2003;
+  static INSURANCE_RISK_CRITICAL_ILLNESS = 2004;
+  static INSURANCE_RISK_HOSPITALIZATION = 2005;
+  static INSURANCE_RISK_IN_PRODUCTION = 2006;
+  static INSURANCE_RISK_TRAUMATIC_INJURY = 2007;
+  static INSURANCE_RISK_CRIMINAL_INJURY = 2008;
+  static INSURANCE_RISK_JOB_LOSS = 2009;
+  static INSURANCE_RISK_DISABILITY = 2010;
+  static INSURANCE_RISK_DOCTOR_ADVICE = 3001;
+  static INSURANCE_RISK_HOSPITAL = 3002;
+  static INSURANCE_RISK_DENTISTRY = 3003;
+  static INSURANCE_RISK_CLINIC_SERVICE = 3004;
+  static INSURANCE_RISK_AMBULANCE = 3005;
+  static INSURANCE_RISK_PHARMACY = 3006;
+  static INSURANCE_RISK_MEDICAL_TRANSPORT = 4001;
+  static INSURANCE_RISK_ACCIDENT = 4002;
+  static INSURANCE_RISK_TRIP_CANCELATION = 4003;
+  static INSURANCE_RISK_ACTIVE_SPORTS = 4004;
+  static INSURANCE_RISK_LOST_LAGGAGE = 4005;
+  static INSURANCE_RISK_CIVIL_RESPONSIBILITY = 4006;
+  static INSURANCE_RISK_DISABILITY_SPORTS = 5001;
+  static INSURANCE_RISK_MARTIAL_ARTS = 5002;
+  static INSURANCE_RISK_FIGURE_SKATING = 5003;
+  static INSURANCE_RISK_INJURY = 5004;
+  static INSURANCE_RISK_GAME_TEAM_SPORTS = 5005;
+  static INSURANCE_RISK_DANCE_SPORTS = 5006;
+  static INSURANCE_RISK_MORTALITY = 5007;
+  static INSURANCE_RISK_ARTISTIC_GYMNASTIC = 5008;
+  static INSURANCE_RISK_EXTREME_SPORTS = 5009;
+  static INSURANCE_RISK_RUN = 5010;
+  static INSURANCE_RISK_SWIMMING = 5011;
+  static INSURANCE_RISK_COMPANY_LIQUIDATION = 6001;
+  static INSURANCE_RISK_AGREEMENT_OF_PARTIES = 6002;
+  static INSURANCE_RISK_CHANGE_OWNERSHIP = 6003;
+  static INSURANCE_RISK_EXTRAORDINARY_CIRCUMSTANCES = 6004;
+  static INSURANCE_RISK_DOWNSIZING_INCONSISTENCY = 6005;
+  static INSURANCE_RISK_EMPLOYERS_INITIATIVE = 6006;
+  static INSURANCE_RISK_DEATH_OF_EMPLOYER = 6007;
+  static INSURANCE_RISK_REINSTATEMENT_TO_WORK = 6008;
+  static INSURANCE_RISK_TERMINATION_OF_ACCESS = 6009;
+  static INSURANCE_RISK_CAUSING_HARM_HEALTH = 7001;
+  static INSURANCE_RISK_CAUSING_PROPERTY_DAMAGE = 7002;
+  static INSURANCE_RISK_CONDUCTIONG_CASES_IN_JUDICAL = 7003;
+  static INSURANCE_RISK_EXPENSES_INCURRED = 7004;
+  /** pet form **/
+  static INSURANCE_RISK_DOCTOR_ADVICE_PET = 8001;
+  static INSURANCE_RISK_DIAGNOSTIC = 8002;
+  static INSURANCE_RISK_PARAMEDIC = 8003;
+  static INSURANCE_RISK_SURGICAL = 8004;
+  static INSURANCE_RISK_MEDICATIONS = 8005;
+  static INSURANCE_RISK_KEEPING_ANIMAL = 8006;
 
+  static getName(item)
+  {
+
+  }
 
   static types()
   {
     return [
-      { id: ActiveConstants.SALARY, name: '' },
-      { id: ActiveConstants.SALARY_INCOME, name: '' },
-      { id: ActiveConstants.BONUS_INCOME, name: '' },
-      { id: ActiveConstants.RETIRE_INCOME, name: '' },
-      { id: ActiveConstants.RETIRE_INCOME, name: '' },
-      { id: ActiveConstants.RENT_INCOME, name: '' },
-      { id: ActiveConstants.RELATIVES_INCOME, name: '' },
-      { id: ActiveConstants.PASSIVE_INCOME, name: '' },
-      { id: ActiveConstants.AGENT_INCOME, name: '' },
-      { id: ActiveConstants.CUSTOM_INCOME, name: '' },
-      { id: ActiveConstants.CUSTOM_SALARY, name: '' },
-      { id: ActiveConstants.FLAT, name: 'Недвижимость' },
-      { id: ActiveConstants.HOUSE, name: 'Недвижимость' },
-      { id: ActiveConstants.LAND, name: 'Недвижимость' },
-      { id: ActiveConstants.CAR, name: 'Техника' },
-      { id: ActiveConstants.MOTO, name: 'Техника' },
-      { id: ActiveConstants.TECHNIC, name: 'Техника' },
-      { id: ActiveConstants.JEWELRY, name: 'Ювелирные украшения' },
-      { id: ActiveConstants.PERSONAL_TECHNIC, name: 'Техника' },
-      { id: ActiveConstants.CUSTOM_PROPERTY, name: 'Имущество' },
-      { id: ActiveConstants.DEPOSIT, name: 'Депозит' },
-      { id: ActiveConstants.DEBT, name: '' },
-      { id: ActiveConstants.FUNDED_LIFE_INSURANCE, name: '' },
-      { id: ActiveConstants.COMMODITY, name: 'Товары' },
-      { id: ActiveConstants.PRECIOUS_METAL, name: 'Драгоценные металлы' },
-      { id: ActiveConstants.CURRENCY, name: 'Валюта' },
-      { id: ActiveConstants.CRYPTO, name: 'Криптовалюта' },
-      { id: ActiveConstants.ETF, name: 'ETF' },
-      { id: ActiveConstants.PIF, name: 'ПИФ' },
-      { id: ActiveConstants.BONUS_INCOME, name: 'БПИФ (биржевой ПИФ)' },
-      { id: ActiveConstants.HEDGE_FUND, name: 'Хэдж-фонды' },
-      { id: ActiveConstants.STOCK, name: 'Акции' },
-      { id: ActiveConstants.STRATEGY_DU, name: 'Стратегия ДУ (доверительное управление)' },
-      { id: ActiveConstants.FUTURES, name: 'Фьючерс' },
-      { id: ActiveConstants.OPTION, name: 'Опцион' },
-      { id: ActiveConstants.OBLIGATION, name: 'Облигации' },
-      { id: ActiveConstants.STRUCTURE_PRODUCT, name: 'Структурные продукты' },
-      { id: ActiveConstants.INVESTMENT_LIFE_INSURANCE, name: 'ИЖС' },
-      { id: ActiveConstants.EXCHANGE_NOTE, name: 'Биржевая нота' },
-      { id: ActiveConstants.OBLIGATION_NOTE, name: 'Облигационная нота' },
-      { id: ActiveConstants.RENT_CAR, name: '' },
-      { id: ActiveConstants.RENT_FLAT, name: '' },
-      { id: ActiveConstants.SPEND_LIFE, name: '' },
-      { id: ActiveConstants.CAR_CREDIT, name: 'Кредит' },
-      { id: ActiveConstants.FLAT_CREDIT, name: 'Кредит' },
-      { id: ActiveConstants.CREDIT, name: 'Кредит' },
-      { id: ActiveConstants.LOAN, name: 'Займ' },
-      { id: ActiveConstants.ALIMONY, name: 'Алименты' },
-      { id: ActiveConstants.CUSTOM_SPEND, name: '' },
-      { id: ActiveConstants.CUSTOM_OBLIGATION, name: '' },
-      { id: ActiveConstants.MONEY_ACTIVE, name: 'Деньги' },
+      {id: ActiveConstants.SALARY, name: ''},
+      {id: ActiveConstants.SALARY_INCOME, name: ''},
+      {id: ActiveConstants.BONUS_INCOME, name: ''},
+      {id: ActiveConstants.RETIRE_INCOME, name: ''},
+      {id: ActiveConstants.RETIRE_INCOME, name: ''},
+      {id: ActiveConstants.RENT_INCOME, name: ''},
+      {id: ActiveConstants.RELATIVES_INCOME, name: ''},
+      {id: ActiveConstants.PASSIVE_INCOME, name: ''},
+      {id: ActiveConstants.AGENT_INCOME, name: ''},
+      {id: ActiveConstants.CUSTOM_INCOME, name: ''},
+      {id: ActiveConstants.CUSTOM_SALARY, name: ''},
+      {id: ActiveConstants.FLAT, name: 'Недвижимость'},
+      {id: ActiveConstants.HOUSE, name: 'Недвижимость'},
+      {id: ActiveConstants.LAND, name: 'Недвижимость'},
+      {id: ActiveConstants.CAR, name: 'Техника'},
+      {id: ActiveConstants.MOTO, name: 'Техника'},
+      {id: ActiveConstants.TECHNIC, name: 'Техника'},
+      {id: ActiveConstants.JEWELRY, name: 'Ювелирные украшения'},
+      {id: ActiveConstants.PERSONAL_TECHNIC, name: 'Техника'},
+      {id: ActiveConstants.CUSTOM_PROPERTY, name: 'Имущество'},
+      {id: ActiveConstants.DEPOSIT, name: 'Депозит'},
+      {id: ActiveConstants.DEBT, name: ''},
+      {id: ActiveConstants.FUNDED_LIFE_INSURANCE, name: ''},
+      {id: ActiveConstants.COMMODITY, name: 'Товары'},
+      {id: ActiveConstants.PRECIOUS_METAL, name: 'Драгоценные металлы'},
+      {id: ActiveConstants.CURRENCY, name: 'Валюта'},
+      {id: ActiveConstants.CRYPTO, name: 'Криптовалюта'},
+      {id: ActiveConstants.ETF, name: 'ETF'},
+      {id: ActiveConstants.PIF, name: 'ПИФ'},
+      {id: ActiveConstants.BONUS_INCOME, name: 'БПИФ (биржевой ПИФ)'},
+      {id: ActiveConstants.HEDGE_FUND, name: 'Хэдж-фонды'},
+      {id: ActiveConstants.STOCK, name: 'Акции'},
+      {id: ActiveConstants.STRATEGY_DU, name: 'Стратегия ДУ (доверительное управление)'},
+      {id: ActiveConstants.FUTURES, name: 'Фьючерс'},
+      {id: ActiveConstants.OPTION, name: 'Опцион'},
+      {id: ActiveConstants.OBLIGATION, name: 'Облигации'},
+      {id: ActiveConstants.STRUCTURE_PRODUCT, name: 'Структурные продукты'},
+      {id: ActiveConstants.INVESTMENT_LIFE_INSURANCE, name: 'ИЖС'},
+      {id: ActiveConstants.EXCHANGE_NOTE, name: 'Биржевая нота'},
+      {id: ActiveConstants.OBLIGATION_NOTE, name: 'Облигационная нота'},
+      {id: ActiveConstants.RENT_CAR, name: ''},
+      {id: ActiveConstants.RENT_FLAT, name: ''},
+      {id: ActiveConstants.SPEND_LIFE, name: ''},
+      {id: ActiveConstants.CAR_CREDIT, name: 'Кредит'},
+      {id: ActiveConstants.FLAT_CREDIT, name: 'Кредит'},
+      {id: ActiveConstants.CREDIT, name: 'Кредит'},
+      {id: ActiveConstants.LOAN, name: 'Займ'},
+      {id: ActiveConstants.ALIMONY, name: 'Алименты'},
+      {id: ActiveConstants.CUSTOM_SPEND, name: ''},
+      {id: ActiveConstants.CUSTOM_OBLIGATION, name: ''},
+      {id: ActiveConstants.MONEY_ACTIVE, name: 'Деньги'},
     ]
   }
 
@@ -343,17 +397,17 @@ export default class ActiveConstants
   {
     return [
       // {id: ActiveConstants.MONEY, name: ''},
-      { id: ActiveConstants.OWN, name: 'Личный актив' },
-      { id: ActiveConstants.INVEST_TRADED, name: 'Инвестиционный финансвовый актив (торгуемый на бирже)'},
-      { id: ActiveConstants.INVEST, name: 'Инвестиционный финансвовый актив (неторгуемый на бирже)'},
+      {id: ActiveConstants.OWN, name: 'Личный актив'},
+      {id: ActiveConstants.INVEST_TRADED, name: 'Инвестиционный финансвовый актив (торгуемый на бирже)'},
+      {id: ActiveConstants.INVEST, name: 'Инвестиционный финансвовый актив (неторгуемый на бирже)'},
     ]
   }
 
   static paymentTypes()
   {
     return [
-      { id: ActiveConstants.ONCE, name: 'Разовый' },
-      { id: ActiveConstants.PERIOD, name: 'Периодичный' }
+      {id: ActiveConstants.ONCE, name: 'Разовый'},
+      {id: ActiveConstants.PERIOD, name: 'Периодичный'}
     ]
   }
 
@@ -378,32 +432,32 @@ export default class ActiveConstants
   {
     return [
       // {id: ActiveConstants.MONEY, name: ''},
-      { id: ActiveConstants.BUY, name: 'Покупка' },
-      { id: ActiveConstants.GET, name: 'Получение или наследование' }
+      {id: ActiveConstants.BUY, name: 'Покупка'},
+      {id: ActiveConstants.GET, name: 'Получение или наследование'}
     ]
   }
 
   static periods()
   {
     return [
-      { id: ActiveConstants.MONTHLY, name: 'Месяц' },
-      { id: ActiveConstants.QUARTER, name: 'Квартал' },
-      { id: ActiveConstants.HALFYEAR, name: 'Полгода' },
-      { id: ActiveConstants.YEARLY, name: 'Год' },
+      {id: ActiveConstants.MONTHLY, name: 'Месяц'},
+      {id: ActiveConstants.QUARTER, name: 'Квартал'},
+      {id: ActiveConstants.HALFYEAR, name: 'Полгода'},
+      {id: ActiveConstants.YEARLY, name: 'Год'},
     ]
   }
 
   static fullList()
   {
     return [
-      { id: ActiveConstants.DAILY, name: 'День' },
-      { id: ActiveConstants.WEEKLY, name: 'Неделя' },
-      { id: ActiveConstants.MONTHLY, name: 'Месяц' },
-      { id: ActiveConstants.QUARTER, name: 'Квартал' },
-      { id: ActiveConstants.HALFYEAR, name: 'Полгода' },
-      { id: ActiveConstants.YEARLY, name: 'Год' },
-      { id: ActiveConstants.CUSTOM_PERIOD_WEEK, name: 'Еженедельно по определенным дням недели' },
-      { id: ActiveConstants.CUSTOM_PERIOD_MONTH, name: 'Ежемесячно по определенным дням месяца' },
+      {id: ActiveConstants.DAILY, name: 'День'},
+      {id: ActiveConstants.WEEKLY, name: 'Неделя'},
+      {id: ActiveConstants.MONTHLY, name: 'Месяц'},
+      {id: ActiveConstants.QUARTER, name: 'Квартал'},
+      {id: ActiveConstants.HALFYEAR, name: 'Полгода'},
+      {id: ActiveConstants.YEARLY, name: 'Год'},
+      {id: ActiveConstants.CUSTOM_PERIOD_WEEK, name: 'Еженедельно по определенным дням недели'},
+      {id: ActiveConstants.CUSTOM_PERIOD_MONTH, name: 'Ежемесячно по определенным дням месяца'},
     ]
   }
 
@@ -416,8 +470,9 @@ export default class ActiveConstants
   {
     let group = null;
 
-    ActiveConstants.groups().map((item) => {
-      if(item.id === id)
+    ActiveConstants.groups().map((item) =>
+    {
+      if (item.id === id)
       {
         group = item
       }
@@ -427,6 +482,7 @@ export default class ActiveConstants
 
     return group;
   }
+
   /**
    *
    * @param id
@@ -436,8 +492,9 @@ export default class ActiveConstants
   {
     let group = null;
 
-    ActiveConstants.actions().map((item) => {
-      if(item.id === id)
+    ActiveConstants.actions().map((item) =>
+    {
+      if (item.id === id)
       {
         group = item
       }
@@ -457,8 +514,9 @@ export default class ActiveConstants
   {
     let type = null;
 
-    ActiveConstants.types().map((item) => {
-      if(item.id === id)
+    ActiveConstants.types().map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }
@@ -478,8 +536,9 @@ export default class ActiveConstants
   {
     let type = null;
 
-    ActiveConstants.fullList().map((item) => {
-      if(item.id === id)
+    ActiveConstants.fullList().map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }
@@ -492,9 +551,9 @@ export default class ActiveConstants
 
   static getActiveCurrency(item)
   {
-    if(ActiveConstants.isPackage(item.type_id))
+    if (ActiveConstants.isPackage(item.type_id))
     {
-      if(item.buy_currency_id)
+      if (item.buy_currency_id)
       {
         let currency = CurrencyConstants.getCurrencyById(item.buy_currency_id);
 
@@ -507,13 +566,13 @@ export default class ActiveConstants
 
   static getBondDate(item)
   {
-    if(ActiveConstants.isPackage(item.type_id))
+    if (ActiveConstants.isPackage(item.type_id))
     {
-      if(item.sell_at_date)
+      if (item.sell_at_date)
       {
         let date = moment(item.sell_at_date, 'DD.MM.YYYY');
 
-        if(date.isValid())
+        if (date.isValid())
         {
           return date.format('YYYY')
         }
@@ -530,30 +589,39 @@ export default class ActiveConstants
    */
   static getActiveCompanyByText(text)
   {
-    if(text)
+    if (text)
     {
       text = text.toLowerCase()
 
-      if(text.includes('газпром') || text.includes('gaz finance') || text.includes('gaz capital'))
+      if (text.includes('газпром') || text.includes('gaz finance') || text.includes('gaz capital'))
       {
         return 'Газпром';
-      }else if(text.includes('ржд') || text.includes('rzd capital')){
+      } else if (text.includes('ржд') || text.includes('rzd capital'))
+      {
         return 'RGD';
-      }else if(text.includes('belarus') || text.includes('RZD Capital')){
+      } else if (text.includes('belarus') || text.includes('RZD Capital'))
+      {
         return 'Belarus';
-      }else if(text.includes('polyus') || text.includes('полюс')){
+      } else if (text.includes('polyus') || text.includes('полюс'))
+      {
         return 'Polyus';
-      }else if(text.includes('россия')){
+      } else if (text.includes('россия'))
+      {
         return 'Russia';
-      }else if(text.includes('фосагро')){
+      } else if (text.includes('фосагро'))
+      {
         return 'Fosagro';
-      }else if(text.includes('dme airport')){
+      } else if (text.includes('dme airport'))
+      {
         return 'Domodedovo';
-      }else if(text.includes('steel funding dac') || text.includes('нлмк')){
+      } else if (text.includes('steel funding dac') || text.includes('нлмк'))
+      {
         return 'NLMK';
-      }else if(text.includes('гмк норильский никель')){
+      } else if (text.includes('гмк норильский никель'))
+      {
         return 'GMKN';
-      }else{
+      } else
+      {
 
 
         console.log(text)
@@ -579,9 +647,12 @@ export default class ActiveConstants
     return ActiveConstants.getActiveCompanyByText(Active.getName(item));
   }
 
-  static getActiveNameByType(item) {
-    if (item) {
-      switch (item.type_id) {
+  static getActiveNameByType(item)
+  {
+    if (item)
+    {
+      switch (item.type_id)
+      {
         case ActiveConstants.FLAT:
         case ActiveConstants.HOUSE:
         case ActiveConstants.LAND:
@@ -628,7 +699,6 @@ export default class ActiveConstants
     return '';
   }
 
-
   static getActiveNameByGroup(item)
   {
     return item.group_type_text ? item.group_type_text : 'Без категории';
@@ -636,11 +706,11 @@ export default class ActiveConstants
 
   static getAccountNameByActive(item)
   {
-    if(ActiveConstants.isPackage(item.type_id))
+    if (ActiveConstants.isPackage(item.type_id))
     {
-      if(item.buy_trades?.length)
+      if (item.buy_trades?.length)
       {
-        if(item.buy_trades[0] && item.buy_trades[0].from_account_id)
+        if (item.buy_trades[0] && item.buy_trades[0].from_account_id)
         {
           let account = AccountConstants.getAccountBySubAccountId(item.buy_trades[0].from_account_id);
 
@@ -648,25 +718,27 @@ export default class ActiveConstants
         }
       }
 
-      if(item.sell_trades?.length)
+      if (item.sell_trades?.length)
       {
-        if(item.sell_trades[0] && item.sell_trades[0].from_account_id)
+        if (item.sell_trades[0] && item.sell_trades[0].from_account_id)
         {
           //если это продажа валюты, то нужно менять использовать другой счёт
-          if(item.type_id === ActiveConstants.CURRENCY)
+          if (item.type_id === ActiveConstants.CURRENCY)
           {
             let account = AccountConstants.getAccountBySubAccountId(item.sell_trades[0].to_account_id);
 
             return account ? (account.name ? account.name : account.bank_text) : ''
-          }else{
+          } else
+          {
             let account = AccountConstants.getAccountBySubAccountId(item.sell_trades[0].from_account_id);
 
             return account ? (account.name ? account.name : account.bank_text) : ''
           }
         }
       }
-    }else{
-      if(item.buy_account_id)
+    } else
+    {
+      if (item.buy_account_id)
       {
         let account = AccountConstants.getAccountBySubAccountId(item.buy_account_id);
 
@@ -680,9 +752,9 @@ export default class ActiveConstants
   static getAccountIdByActive(item)
   {
     //TODO correct grouping
-    if(item.buy_trades?.length)
+    if (item.buy_trades?.length)
     {
-      if(item.buy_trades[0] && item.buy_trades[0].from_account_id)
+      if (item.buy_trades[0] && item.buy_trades[0].from_account_id)
       {
         return item.buy_trades[0].from_account_id;
       }
@@ -729,74 +801,6 @@ export default class ActiveConstants
     return false;
   }
 
-  static INSURANCE_RISK_STEAL = 1001;
-  static INSURANCE_RISK_FIRE = 1002;
-  static INSURANCE_RISK_DISASTER = 1003;
-  static INSURANCE_RISK_TOTAL = 1004;
-  static INSURANCE_RISK_FLOODING = 1005;
-  static INSURANCE_RISK_ILLEGAL_ACTIONS = 1006;
-
-  static INSURANCE_RISK_DEATH = 2001;
-  static INSURANCE_RISK_SURGICAL_INTERVENTION = 2002;
-  static INSURANCE_RISK_SPORT_INJURY = 2003;
-  static INSURANCE_RISK_CRITICAL_ILLNESS = 2004;
-  static INSURANCE_RISK_HOSPITALIZATION = 2005;
-  static INSURANCE_RISK_IN_PRODUCTION = 2006;
-  static INSURANCE_RISK_TRAUMATIC_INJURY = 2007;
-  static INSURANCE_RISK_CRIMINAL_INJURY = 2008;
-  static INSURANCE_RISK_JOB_LOSS = 2009;
-  static INSURANCE_RISK_DISABILITY = 2010;
-
-  static INSURANCE_RISK_DOCTOR_ADVICE = 3001;
-  static INSURANCE_RISK_HOSPITAL = 3002;
-  static INSURANCE_RISK_DENTISTRY = 3003;
-  static INSURANCE_RISK_CLINIC_SERVICE = 3004;
-  static INSURANCE_RISK_AMBULANCE = 3005;
-  static INSURANCE_RISK_PHARMACY = 3006;
-
-  static INSURANCE_RISK_MEDICAL_TRANSPORT = 4001;
-  static INSURANCE_RISK_ACCIDENT = 4002;
-  static INSURANCE_RISK_TRIP_CANCELATION = 4003;
-  static INSURANCE_RISK_ACTIVE_SPORTS = 4004;
-  static INSURANCE_RISK_LOST_LAGGAGE = 4005;
-  static INSURANCE_RISK_CIVIL_RESPONSIBILITY = 4006;
-
-  static INSURANCE_RISK_DISABILITY_SPORTS = 5001;
-  static INSURANCE_RISK_MARTIAL_ARTS = 5002;
-  static INSURANCE_RISK_FIGURE_SKATING = 5003;
-  static INSURANCE_RISK_INJURY = 5004;
-  static INSURANCE_RISK_GAME_TEAM_SPORTS = 5005;
-  static INSURANCE_RISK_DANCE_SPORTS = 5006;
-  static INSURANCE_RISK_MORTALITY = 5007;
-  static INSURANCE_RISK_ARTISTIC_GYMNASTIC = 5008;
-  static INSURANCE_RISK_EXTREME_SPORTS = 5009;
-  static INSURANCE_RISK_RUN = 5010;
-  static INSURANCE_RISK_SWIMMING = 5011;
-
-  static INSURANCE_RISK_COMPANY_LIQUIDATION = 6001;
-  static INSURANCE_RISK_AGREEMENT_OF_PARTIES = 6002;
-  static INSURANCE_RISK_CHANGE_OWNERSHIP = 6003;
-  static INSURANCE_RISK_EXTRAORDINARY_CIRCUMSTANCES = 6004;
-  static INSURANCE_RISK_DOWNSIZING_INCONSISTENCY = 6005;
-  static INSURANCE_RISK_EMPLOYERS_INITIATIVE = 6006;
-  static INSURANCE_RISK_DEATH_OF_EMPLOYER = 6007;
-  static INSURANCE_RISK_REINSTATEMENT_TO_WORK = 6008;
-  static INSURANCE_RISK_TERMINATION_OF_ACCESS = 6009;
-
-  static INSURANCE_RISK_CAUSING_HARM_HEALTH = 7001;
-  static INSURANCE_RISK_CAUSING_PROPERTY_DAMAGE = 7002;
-  static INSURANCE_RISK_CONDUCTIONG_CASES_IN_JUDICAL = 7003;
-  static INSURANCE_RISK_EXPENSES_INCURRED = 7004;
-
-  /** pet form **/
-  static INSURANCE_RISK_DOCTOR_ADVICE_PET = 8001;
-  static INSURANCE_RISK_DIAGNOSTIC = 8002;
-  static INSURANCE_RISK_PARAMEDIC = 8003;
-  static INSURANCE_RISK_SURGICAL = 8004;
-  static INSURANCE_RISK_MEDICATIONS = 8005;
-  static INSURANCE_RISK_KEEPING_ANIMAL = 8006;
-
-
   /**
    *
    * @param id
@@ -806,73 +810,132 @@ export default class ActiveConstants
   {
     switch (parseInt(id))
     {
-      case ActiveConstants.INSURANCE_RISK_STEAL: return 'Угон';
-      case ActiveConstants.INSURANCE_RISK_FIRE: return 'Пожар';
-      case ActiveConstants.INSURANCE_RISK_DISASTER: return 'Стихийный бедствия';
-      case ActiveConstants.INSURANCE_RISK_TOTAL: return 'Тотал';
-      case ActiveConstants.INSURANCE_RISK_FLOODING: return 'Затопление';
-      case ActiveConstants.INSURANCE_RISK_ILLEGAL_ACTIONS: return 'Противоправные действия';
-      case ActiveConstants.INSURANCE_RISK_DEATH: return 'Смерть';
-      case ActiveConstants.INSURANCE_RISK_SURGICAL_INTERVENTION: return 'Хирургическое вмешательство';
-      case ActiveConstants.INSURANCE_RISK_SPORT_INJURY: return 'Спортивная травма';
-      case ActiveConstants.INSURANCE_RISK_CRITICAL_ILLNESS: return 'Критическое заболевание';
-      case ActiveConstants.INSURANCE_RISK_HOSPITALIZATION: return 'Госпитализация';
-      case ActiveConstants.INSURANCE_RISK_IN_PRODUCTION: return 'На производстве';
-      case ActiveConstants.INSURANCE_RISK_TRAUMATIC_INJURY: return 'Травматическое повреждение';
-      case ActiveConstants.INSURANCE_RISK_CRIMINAL_INJURY: return 'Криминальная травма';
-      case ActiveConstants.INSURANCE_RISK_JOB_LOSS: return 'Потеря работы';
-      case ActiveConstants.INSURANCE_RISK_DISABILITY: return 'Инвалидность';
-      case ActiveConstants.INSURANCE_RISK_DOCTOR_ADVICE: return 'Консультации врача';
-      case ActiveConstants.INSURANCE_RISK_HOSPITAL: return 'Стационар';
-      case ActiveConstants.INSURANCE_RISK_DENTISTRY: return 'Стоматология';
-      case ActiveConstants.INSURANCE_RISK_CLINIC_SERVICE: return 'Амбулаторно-поликлинические услуги';
-      case ActiveConstants.INSURANCE_RISK_AMBULANCE: return 'Скорая помощь';
-      case ActiveConstants.INSURANCE_RISK_PHARMACY: return 'Аптека';
-      case ActiveConstants.INSURANCE_RISK_MEDICAL_TRANSPORT: return 'Медико-транспортные расходы';
-      case ActiveConstants.INSURANCE_RISK_ACCIDENT: return 'Несчастный случай';
-      case ActiveConstants.INSURANCE_RISK_TRIP_CANCELATION: return 'Отмена поездки и задержка рейса';
-      case ActiveConstants.INSURANCE_RISK_ACTIVE_SPORTS: return 'Активные виды спорта';
-      case ActiveConstants.INSURANCE_RISK_LOST_LAGGAGE: return 'Утрата багажа';
-      case ActiveConstants.INSURANCE_RISK_CIVIL_RESPONSIBILITY: return 'Гражданская ответственность';
-      case ActiveConstants.INSURANCE_RISK_DISABILITY_SPORTS: return 'Инвалидность';
-      case ActiveConstants.INSURANCE_RISK_MARTIAL_ARTS: return 'Боевые единоборства';
-      case ActiveConstants.INSURANCE_RISK_FIGURE_SKATING: return 'Фигурное катание';
-      case ActiveConstants.INSURANCE_RISK_INJURY: return 'Травма';
-      case ActiveConstants.INSURANCE_RISK_GAME_TEAM_SPORTS: return 'Игровые командные виды спорта (футбол; хоккей и т.д)';
-      case ActiveConstants.INSURANCE_RISK_DANCE_SPORTS: return 'Спортивные танцы';
-      case ActiveConstants.INSURANCE_RISK_MORTALITY: return 'Смертность';
-      case ActiveConstants.INSURANCE_RISK_ARTISTIC_GYMNASTIC: return 'Художественная и спортивная гимнастика';
-      case ActiveConstants.INSURANCE_RISK_EXTREME_SPORTS: return 'Экстремальные виды спорта  (сноуборд; горнолыжный спорт; скейтборд) и т.д.';
-      case ActiveConstants.INSURANCE_RISK_RUN: return 'Бег';
-      case ActiveConstants.INSURANCE_RISK_SWIMMING: return 'Плавание';
-      case ActiveConstants.INSURANCE_RISK_COMPANY_LIQUIDATION: return 'Ликвидация предприятия';
-      case ActiveConstants.INSURANCE_RISK_AGREEMENT_OF_PARTIES: return 'Соглашение сторон';
-      case ActiveConstants.INSURANCE_RISK_CHANGE_OWNERSHIP: return 'Смена собственника имущества организации';
-      case ActiveConstants.INSURANCE_RISK_EXTRAORDINARY_CIRCUMSTANCES: return 'Чрезвычайные обстоятельства; препятствующие продолжению трудовых отношений';
-      case ActiveConstants.INSURANCE_RISK_DOWNSIZING_INCONSISTENCY: return 'Сокращение штата несоответствием занимаемой должности или выполняемой работы';
-      case ActiveConstants.INSURANCE_RISK_EMPLOYERS_INITIATIVE: return 'Инициатива работодателя при неудовлетворительном результате прохождения испытания; установленного трудовым договором';
-      case ActiveConstants.INSURANCE_RISK_DEATH_OF_EMPLOYER: return 'Смерть работодателя — физического лица';
-      case ActiveConstants.INSURANCE_RISK_REINSTATEMENT_TO_WORK: return 'Восстановление на работе лица; ранее выполнявшего эту работу';
-      case ActiveConstants.INSURANCE_RISK_TERMINATION_OF_ACCESS: return 'Прекращение допуска к государственной тайне';
-      case ActiveConstants.INSURANCE_RISK_DOCTOR_ADVICE_PET: return 'Консультации врача';
-      case ActiveConstants.INSURANCE_RISK_DIAGNOSTIC: return 'Диагностические исследования';
-      case ActiveConstants.INSURANCE_RISK_PARAMEDIC: return 'Фельдшерские процедуры';
-      case ActiveConstants.INSURANCE_RISK_SURGICAL: return 'Хирургические операции';
-      case ActiveConstants.INSURANCE_RISK_MEDICATIONS: return 'Лекарственные препараты и другие необходимые для лечения средства';
-      case ActiveConstants.INSURANCE_RISK_KEEPING_ANIMAL: return 'Одни сутки содержания животного в стационаре по каждому обращению в клинику';
-      case ActiveConstants.INSURANCE_RISK_CAUSING_HARM_HEALTH: return 'Причинение вреда жизни или здоровью';
-      case ActiveConstants.INSURANCE_RISK_CAUSING_PROPERTY_DAMAGE: return 'Причинение имущественного вреда';
-      case ActiveConstants.INSURANCE_RISK_CONDUCTIONG_CASES_IN_JUDICAL: return 'Ведение дел по страховому случаю в судебных органах';
-      case ActiveConstants.INSURANCE_RISK_EXPENSES_INCURRED: return 'Расходы; произведенные страхователем в целях уменьшения убытков';
+      case ActiveConstants.INSURANCE_RISK_STEAL:
+        return 'Угон';
+      case ActiveConstants.INSURANCE_RISK_FIRE:
+        return 'Пожар';
+      case ActiveConstants.INSURANCE_RISK_DISASTER:
+        return 'Стихийный бедствия';
+      case ActiveConstants.INSURANCE_RISK_TOTAL:
+        return 'Тотал';
+      case ActiveConstants.INSURANCE_RISK_FLOODING:
+        return 'Затопление';
+      case ActiveConstants.INSURANCE_RISK_ILLEGAL_ACTIONS:
+        return 'Противоправные действия';
+      case ActiveConstants.INSURANCE_RISK_DEATH:
+        return 'Смерть';
+      case ActiveConstants.INSURANCE_RISK_SURGICAL_INTERVENTION:
+        return 'Хирургическое вмешательство';
+      case ActiveConstants.INSURANCE_RISK_SPORT_INJURY:
+        return 'Спортивная травма';
+      case ActiveConstants.INSURANCE_RISK_CRITICAL_ILLNESS:
+        return 'Критическое заболевание';
+      case ActiveConstants.INSURANCE_RISK_HOSPITALIZATION:
+        return 'Госпитализация';
+      case ActiveConstants.INSURANCE_RISK_IN_PRODUCTION:
+        return 'На производстве';
+      case ActiveConstants.INSURANCE_RISK_TRAUMATIC_INJURY:
+        return 'Травматическое повреждение';
+      case ActiveConstants.INSURANCE_RISK_CRIMINAL_INJURY:
+        return 'Криминальная травма';
+      case ActiveConstants.INSURANCE_RISK_JOB_LOSS:
+        return 'Потеря работы';
+      case ActiveConstants.INSURANCE_RISK_DISABILITY:
+        return 'Инвалидность';
+      case ActiveConstants.INSURANCE_RISK_DOCTOR_ADVICE:
+        return 'Консультации врача';
+      case ActiveConstants.INSURANCE_RISK_HOSPITAL:
+        return 'Стационар';
+      case ActiveConstants.INSURANCE_RISK_DENTISTRY:
+        return 'Стоматология';
+      case ActiveConstants.INSURANCE_RISK_CLINIC_SERVICE:
+        return 'Амбулаторно-поликлинические услуги';
+      case ActiveConstants.INSURANCE_RISK_AMBULANCE:
+        return 'Скорая помощь';
+      case ActiveConstants.INSURANCE_RISK_PHARMACY:
+        return 'Аптека';
+      case ActiveConstants.INSURANCE_RISK_MEDICAL_TRANSPORT:
+        return 'Медико-транспортные расходы';
+      case ActiveConstants.INSURANCE_RISK_ACCIDENT:
+        return 'Несчастный случай';
+      case ActiveConstants.INSURANCE_RISK_TRIP_CANCELATION:
+        return 'Отмена поездки и задержка рейса';
+      case ActiveConstants.INSURANCE_RISK_ACTIVE_SPORTS:
+        return 'Активные виды спорта';
+      case ActiveConstants.INSURANCE_RISK_LOST_LAGGAGE:
+        return 'Утрата багажа';
+      case ActiveConstants.INSURANCE_RISK_CIVIL_RESPONSIBILITY:
+        return 'Гражданская ответственность';
+      case ActiveConstants.INSURANCE_RISK_DISABILITY_SPORTS:
+        return 'Инвалидность';
+      case ActiveConstants.INSURANCE_RISK_MARTIAL_ARTS:
+        return 'Боевые единоборства';
+      case ActiveConstants.INSURANCE_RISK_FIGURE_SKATING:
+        return 'Фигурное катание';
+      case ActiveConstants.INSURANCE_RISK_INJURY:
+        return 'Травма';
+      case ActiveConstants.INSURANCE_RISK_GAME_TEAM_SPORTS:
+        return 'Игровые командные виды спорта (футбол; хоккей и т.д)';
+      case ActiveConstants.INSURANCE_RISK_DANCE_SPORTS:
+        return 'Спортивные танцы';
+      case ActiveConstants.INSURANCE_RISK_MORTALITY:
+        return 'Смертность';
+      case ActiveConstants.INSURANCE_RISK_ARTISTIC_GYMNASTIC:
+        return 'Художественная и спортивная гимнастика';
+      case ActiveConstants.INSURANCE_RISK_EXTREME_SPORTS:
+        return 'Экстремальные виды спорта  (сноуборд; горнолыжный спорт; скейтборд) и т.д.';
+      case ActiveConstants.INSURANCE_RISK_RUN:
+        return 'Бег';
+      case ActiveConstants.INSURANCE_RISK_SWIMMING:
+        return 'Плавание';
+      case ActiveConstants.INSURANCE_RISK_COMPANY_LIQUIDATION:
+        return 'Ликвидация предприятия';
+      case ActiveConstants.INSURANCE_RISK_AGREEMENT_OF_PARTIES:
+        return 'Соглашение сторон';
+      case ActiveConstants.INSURANCE_RISK_CHANGE_OWNERSHIP:
+        return 'Смена собственника имущества организации';
+      case ActiveConstants.INSURANCE_RISK_EXTRAORDINARY_CIRCUMSTANCES:
+        return 'Чрезвычайные обстоятельства; препятствующие продолжению трудовых отношений';
+      case ActiveConstants.INSURANCE_RISK_DOWNSIZING_INCONSISTENCY:
+        return 'Сокращение штата несоответствием занимаемой должности или выполняемой работы';
+      case ActiveConstants.INSURANCE_RISK_EMPLOYERS_INITIATIVE:
+        return 'Инициатива работодателя при неудовлетворительном результате прохождения испытания; установленного трудовым договором';
+      case ActiveConstants.INSURANCE_RISK_DEATH_OF_EMPLOYER:
+        return 'Смерть работодателя — физического лица';
+      case ActiveConstants.INSURANCE_RISK_REINSTATEMENT_TO_WORK:
+        return 'Восстановление на работе лица; ранее выполнявшего эту работу';
+      case ActiveConstants.INSURANCE_RISK_TERMINATION_OF_ACCESS:
+        return 'Прекращение допуска к государственной тайне';
+      case ActiveConstants.INSURANCE_RISK_DOCTOR_ADVICE_PET:
+        return 'Консультации врача';
+      case ActiveConstants.INSURANCE_RISK_DIAGNOSTIC:
+        return 'Диагностические исследования';
+      case ActiveConstants.INSURANCE_RISK_PARAMEDIC:
+        return 'Фельдшерские процедуры';
+      case ActiveConstants.INSURANCE_RISK_SURGICAL:
+        return 'Хирургические операции';
+      case ActiveConstants.INSURANCE_RISK_MEDICATIONS:
+        return 'Лекарственные препараты и другие необходимые для лечения средства';
+      case ActiveConstants.INSURANCE_RISK_KEEPING_ANIMAL:
+        return 'Одни сутки содержания животного в стационаре по каждому обращению в клинику';
+      case ActiveConstants.INSURANCE_RISK_CAUSING_HARM_HEALTH:
+        return 'Причинение вреда жизни или здоровью';
+      case ActiveConstants.INSURANCE_RISK_CAUSING_PROPERTY_DAMAGE:
+        return 'Причинение имущественного вреда';
+      case ActiveConstants.INSURANCE_RISK_CONDUCTIONG_CASES_IN_JUDICAL:
+        return 'Ведение дел по страховому случаю в судебных органах';
+      case ActiveConstants.INSURANCE_RISK_EXPENSES_INCURRED:
+        return 'Расходы; произведенные страхователем в целях уменьшения убытков';
     }
   }
 
 
   static getImage(item)
   {
-    if(item)
+    if (item)
     {
-      switch (item.type_id) {
+      switch (item.type_id)
+      {
         case ActiveConstants.FLAT:
           return <img className='flat' src={require('../assets/icons/house.svg').default}/>
         case ActiveConstants.HOUSE:

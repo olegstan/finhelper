@@ -7,7 +7,7 @@ export default class Multi
     let length = params.length;
     for (var i = 0; i < length; i++)
     {
-      if(i > 0)
+      if (i > 0)
       {
         args.push(params[i]);
       }

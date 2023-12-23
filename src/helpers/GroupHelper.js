@@ -6,23 +6,26 @@ import AccountConstants from "../constants/AccountConstants"
 class GroupHelper
 {
   /**
-   * 
+   *
    * @param actives
    * @param groupType
    * @return {*[]}
    */
   static prepareArchiveActives(actives, groupType)
   {
-    try {
+    try
+    {
       let activeSortedItems = [];
 
       let sortedItems = [];
       let activeSubIndex = [];
 
-      actives.map((item) => {
+      actives.map((item) =>
+      {
         let subkey = item.item_id ? item.item_type + '.' + item.item_id : item.name_text;
 
-        if (activeSubIndex.indexOf(subkey) === -1) {
+        if (activeSubIndex.indexOf(subkey) === -1)
+        {
           activeSubIndex.push(subkey);
         }
 
@@ -30,7 +33,8 @@ class GroupHelper
         item.keyId = keyId;
         item.attributes.keyId = keyId;
 
-        if (typeof activeSortedItems[keyId] === 'undefined') {
+        if (typeof activeSortedItems[keyId] === 'undefined')
+        {
 
           activeSortedItems[keyId] = ActiveModel.create({...item.attributes});
 
@@ -38,32 +42,41 @@ class GroupHelper
           activeSortedItems[keyId].attributes.sell_trades = [];
         }
 
-        item.attributes.buy_trades.map((trade) => {
+        item.attributes.buy_trades.map((trade) =>
+        {
           activeSortedItems[keyId].attributes.buy_trades.push({...trade})
         })
 
-        item.attributes.sell_trades.map((trade) => {
+        item.attributes.sell_trades.map((trade) =>
+        {
           activeSortedItems[keyId].attributes.sell_trades.push({...trade})
         })
 
 
       });
 
-      if (groupType === ActiveConstants.BY_TYPE) {
+      if (groupType === ActiveConstants.BY_TYPE)
+      {
         sortedItems = activeSortedItems;
-      } else if (groupType === ActiveConstants.BY_GROUP) {
+      } else if (groupType === ActiveConstants.BY_GROUP)
+      {
         sortedItems = activeSortedItems;
-      } else if (groupType === ActiveConstants.BY_ACCOUNT) {
+      } else if (groupType === ActiveConstants.BY_ACCOUNT)
+      {
         let activeIndex = [];
 
-        activeSortedItems.map((item) => {
-          if (ActiveConstants.isPackage(item.type_id)) {
-            item.attributes.buy_trades.map((trade) => {
+        activeSortedItems.map((item) =>
+        {
+          if (ActiveConstants.isPackage(item.type_id))
+          {
+            item.attributes.buy_trades.map((trade) =>
+            {
               let account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
 
               let key = item.id + account?.id;
 
-              if (activeIndex.indexOf(key) === -1) {
+              if (activeIndex.indexOf(key) === -1)
+              {
                 activeIndex.push(key);
               }
 
@@ -71,7 +84,8 @@ class GroupHelper
               item.keyId = keyId;
               item.attributes.keyId = keyId;
 
-              if (typeof sortedItems[keyId] === 'undefined') {
+              if (typeof sortedItems[keyId] === 'undefined')
+              {
                 sortedItems[keyId] = ActiveModel.create({...item.attributes});
 
                 sortedItems[keyId].attributes.buy_trades = [];
@@ -79,19 +93,23 @@ class GroupHelper
               }
             });
 
-            item.attributes.sell_trades.map((trade) => {
+            item.attributes.sell_trades.map((trade) =>
+            {
               let account;
 
-              if (item.type_id === ActiveConstants.CURRENCY) {
+              if (item.type_id === ActiveConstants.CURRENCY)
+              {
                 account = AccountConstants.getAccountBySubAccountId(trade.to_account_id);
-              } else {
+              } else
+              {
                 account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
               }
 
 
               let key = item.id + account?.id;
 
-              if (activeIndex.indexOf(key) === -1) {
+              if (activeIndex.indexOf(key) === -1)
+              {
                 activeIndex.push(key);
               }
 
@@ -99,7 +117,8 @@ class GroupHelper
               item.keyId = keyId;
               item.attributes.keyId = keyId;
 
-              if (typeof sortedItems[keyId] === 'undefined') {
+              if (typeof sortedItems[keyId] === 'undefined')
+              {
                 sortedItems[keyId] = ActiveModel.create({...item.attributes});
 
                 sortedItems[keyId].attributes.buy_trades = [];
@@ -107,7 +126,8 @@ class GroupHelper
               }
             });
 
-            item.attributes.buy_trades.map((trade) => {
+            item.attributes.buy_trades.map((trade) =>
+            {
               let account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
 
               let key = item.id + account?.id;
@@ -120,12 +140,15 @@ class GroupHelper
             });
 
 
-            item.attributes.sell_trades.map((trade) => {
+            item.attributes.sell_trades.map((trade) =>
+            {
               let account;
 
-              if (item.type_id === ActiveConstants.CURRENCY) {
+              if (item.type_id === ActiveConstants.CURRENCY)
+              {
                 account = AccountConstants.getAccountBySubAccountId(trade.to_account_id);
-              } else {
+              } else
+              {
                 account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
               }
 
@@ -137,16 +160,19 @@ class GroupHelper
 
 
             });
-          } else {
+          } else
+          {
             let key = item.id + 'none';
 
-            if (item.buy_account_id) {
+            if (item.buy_account_id)
+            {
               let account = AccountConstants.getAccountBySubAccountId(item.buy_account_idd);
 
               key = item.id + account?.id;
             }
 
-            if (activeIndex.indexOf(key) === -1) {
+            if (activeIndex.indexOf(key) === -1)
+            {
               activeIndex.push(key);
             }
 
@@ -154,7 +180,8 @@ class GroupHelper
             item.keyId = keyId;
             item.attributes.keyId = keyId;
 
-            if (typeof sortedItems[keyId] === 'undefined') {
+            if (typeof sortedItems[keyId] === 'undefined')
+            {
               sortedItems[keyId] = ActiveModel.create({...item.attributes});
 
               sortedItems[keyId].attributes.buy_trades = [];
@@ -169,7 +196,8 @@ class GroupHelper
       }
 
       return GroupHelper.group(sortedItems, groupType);
-    } catch (e) {
+    } catch (e)
+    {
       console.log(e)
       return []
     }
@@ -189,15 +217,18 @@ class GroupHelper
     let subName = '';
     let account = null;
 
-    if (groupType === ActiveConstants.BY_TYPE) {
+    if (groupType === ActiveConstants.BY_TYPE)
+    {
       name = ActiveConstants.getActiveNameByType(item);
       account = AccountConstants.getAccountBySubAccountId(accountId);
       subName = account ? account.name : 'Без названия';
-    } else if (groupType === ActiveConstants.BY_GROUP) {
+    } else if (groupType === ActiveConstants.BY_GROUP)
+    {
       name = ActiveConstants.getActiveNameByGroup(item);
       account = AccountConstants.getAccountBySubAccountId(accountId);
       subName = account ? account.name : 'Без названия';
-    } else if (groupType === ActiveConstants.BY_ACCOUNT) {
+    } else if (groupType === ActiveConstants.BY_ACCOUNT)
+    {
       account = AccountConstants.getAccountBySubAccountId(accountId);
       name = account ? account.name : 'Без названия';
       subName = ActiveConstants.getActiveNameByType(item);
@@ -205,11 +236,13 @@ class GroupHelper
 
     let key = item.id + name + subName + 'none';
 
-    if (activeIndex.indexOf(key) === -1) {
+    if (activeIndex.indexOf(key) === -1)
+    {
       activeIndex.push(key);
     }
 
-    if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
+    if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined')
+    {
       sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({...item}.attributes);
 
       sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
@@ -228,14 +261,18 @@ class GroupHelper
    */
   static prepareActives(actives, groupType)
   {
-    try {
+    try
+    {
       let sortedItems = [];
       let activeIndex = [];
       let key = '';
 
-      actives.map((item) => {
-        if (ActiveConstants.isPackage(item.type_id)) {
-          item.attributes.buy_trades.map((trade) => {
+      actives.map((item) =>
+      {
+        if (ActiveConstants.isPackage(item.type_id))
+        {
+          item.attributes.buy_trades.map((trade) =>
+          {
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
 
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
@@ -243,14 +280,16 @@ class GroupHelper
 
           });
 
-          item.attributes.sell_trades.map((trade) => {
+          item.attributes.sell_trades.map((trade) =>
+          {
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
 
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({...trade});
 
 
           });
-        } else {
+        } else
+        {
           key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType);
         }
 
@@ -262,9 +301,12 @@ class GroupHelper
       let groups = GroupHelper.group(sortedItems, groupType);
 
       //сортируем по оценке
-      groups.map((group) => {
-        group.groups.map((subGroup) => {
-          subGroup.actives?.sort((c1, c2) => {
+      groups.map((group) =>
+      {
+        group.groups.map((subGroup) =>
+        {
+          subGroup.actives?.sort((c1, c2) =>
+          {
             let valuation1 = c1.valuation;
             let valuation2 = c2.valuation;
 
@@ -304,7 +346,8 @@ class GroupHelper
 
 
       return groups;
-    } catch (e) {
+    } catch (e)
+    {
       console.log(e)
       return []
     }
@@ -321,12 +364,15 @@ class GroupHelper
    */
   static setValuation(items)
   {
-    items.map((item) => {
+    items.map((item) =>
+    {
       let obj = Active.getValuation(item.attributes)
 
-      if (obj) {
+      if (obj)
+      {
         item.attributes['valuation'] = obj.sum;
-      } else {
+      } else
+      {
         item.attributes['valuation'] = 0;
       }
     });
@@ -344,40 +390,48 @@ class GroupHelper
     let index = [];
     let subIndex = [];
 
-    sortedItems.map((item, key) => {
+    sortedItems.map((item, key) =>
+    {
       let name = '';
       let subName = '';
 
-      if (groupType === ActiveConstants.BY_TYPE) {
+      if (groupType === ActiveConstants.BY_TYPE)
+      {
         name = ActiveConstants.getActiveNameByType(item);
         subName = ActiveConstants.getAccountNameByActive(item);
 
-      } else if (groupType === ActiveConstants.BY_GROUP) {
+      } else if (groupType === ActiveConstants.BY_GROUP)
+      {
         name = ActiveConstants.getActiveNameByGroup(item);
         subName = ActiveConstants.getAccountNameByActive(item);
 
-      } else if (groupType === ActiveConstants.BY_ACCOUNT) {
+      } else if (groupType === ActiveConstants.BY_ACCOUNT)
+      {
         name = ActiveConstants.getAccountNameByActive(item);
         subName = ActiveConstants.getActiveNameByType(item);
       }
 
-      if (index.indexOf(name) === -1) {
+      if (index.indexOf(name) === -1)
+      {
         index.push(name);
       }
 
       let nameIndex = index.indexOf(name);
 
-      if (typeof subIndex[nameIndex] === 'undefined') {
+      if (typeof subIndex[nameIndex] === 'undefined')
+      {
         subIndex[nameIndex] = [];
       }
 
-      if (subIndex[nameIndex].indexOf(subName) === -1) {
+      if (subIndex[nameIndex].indexOf(subName) === -1)
+      {
         subIndex[nameIndex].push(subName);
       }
 
       let nameSubIndex = subIndex[nameIndex].indexOf(subName);
 
-      if (typeof groups[nameIndex] === 'undefined') {
+      if (typeof groups[nameIndex] === 'undefined')
+      {
         groups[nameIndex] = {
           name: name,
           sum: 0,
@@ -385,7 +439,8 @@ class GroupHelper
         }
       }
 
-      if (typeof groups[nameIndex].groups[nameSubIndex] === 'undefined') {
+      if (typeof groups[nameIndex].groups[nameSubIndex] === 'undefined')
+      {
         groups[nameIndex].groups[nameSubIndex] = {
           name: subName,
           sum: 0,
@@ -408,15 +463,20 @@ class GroupHelper
     let index = [];
     let groups = [];
 
-    accounts.filter((account) => {
+    accounts.filter((account) =>
+    {
       return account.type_id === AccountConstants.BROKER_ACCOUNT && account.type_id !== AccountConstants.TEMP;
-    }).map((account, key) => {
-      account.accounts.map((subAccount) => {
-        if (index.indexOf(subAccount.currency.code) === -1) {
+    }).map((account, key) =>
+    {
+      account.accounts.map((subAccount) =>
+      {
+        if (index.indexOf(subAccount.currency.code) === -1)
+        {
           index.push(subAccount.currency.code);
         }
         //
-        if (typeof groups[index.indexOf(subAccount.currency.code)] === 'undefined') {
+        if (typeof groups[index.indexOf(subAccount.currency.code)] === 'undefined')
+        {
           groups[index.indexOf(subAccount.currency.code)] = {
             name: subAccount.currency.code,
             sign: subAccount.currency.sign,
@@ -435,7 +495,8 @@ class GroupHelper
     return groups;
   }
 
-  static prepareLogs(logs, currency) {
+  static prepareLogs(logs, currency)
+  {
     let index = [];
     let indexCurrency = [];
     let pairs = [];
@@ -447,46 +508,57 @@ class GroupHelper
     }
 
 
-    logs.map((item, key) => {
-      try {
+    logs.map((item, key) =>
+    {
+      try
+      {
         let keyItem = item.item_id + item.item_type;
-        if (index.indexOf(keyItem) === -1) {
+        if (index.indexOf(keyItem) === -1)
+        {
           index.push(keyItem);
         }
 
-        if (typeof pairs[index.indexOf(keyItem)] === 'undefined') {
+        if (typeof pairs[index.indexOf(keyItem)] === 'undefined')
+        {
           pairs[index.indexOf(keyItem)] = {
             income: null,
             outcome: null
           }
         }
 
-        if (indexCurrency.indexOf(item.account.currency.sign) === -1) {
+        if (indexCurrency.indexOf(item.account.currency.sign) === -1)
+        {
           indexCurrency.push(item.account.currency.sign);
         }
 
-        if (item.sum > 0 && item.item_type === 'transfer') {
+        if (item.sum > 0 && item.item_type === 'transfer')
+        {
           pairs[index.indexOf(keyItem)].income = item;
         }
         //
-        if (item.sum < 0 && item.item_type === 'transfer') {
+        if (item.sum < 0 && item.item_type === 'transfer')
+        {
           pairs[index.indexOf(keyItem)].outcome = item;
         }
-      } catch (e) {
+      } catch (e)
+      {
         console.error(e)
       }
 
 
     });
 
-    pairs.map((pair) => {
+    pairs.map((pair) =>
+    {
       //деньги пришли на брокерский счёт с другого типа счёта или без счёта
-      if (pair?.income?.account?.user_account?.type_id && pair.income.account.user_account.type_id === AccountConstants.BROKER_ACCOUNT && ((pair.outcome && pair.outcome.account.user_account.type_id !== AccountConstants.BROKER_ACCOUNT) || pair.outcome === null)) {
+      if (pair?.income?.account?.user_account?.type_id && pair.income.account.user_account.type_id === AccountConstants.BROKER_ACCOUNT && ((pair.outcome && pair.outcome.account.user_account.type_id !== AccountConstants.BROKER_ACCOUNT) || pair.outcome === null))
+      {
         groups[0].income += pair.income.sum;
       }
 
       //деньги сняты с брокерского счёта
-      if (((pair?.income?.account?.user_account?.type_id && pair.income.account.user_account.type_id !== AccountConstants.BROKER_ACCOUNT) || pair.income === null) && pair.outcome && pair.outcome.account.user_account.type_id === AccountConstants.BROKER_ACCOUNT) {
+      if (((pair?.income?.account?.user_account?.type_id && pair.income.account.user_account.type_id !== AccountConstants.BROKER_ACCOUNT) || pair.income === null) && pair.outcome && pair.outcome.account.user_account.type_id === AccountConstants.BROKER_ACCOUNT)
+      {
         groups[0].outcome += pair.outcome.sum;
       }
 

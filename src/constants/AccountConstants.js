@@ -4,7 +4,6 @@ import ModelHelper from "../helpers/ModelHelper";
 import moment from "moment/moment";
 import ActiveConstants from "./ActiveConstants";
 import CurrencyConstants from "./CurrencyConstants";
-import ActiveModel from "../models/Active"
 
 let types = [
   1,
@@ -13,11 +12,10 @@ let types = [
   4
 ]
 
-if(process.env.REACT_APP_ENV === 'test')
+if (process.env.REACT_APP_ENV === 'test')
 {
   // types.push(5)
 }
-
 
 
 export default class AccountConstants
@@ -63,19 +61,23 @@ export default class AccountConstants
     let preparedAccounts = [];
     let index = [];
 
-    accounts.filter((account) => {
+    accounts.filter((account) =>
+    {
       return AccountConstants.BROKER_ACCOUNT === account.type_id;
-    }).map((account) => {
-      account.accounts.filter((subAccount) => {
+    }).map((account) =>
+    {
+      account.accounts.filter((subAccount) =>
+      {
         return parseInt(subAccount.sum) !== 0;
-      }).map((subAccount) => {
+      }).map((subAccount) =>
+      {
         let date = moment();
 
         //объединяем все остатки по одному счету, если одна валюта, то субсчета просуммируются
         let accountId = account.id;
         let sum = subAccount.sum;
 
-        if(currency && currency.id !== 'none')
+        if (currency && currency.id !== 'none')
         {
           sum = Money.convert(sum, currency.id, subAccount.currency_id);
         }
@@ -85,7 +87,7 @@ export default class AccountConstants
         let name = CurrencyConstants.getCurrencyNameById(subAccount.currency_id)
         let keyName = accountId + name + '-' + cbCurrency?.id;
 
-        if(index.indexOf(keyName) === -1)
+        if (index.indexOf(keyName) === -1)
         {
           index.push(keyName)
 
@@ -106,7 +108,7 @@ export default class AccountConstants
                 sell_trades: [],
                 buy_trades: [
                   {
-                    "id": null ,
+                    "id": null,
                     "active_id": subAccount.id,
                     "from_account_id": subAccount.id,
                     "currency_id": subAccount.currency_id,
@@ -151,7 +153,7 @@ export default class AccountConstants
                 sell_trades: [],
                 buy_trades: [
                   {
-                    "id": null ,
+                    "id": null,
                     "active_id": subAccount.id,
                     "from_account_id": subAccount.id,
                     "currency_id": subAccount.currency_id,
@@ -186,7 +188,8 @@ export default class AccountConstants
               preparedAccounts[key] = newItem;
               break;
           }
-        }else{
+        } else
+        {
           let key = index.indexOf(keyName);
 
           preparedAccounts[key]['buy_trades'][0]['original_sum'] += sum;
@@ -203,11 +206,11 @@ export default class AccountConstants
   {
     let account = null;
 
-    for(let i = 0; i < ModelHelper.accounts.length; i++)
+    for (let i = 0; i < ModelHelper.accounts.length; i++)
     {
-      for(let n = 0; n < ModelHelper.accounts[i].accounts.length; n++)
+      for (let n = 0; n < ModelHelper.accounts[i].accounts.length; n++)
       {
-        if(subAccountId === ModelHelper.accounts[i].accounts[n].id)
+        if (subAccountId === ModelHelper.accounts[i].accounts[n].id)
         {
           account = ModelHelper.accounts[i].accounts[n];
         }
@@ -219,18 +222,18 @@ export default class AccountConstants
 
   static getAccountBySubAccountId(subAccountId)
   {
-    if(!subAccountId || !ModelHelper.accounts)
+    if (!subAccountId || !ModelHelper.accounts)
     {
       return null;
     }
 
     let account = null;
 
-    for(let i = 0; i < ModelHelper.accounts.length; i++)
+    for (let i = 0; i < ModelHelper.accounts.length; i++)
     {
-      for(let n = 0; n < ModelHelper.accounts[i].accounts.length; n++)
+      for (let n = 0; n < ModelHelper.accounts[i].accounts.length; n++)
       {
-        if(subAccountId === ModelHelper.accounts[i].accounts[n].id)
+        if (subAccountId === ModelHelper.accounts[i].accounts[n].id)
         {
           account = ModelHelper.accounts[i];
         }
@@ -255,15 +258,15 @@ export default class AccountConstants
     switch (item.type_id)
     {
       case AccountConstants.CASH:
-        return item.name + ' ' + Money.format(item.sum) +  ' ' + code;
+        return item.name + ' ' + Money.format(item.sum) + ' ' + code;
       case AccountConstants.BANK_ACCOUNT:
-        return item.name + ' ' + item.number + ' - ' + Money.format(item.sum) +  ' ' + code;
+        return item.name + ' ' + item.number + ' - ' + Money.format(item.sum) + ' ' + code;
       case AccountConstants.DIGIT_MONEY:
-        return item.name + ' ' + item.number + ' - '  + Money.format(item.sum) +  ' ' + code;
+        return item.name + ' ' + item.number + ' - ' + Money.format(item.sum) + ' ' + code;
       case AccountConstants.BROKER_ACCOUNT:
-        return item.name + ' ' + item.number + ' - ' + Money.format(item.sum) +  ' ' + code;
+        return item.name + ' ' + item.number + ' - ' + Money.format(item.sum) + ' ' + code;
       case AccountConstants.TEMP:
-        return item.name + ' ' + Money.format(item.sum) +  ' ' + code;
+        return item.name + ' ' + Money.format(item.sum) + ' ' + code;
     }
   }
 
@@ -327,8 +330,9 @@ export default class AccountConstants
   {
     let type = null;
 
-    AccountConstants.types().map((item) => {
-      if(item.id === id)
+    AccountConstants.types().map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }
@@ -351,8 +355,9 @@ export default class AccountConstants
   {
     let type = null;
 
-    AccountConstants.TYPES.map((item) => {
-      if(item.id === id)
+    AccountConstants.TYPES.map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }
@@ -365,13 +370,15 @@ export default class AccountConstants
 
   static getSrc(item)
   {
-    if(item)
+    if (item)
     {
-      switch (item.type_id) {
+      switch (item.type_id)
+      {
         case AccountConstants.CASH:
           return require('../assets/icons/cash.svg').default
         case AccountConstants.BANK_ACCOUNT:
-          switch (item.bank_id) {
+          switch (item.bank_id)
+          {
             case AccountConstants.ALPHA_BANK:
               return require('../assets/banks/alfa.png')
             case AccountConstants.SBER_BANK:
@@ -398,7 +405,8 @@ export default class AccountConstants
               return require('../assets/icons/wallet.svg').default
           }
         case AccountConstants.BROKER_ACCOUNT:
-          switch (item.bank_id) {
+          switch (item.bank_id)
+          {
             case AccountConstants.ALPHA_BROKER:
               return require('../assets/banks/alfa.png')
             case AccountConstants.SBER_BROKER:
@@ -433,16 +441,18 @@ export default class AccountConstants
 
     return require('../assets/icons/cash.svg').default
   }
-  
+
   static getImage(item)
   {
-    if(item)
+    if (item)
     {
-      switch (item.type_id) {
+      switch (item.type_id)
+      {
         case AccountConstants.CASH:
           return <img className='cash' src={require('../assets/icons/cash.svg').default} alt=''/>
         case AccountConstants.BANK_ACCOUNT:
-          switch (item.bank_id) {
+          switch (item.bank_id)
+          {
             case AccountConstants.ALPHA_BANK:
               return <img className='bank' src={require('../assets/banks/alfa.png')} alt=''/>
             case AccountConstants.SBER_BANK:
@@ -469,7 +479,8 @@ export default class AccountConstants
               return <img className='user' src={require('../assets/icons/wallet.svg').default} alt=''/>
           }
         case AccountConstants.BROKER_ACCOUNT:
-          switch (item.bank_id) {
+          switch (item.bank_id)
+          {
             case AccountConstants.ALPHA_BROKER:
               return <img className='bank' src={require('../assets/banks/alfa.png')} alt=''/>
             case AccountConstants.SBER_BROKER:

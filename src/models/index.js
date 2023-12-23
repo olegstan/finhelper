@@ -5,4 +5,4 @@ import SellTradeModel from './SellTrade';
 import ClientModel from './Client';
 import PaymentModel from './Payment';
 
-export { ActiveModel, TradeModel, BuyTradeModel, SellTradeModel, ClientModel, PaymentModel };
+export {ActiveModel, TradeModel, BuyTradeModel, SellTradeModel, ClientModel, PaymentModel};

@@ -1,6 +1,7 @@
 import {Api} from "laravel-request";
 
-export default class BaseModel {
+export default class BaseModel
+{
   /**
    *
    * @type {Array}
@@ -29,32 +30,14 @@ export default class BaseModel {
     this.setGetters(attributes);
   }
 
-  setGetters(attributes)
+  get id()
   {
-    for (const index in attributes)
-    {
-      if(typeof this.related[index] !== 'undefined' || index === 'attributes' || index === 'related' || index === 'modelFields' || index === 'currencyFields')
-      {
+    return this.attributes.id;
+  }
 
-      }else{
-        try{
-          Object.defineProperty(this, index, {
-            get()
-            {
-              return this.attributes[index]
-            },
-            set(x)
-            {
-              this.attributes[index] = x;
-            },
-          });
-        }catch (e)
-        {
-          console.warn(e.message)
-        }
-      }
-    }
-    // debugger
+  set id(x)
+  {
+    this.attributes.id = x;
   }
 
   /**
@@ -74,19 +57,50 @@ export default class BaseModel {
    */
   static load(array)
   {
-    return array.map((item) => {
+    return array.map((item) =>
+    {
       return this.create(item);
     })
   }
 
-  get id()
+  static getInstance()
   {
-    return this.attributes.id;
+    return new this();
   }
 
-  set id(x)
+  static fetch(method = 'index', params = {})
   {
-    this.attributes.id = x;
+    return Api.get(this.getInstance().controller, method, params)
+  }
+
+  setGetters(attributes)
+  {
+    for (const index in attributes)
+    {
+      if (typeof this.related[index] !== 'undefined' || index === 'attributes' || index === 'related' || index === 'modelFields' || index === 'currencyFields')
+      {
+
+      } else
+      {
+        try
+        {
+          Object.defineProperty(this, index, {
+            get()
+            {
+              return this.attributes[index]
+            },
+            set(x)
+            {
+              this.attributes[index] = x;
+            },
+          });
+        } catch (e)
+        {
+          console.warn(e.message)
+        }
+      }
+    }
+    // debugger
   }
 
   /**
@@ -96,7 +110,7 @@ export default class BaseModel {
    */
   get(prop)
   {
-    if(typeof this.attributes[prop] === "undefined")
+    if (typeof this.attributes[prop] === "undefined")
       return null;
     else
       return this.attributes[prop];
@@ -110,14 +124,5 @@ export default class BaseModel {
   set(prop, value)
   {
     this.attributes[prop] = value;
-  }
-
-  static getInstance(){
-    return new this();
-  }
-
-  static fetch(method = 'index', params = {})
-  {
-    return Api.get(this.getInstance().controller, method, params)
   }
 }

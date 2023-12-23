@@ -48,10 +48,11 @@ export default class TransferConstants
       {id: TransferConstants.ADD_OBLIGATION_PAYMENT, name: 'Привязка платежа к обязательству'},
     ];
 
-    if(actionTypeId === TransferConstants.SPENDING)
+    if (actionTypeId === TransferConstants.SPENDING)
     {
       variants.push({id: TransferConstants.CONNECT_PAYMENT, name: 'К доходу'})
-    }else if(actionTypeId === TransferConstants.INCOME) {
+    } else if (actionTypeId === TransferConstants.INCOME)
+    {
       variants.push({id: TransferConstants.CONNECT_PAYMENT, name: 'К расходу'})
     }
 
@@ -75,8 +76,9 @@ export default class TransferConstants
   {
     let type = null;
 
-    TransferConstants.types().map((item) => {
-      if(item.id === id)
+    TransferConstants.types().map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }
@@ -96,8 +98,9 @@ export default class TransferConstants
   {
     let type = null;
 
-    TransferConstants.items(oldActionTypeId).map((item) => {
-      if(item.id === id)
+    TransferConstants.items(oldActionTypeId).map((item) =>
+    {
+      if (item.id === id)
       {
         type = item
       }

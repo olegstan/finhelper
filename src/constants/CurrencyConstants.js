@@ -24,17 +24,20 @@ export default class CurrencyConstants
    * @param id
    * @return {*}
    */
-  static getCurrencyNameById(id) {
+  static getCurrencyNameById(id)
+  {
     let currency = CurrencyConstants.getCurrencyById(id)
 
-    if(currency)
+    if (currency)
     {
       return currency.name
     }
   }
 
-  static getCurrencyNameByCode(code) {
-    switch (code) {
+  static getCurrencyNameByCode(code)
+  {
+    switch (code)
+    {
       case 'USD':
         return 'Доллар США';
       case 'EUR':
@@ -55,7 +58,8 @@ export default class CurrencyConstants
   {
     let currency = null;
 
-    CurrencyConstants.currencies.map((item) => {
+    CurrencyConstants.currencies.map((item) =>
+    {
       if (item.id === id)
       {
         currency = item;
@@ -76,12 +80,13 @@ export default class CurrencyConstants
   {
     let currency = CurrencyConstants.getCurrencyById(id)
 
-    if(currency)
+    if (currency)
     {
-      if(currency.sign)
+      if (currency.sign)
       {
         return currency.sign;
-      }else{
+      } else
+      {
         return currency.code;
       }
     }
@@ -96,12 +101,13 @@ export default class CurrencyConstants
   {
     let currency = CurrencyConstants.getCurrencyById(id)
 
-    if(currency)
+    if (currency)
     {
-      if(currency.code)
+      if (currency.code)
       {
         return currency.code;
-      }else{
+      } else
+      {
         return currency.sign;
       }
     }
@@ -116,15 +122,18 @@ export default class CurrencyConstants
   {
     let sign = '';
 
-    if(ActiveConstants.isPackage(item.type_id)){
-      if(item.buy_trades[item.buy_trades?.length - 1]?.currency_id)
+    if (ActiveConstants.isPackage(item.type_id))
+    {
+      if (item.buy_trades[item.buy_trades?.length - 1]?.currency_id)
       {
         sign = CurrencyConstants.getCurrencySignById(item.buy_trades[item.buy_trades?.length - 1].currency_id)
-      }else if(item.sell_trades[item.sell_trades?.length - 1]?.currency_id){
+      } else if (item.sell_trades[item.sell_trades?.length - 1]?.currency_id)
+      {
         sign = CurrencyConstants.getCurrencySignById(item.sell_trades[item.sell_trades?.length - 1].currency_id)
       }
-    }else{
-      if(item.buy_currency_id)
+    } else
+    {
+      if (item.buy_currency_id)
       {
         sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id)
       }
@@ -142,15 +151,18 @@ export default class CurrencyConstants
   {
     let code = '';
 
-    if(ActiveConstants.isPackage(item.type_id)){
-      if(item.buy_trades[item.buy_trades?.length - 1]?.currency_id)
+    if (ActiveConstants.isPackage(item.type_id))
+    {
+      if (item.buy_trades[item.buy_trades?.length - 1]?.currency_id)
       {
         code = CurrencyConstants.getCurrencyCodeById(item.buy_trades[item.buy_trades?.length - 1].currency_id)
-      }else if(item.sell_trades[item.sell_trades?.length - 1]?.currency_id){
+      } else if (item.sell_trades[item.sell_trades?.length - 1]?.currency_id)
+      {
         code = CurrencyConstants.getCurrencyCodeById(item.sell_trades[item.sell_trades?.length - 1].currency_id)
       }
-    }else{
-      if(item.buy_currency_id)
+    } else
+    {
+      if (item.buy_currency_id)
       {
         code = CurrencyConstants.getCurrencyCodeById(item.buy_currency_id)
       }
