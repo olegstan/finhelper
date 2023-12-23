@@ -81,7 +81,7 @@ export default class TransferConstants
         type = item
       }
 
-      return;
+
     })
 
     return type;
@@ -102,7 +102,7 @@ export default class TransferConstants
         type = item
       }
 
-      return;
+
     })
 
     return type;

@@ -8,6 +8,6 @@ export function isset(obj) {
     obj = obj[arguments[i]];
   }
   return true;
-};
+}
 
 // export {isset}

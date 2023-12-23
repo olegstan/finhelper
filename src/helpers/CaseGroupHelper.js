@@ -64,7 +64,7 @@ class CaseGroupHelper
 
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
 
-          return;
+
         });
 
         item.attributes.sell_trades.map((trade) => {
@@ -85,7 +85,7 @@ class CaseGroupHelper
 
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({...trade});
 
-          return;
+
         });
       } else {
         let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
@@ -104,7 +104,7 @@ class CaseGroupHelper
         }
       }
 
-      return;
+
     });
 
 
@@ -214,7 +214,7 @@ class CaseGroupHelper
 
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
 
-          return;
+
         });
 
         item.attributes.sell_trades.map((trade) => {
@@ -235,7 +235,7 @@ class CaseGroupHelper
 
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({...trade});
 
-          return;
+
         });
       } else {
         let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
@@ -255,7 +255,7 @@ class CaseGroupHelper
         }
       }
 
-      return;
+
     });
 
 
@@ -435,7 +435,7 @@ class CaseGroupHelper
 
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
 
-          return;
+
         });
 
         item.attributes.sell_trades.map((trade) => {
@@ -468,7 +468,7 @@ class CaseGroupHelper
 
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({...trade});
 
-          return;
+
         });
       } else {
         let name = '';
@@ -500,7 +500,7 @@ class CaseGroupHelper
         }
       }
 
-      return;
+
     });
 
 

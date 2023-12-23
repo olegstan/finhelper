@@ -32,7 +32,7 @@ export default class ContactConstants {
       if (item.id === id) {
         status = item;
       }
-      return;
+
     });
     return status;
   }

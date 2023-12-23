@@ -266,7 +266,7 @@ export default class AccountConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }
@@ -285,7 +285,7 @@ export default class AccountConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }

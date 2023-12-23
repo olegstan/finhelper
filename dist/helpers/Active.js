@@ -75,7 +75,7 @@ export default class Active {
     items.map(trade => {
       count += trade.count;
       sum += trade.sum;
-      return;
+
     });
     return sum / count / lotsize;
   }
@@ -93,7 +93,7 @@ export default class Active {
     items.map(trade => {
       count += trade.count;
       sum += trade.original_sum;
-      return;
+
     });
     return sum / count / lotsize;
   }
@@ -107,7 +107,7 @@ export default class Active {
     let sum = 0;
     items.map(trade => {
       sum += trade.sum;
-      return;
+
     });
     return sum;
   }
@@ -121,7 +121,7 @@ export default class Active {
     let sum = 0;
     items.map(trade => {
       sum += trade.original_sum;
-      return;
+
     });
     return sum;
   }
@@ -137,7 +137,7 @@ export default class Active {
     let lotsize = active.item ? active.item.lotsize : 1;
     items.map(trade => {
       count += trade.count;
-      return;
+
     });
     return count * lotsize;
   }
@@ -152,7 +152,7 @@ export default class Active {
     let count = 0;
     items.map(trade => {
       count += trade.count;
-      return;
+
     });
     return count;
   }
@@ -167,7 +167,7 @@ export default class Active {
     if (payments.length) {
       payments.map(payment => {
         sum += payment.sum;
-        return;
+
       });
     }
     return sum;
@@ -185,7 +185,7 @@ export default class Active {
         if (payment.is_confirmed) {
           sum += payment.sum;
         }
-        return;
+
       });
     }
     return sum;
@@ -203,7 +203,7 @@ export default class Active {
         if (payment.is_confirmed) {
           sum += payment.original_sum;
         }
-        return;
+
       });
     }
     return sum;
@@ -219,7 +219,7 @@ export default class Active {
     if (payments.length) {
       payments.map(payment => {
         sum += payment.original_sum;
-        return;
+
       });
     }
     return sum;
@@ -272,7 +272,7 @@ export default class Active {
             if (tradeDate.isBefore(decideDate) && decideDate.isBefore(nowDate)) {
               sum += dividend.sum * trade.count;
             }
-            return;
+
           });
         } else {
           if (item.buy_trades?.length && item.sell_trades?.length) {
@@ -285,7 +285,7 @@ export default class Active {
             }
           }
         }
-        return;
+
       });
     }
     return sum;
@@ -308,7 +308,7 @@ export default class Active {
             if (tradeDate.isBefore(decideDate) && decideDate.isBefore(nowDate)) {
               sum += dividend.original_sum * trade.count;
             }
-            return;
+
           });
         } else {
           if (item.buy_trades?.length && item.sell_trades?.length) {
@@ -321,7 +321,7 @@ export default class Active {
             }
           }
         }
-        return;
+
       });
     }
     return sum;
@@ -376,10 +376,10 @@ export default class Active {
                 sum += commission.percent / 100 * item.sum;
                 break;
             }
-            return;
+
           });
         }
-        return;
+
       });
     }
     return sum;
@@ -404,10 +404,10 @@ export default class Active {
                 sum += commission.percent / 100 * item.original_sum;
                 break;
             }
-            return;
+
           });
         }
-        return;
+
       });
     }
     return sum;
@@ -417,7 +417,7 @@ export default class Active {
     let sum = 0;
     items.map(item => {
       sum += Active.getDiffRubble(item, now);
-      return;
+
     });
     return sum;
   }
@@ -429,7 +429,7 @@ export default class Active {
       if (payment.is_confirmed === false && paymentDate.isBefore(futureDate)) {
         sum += Math.abs(payment.sum);
       }
-      return;
+
     });
     return {
       sum: sum,
@@ -446,7 +446,7 @@ export default class Active {
         sum += Math.abs(payment.sum);
         count++;
       }
-      return;
+
     });
     return {
       sum: sum,

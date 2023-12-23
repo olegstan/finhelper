@@ -46,7 +46,7 @@ class GroupHelper
           activeSortedItems[keyId].attributes.sell_trades.push({...trade})
         })
 
-        return;
+
       });
 
       if (groupType === ActiveConstants.BY_TYPE) {
@@ -116,7 +116,7 @@ class GroupHelper
 
               sortedItems[keyId].attributes.buy_trades.push({...trade});
 
-              return;
+
             });
 
 
@@ -135,7 +135,7 @@ class GroupHelper
 
               sortedItems[keyId].attributes.sell_trades.push({...trade});
 
-              return;
+
             });
           } else {
             let key = item.id + 'none';
@@ -162,7 +162,7 @@ class GroupHelper
             }
           }
 
-          return;
+
         });
 
         GroupHelper.setValuation(sortedItems);
@@ -240,7 +240,7 @@ class GroupHelper
 
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
 
-            return;
+
           });
 
           item.attributes.sell_trades.map((trade) => {
@@ -248,13 +248,13 @@ class GroupHelper
 
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({...trade});
 
-            return;
+
           });
         } else {
           key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType);
         }
 
-        return;
+
       });
 
       GroupHelper.setValuation(sortedItems);
@@ -397,7 +397,7 @@ class GroupHelper
       groups[nameIndex].groups[nameSubIndex].sum += item.valuation;
       groups[nameIndex].groups[nameSubIndex].actives.push(item);
 
-      return;
+
     });
 
     return groups;
@@ -426,10 +426,10 @@ class GroupHelper
 
         groups[index.indexOf(subAccount.currency.code)].sum += subAccount.sum;
 
-        return;
+
       });
 
-      return;
+
     })
 
     return groups;
@@ -476,7 +476,7 @@ class GroupHelper
         console.error(e)
       }
 
-      return;
+
     });
 
     pairs.map((pair) => {
@@ -490,7 +490,7 @@ class GroupHelper
         groups[0].outcome += pair.outcome.sum;
       }
 
-      return;
+
     });
 
 

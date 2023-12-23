@@ -31,7 +31,7 @@ export default class TradeCommissionConstants
         type = item
       }
 
-      return;
+
     })
 
     return type;

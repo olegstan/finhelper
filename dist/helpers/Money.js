@@ -161,7 +161,7 @@ export default class Money {
         if (item.cb_currency.currency.id === id) {
           course = item;
         }
-        return;
+
       });
     }
     return course;

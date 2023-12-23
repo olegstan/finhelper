@@ -42,7 +42,7 @@ export default class TradeConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }
@@ -58,7 +58,7 @@ export default class TradeConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }

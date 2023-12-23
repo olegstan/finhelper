@@ -51,7 +51,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({
             ...trade
           });
-          return;
+
         });
         item.attributes.sell_trades.map(trade => {
           let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
@@ -69,7 +69,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({
             ...trade
           });
-          return;
+
         });
       } else {
         let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
@@ -85,7 +85,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
         }
       }
-      return;
+
     });
     sortedItems.map(item => {
       let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
@@ -161,7 +161,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({
             ...trade
           });
-          return;
+
         });
         item.attributes.sell_trades.map(trade => {
           let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
@@ -179,7 +179,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({
             ...trade
           });
-          return;
+
         });
       } else {
         let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
@@ -195,7 +195,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
         }
       }
-      return;
+
     });
     let colorIndex = 0;
     let subColorIndex = 0;
@@ -334,7 +334,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({
             ...trade
           });
-          return;
+
         });
         item.attributes.sell_trades.map(trade => {
           let name = '';
@@ -363,7 +363,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({
             ...trade
           });
-          return;
+
         });
       } else {
         let name = '';
@@ -390,7 +390,7 @@ class CaseGroupHelper {
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
         }
       }
-      return;
+
     });
     let colorIndex = 0;
     let subColorIndex = 0;

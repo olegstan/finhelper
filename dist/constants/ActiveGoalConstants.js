@@ -180,7 +180,7 @@ export default class ActiveGoalConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }
@@ -190,7 +190,7 @@ export default class ActiveGoalConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }
@@ -200,7 +200,7 @@ export default class ActiveGoalConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }

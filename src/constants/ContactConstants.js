@@ -31,7 +31,7 @@ export default class ContactConstants
         status = item
       }
 
-      return;
+
     });
 
     return status;

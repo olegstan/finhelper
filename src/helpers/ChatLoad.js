@@ -28,6 +28,6 @@ export default class ChatLoad
             ChatLoad.isPlaced = true;
         }
 
-        return;
+
     }
 }

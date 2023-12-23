@@ -333,7 +333,7 @@ export default class AccountConstants
         type = item
       }
 
-      return;
+
     });
 
     return type;
@@ -357,7 +357,7 @@ export default class AccountConstants
         type = item
       }
 
-      return;
+
     });
 
     return type;

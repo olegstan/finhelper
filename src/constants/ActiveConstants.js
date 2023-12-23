@@ -368,7 +368,7 @@ export default class ActiveConstants
         type = item
       }
 
-      return;
+
     });
 
     return type;
@@ -422,7 +422,7 @@ export default class ActiveConstants
         group = item
       }
 
-      return;
+
     });
 
     return group;
@@ -442,7 +442,7 @@ export default class ActiveConstants
         group = item
       }
 
-      return;
+
     });
 
     return group;
@@ -463,7 +463,7 @@ export default class ActiveConstants
         type = item
       }
 
-      return;
+
     })
 
     return type;
@@ -484,7 +484,7 @@ export default class ActiveConstants
         type = item
       }
 
-      return;
+
     })
 
     return type;

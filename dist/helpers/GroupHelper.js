@@ -39,7 +39,7 @@ class GroupHelper {
             ...trade
           });
         });
-        return;
+
       });
       if (groupType === ActiveConstants.BY_TYPE) {
         sortedItems = activeSortedItems;
@@ -95,7 +95,7 @@ class GroupHelper {
               sortedItems[keyId].attributes.buy_trades.push({
                 ...trade
               });
-              return;
+
             });
             item.attributes.sell_trades.map(trade => {
               let account;
@@ -109,7 +109,7 @@ class GroupHelper {
               sortedItems[keyId].attributes.sell_trades.push({
                 ...trade
               });
-              return;
+
             });
           } else {
             let key = item.id + 'none';
@@ -131,7 +131,7 @@ class GroupHelper {
               sortedItems[keyId].attributes.sell_trades = [];
             }
           }
-          return;
+
         });
         GroupHelper.setValuation(sortedItems);
       }
@@ -199,19 +199,19 @@ class GroupHelper {
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({
               ...trade
             });
-            return;
+
           });
           item.attributes.sell_trades.map(trade => {
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({
               ...trade
             });
-            return;
+
           });
         } else {
           key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType);
         }
-        return;
+
       });
       GroupHelper.setValuation(sortedItems);
       let groups = GroupHelper.group(sortedItems, groupType);
@@ -330,7 +330,7 @@ class GroupHelper {
       groups[nameIndex].sum += item.valuation;
       groups[nameIndex].groups[nameSubIndex].sum += item.valuation;
       groups[nameIndex].groups[nameSubIndex].actives.push(item);
-      return;
+
     });
     return groups;
   }
@@ -353,9 +353,9 @@ class GroupHelper {
           };
         }
         groups[index.indexOf(subAccount.currency.code)].sum += subAccount.sum;
-        return;
+
       });
-      return;
+
     });
     return groups;
   }
@@ -394,7 +394,7 @@ class GroupHelper {
       } catch (e) {
         console.error(e);
       }
-      return;
+
     });
     pairs.map(pair => {
       //деньги пришли на брокерский счёт с другого типа счёта или без счёта
@@ -406,7 +406,7 @@ class GroupHelper {
       if ((pair?.income?.account?.user_account?.type_id && pair.income.account.user_account.type_id !== AccountConstants.BROKER_ACCOUNT || pair.income === null) && pair.outcome && pair.outcome.account.user_account.type_id === AccountConstants.BROKER_ACCOUNT) {
         groups[0].outcome += pair.outcome.sum;
       }
-      return;
+
     });
     return groups;
   }

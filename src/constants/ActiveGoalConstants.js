@@ -176,7 +176,7 @@ export default class ActiveGoalConstants {
         type = item
       }
 
-      return;
+
     });
 
     return type;
@@ -190,7 +190,7 @@ export default class ActiveGoalConstants {
         type = item
       }
 
-      return;
+
     });
 
     return type;
@@ -204,7 +204,7 @@ export default class ActiveGoalConstants {
         type = item
       }
 
-      return;
+
     });
 
     return type;

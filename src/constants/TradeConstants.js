@@ -46,7 +46,7 @@ export default class TradeConstants
         type = item
       }
 
-      return;
+
     })
 
     return type;
@@ -67,7 +67,7 @@ export default class TradeConstants
         type = item
       }
 
-      return;
+
     })
 
     return type;

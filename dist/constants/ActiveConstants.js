@@ -343,7 +343,7 @@ export default class ActiveConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }
@@ -412,7 +412,7 @@ export default class ActiveConstants {
       if (item.id === id) {
         group = item;
       }
-      return;
+
     });
     return group;
   }
@@ -427,7 +427,7 @@ export default class ActiveConstants {
       if (item.id === id) {
         group = item;
       }
-      return;
+
     });
     return group;
   }
@@ -443,7 +443,7 @@ export default class ActiveConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }
@@ -459,7 +459,7 @@ export default class ActiveConstants {
       if (item.id === id) {
         type = item;
       }
-      return;
+
     });
     return type;
   }

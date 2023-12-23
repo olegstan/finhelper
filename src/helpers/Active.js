@@ -94,7 +94,7 @@ export default class Active
       count += trade.count;
       sum += trade.sum;
 
-      return;
+
     });
 
     return sum / count / lotsize;
@@ -116,7 +116,7 @@ export default class Active
       count += trade.count;
       sum += trade.original_sum;
 
-      return;
+
     });
 
     return sum / count / lotsize;
@@ -134,7 +134,7 @@ export default class Active
     {
       sum += trade.sum;
 
-      return;
+
     });
 
     return sum;
@@ -153,7 +153,7 @@ export default class Active
     {
       sum += trade.original_sum;
 
-      return;
+
     });
 
     return sum;
@@ -174,7 +174,7 @@ export default class Active
     {
       count += trade.count;
 
-      return;
+
     });
 
     return count * lotsize;
@@ -194,7 +194,7 @@ export default class Active
     {
       count += trade.count;
 
-      return;
+
     });
 
     return count;
@@ -214,7 +214,7 @@ export default class Active
       {
         sum += payment.sum;
 
-        return;
+
       });
     }
 
@@ -238,7 +238,7 @@ export default class Active
           sum += payment.sum;
         }
 
-        return;
+
       });
     }
 
@@ -262,7 +262,7 @@ export default class Active
           sum += payment.original_sum;
         }
 
-        return;
+
       });
     }
 
@@ -283,7 +283,7 @@ export default class Active
       {
         sum += payment.original_sum;
 
-        return;
+
       });
     }
 
@@ -354,7 +354,7 @@ export default class Active
               sum += dividend.sum * trade.count;
             }
 
-            return;
+
           });
         } else
         {
@@ -373,7 +373,7 @@ export default class Active
           }
         }
 
-        return;
+
       });
     }
     return sum;
@@ -403,7 +403,7 @@ export default class Active
               sum += dividend.original_sum * trade.count;
             }
 
-            return;
+
           });
         } else
         {
@@ -422,7 +422,7 @@ export default class Active
           }
         }
 
-        return;
+
       });
     }
     return sum;
@@ -495,11 +495,11 @@ export default class Active
                 break;
             }
 
-            return;
+
           });
         }
 
-        return;
+
       });
     }
     return sum;
@@ -531,11 +531,11 @@ export default class Active
                 break;
             }
 
-            return;
+
           });
         }
 
-        return;
+
       });
     }
     return sum;
@@ -550,7 +550,7 @@ export default class Active
     {
       sum += Active.getDiffRubble(item, now);
 
-      return;
+
     });
 
     return sum;
@@ -570,7 +570,7 @@ export default class Active
         sum += Math.abs(payment.sum);
       }
 
-      return;
+
     });
 
     return {sum: sum, code: ''};
@@ -592,7 +592,7 @@ export default class Active
         count++
       }
 
-      return;
+
     });
 
     return {sum: sum, code: ''};

@@ -208,7 +208,7 @@ export default class Money {
           course = item
         }
 
-        return;
+
       });
     }
 
