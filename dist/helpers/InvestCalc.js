@@ -8,7 +8,7 @@ import exactMath from "exact-math";
 import CurrencyConstants from "../constants/CurrencyConstants";
 import BuyTrade from "../models/BuyTrade";
 import SellTrade from "../models/SellTrade";
-import ActiveValueCalculator from "src/helpers/Active/ActiveValueCalculator";
+import ActiveValueCalculator from "./Active/ActiveValueCalculator";
 class InvestCalc {
   static getRoundPrice(item, field) {
     let number = 2;

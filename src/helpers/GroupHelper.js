@@ -1,7 +1,7 @@
 import ActiveConstants from "../constants/ActiveConstants"
-import Active from "../helpers/Active"
 import ActiveModel from "../models/Active"
 import AccountConstants from "../constants/AccountConstants"
+import ActiveValuer from "src/helpers/Active/ActiveValuer";
 
 class GroupHelper
 {
@@ -366,7 +366,7 @@ class GroupHelper
   {
     items.map((item) =>
     {
-      let obj = Active.getValuation(item.attributes)
+      let obj = ActiveValuer.getValuation(item.attributes)
 
       if (obj)
       {

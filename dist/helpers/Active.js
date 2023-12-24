@@ -6,7 +6,7 @@ import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
 import CurrencyConstants from "../constants/CurrencyConstants";
-import ActiveValueCalculator from "src/helpers/Active/ActiveValueCalculator";
+import ActiveValueCalculator from "./Active/ActiveValueCalculator";
 export default class Active {
   /**
    *

@@ -8,7 +8,7 @@ import exactMath from "exact-math";
 import CurrencyConstants from "../constants/CurrencyConstants";
 import BuyTrade from "../models/BuyTrade";
 import SellTrade from "../models/SellTrade";
-import ActiveValueCalculator from "src/helpers/Active/ActiveValueCalculator";
+import ActiveValueCalculator from "./Active/ActiveValueCalculator";
 
 class InvestCalc
 {
@@ -585,8 +585,8 @@ class InvestCalc
               //для рассчёта оценки сделаем копию с ценой с учетом комиссии
               let copyTrade = new BuyTrade({...trade});
 
-              copyTrade.price = trade.price + (Active.getCommission([trade]) / trade.count);
-              copyTrade.original_price = trade.original_price + (Active.getCommission([trade]) / trade.count);
+              copyTrade.price = trade.price + (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
+              copyTrade.original_price = trade.original_price + (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
 
               let tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
 
@@ -638,8 +638,8 @@ class InvestCalc
             active.attributes.sell_trades.map((trade) =>
             {
               let copyTrade = new SellTrade({...trade});
-              copyTrade.price = trade.price - (Active.getCommission([trade]) / trade.count);
-              copyTrade.original_price = trade.original_price - (Active.getCommission([trade]) / trade.count);
+              copyTrade.price = trade.price - (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
+              copyTrade.original_price = trade.original_price - (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
 
               let tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
 
@@ -1086,8 +1086,8 @@ class InvestCalc
           //для рассчёта оценки сделаем копию с ценой с учетом комиссии
           let copyTrade = new BuyTrade({...trade});
 
-          copyTrade.price = trade.price + (Active.getCommission([trade]) / trade.count);
-          copyTrade.original_price = trade.original_price + (Active.getCommission([trade]) / trade.count);
+          copyTrade.price = trade.price + (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
+          copyTrade.original_price = trade.original_price + (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
 
           grid.push({
             item: copyTrade,
@@ -1102,8 +1102,8 @@ class InvestCalc
         {
           //для рассчёта оценки сделаем копию с ценой с учетом комиссии
           let copyTrade = new SellTrade({...trade});
-          copyTrade.price = trade.price - (Active.getCommission([trade]) / trade.count);
-          copyTrade.original_price = trade.original_price - (Active.getCommission([trade]) / trade.count);
+          copyTrade.price = trade.price - (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
+          copyTrade.original_price = trade.original_price - (ActiveValueCalculator.getCommissionSum([trade]) / trade.count);
 
           grid.push({
             item: copyTrade,
