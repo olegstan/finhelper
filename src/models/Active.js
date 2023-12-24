@@ -282,7 +282,7 @@ export default class Active extends BaseModel
   {
     if (this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined')
     {
-      let obj = ActiveHelper.getOriginalValuation(this.attributes, moment());
+      let obj = ActiveValuer.getOriginalValuation(this.attributes, moment());
 
       if (obj)
       {

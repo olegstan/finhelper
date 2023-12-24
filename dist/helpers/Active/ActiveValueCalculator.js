@@ -1,5 +1,5 @@
 import moment from "moment/moment";
-import TradeCommissionConstants from "src/constants";
+import TradeCommissionConstants from "./../../constants/TradeCommissionConstants";
 export default class ActiveValueCalculator {
   static calculate(active, items) {
     // template method
@@ -78,6 +78,24 @@ export default class ActiveValueCalculator {
   /**
    *
    * @param item
+   * @returns {number}
+   */
+  static getCouponSellOriginalSum(item) {
+    return this.getCouponSellSum(item, true);
+  }
+
+  /**
+   *
+   * @param item
+   * @returns {number}
+   */
+  static getCouponBuyOriginalSum(item) {
+    return this.getCouponBuySum(item, true);
+  }
+
+  /**
+   *
+   * @param item
    * @param original
    * @return {number}
    */
@@ -89,15 +107,6 @@ export default class ActiveValueCalculator {
       }
     }
     return sum;
-  }
-
-  /**
-   *
-   * @param item
-   * @returns {number}
-   */
-  static getCouponSellOriginalSum(item) {
-    return this.getCouponSellSum(item, true);
   }
 
   /**

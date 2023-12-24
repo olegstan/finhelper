@@ -1,11 +1,12 @@
 import moment from "moment/moment";
 import ActiveValueCalculator from "./ActiveValueCalculator";
 import ActiveConstants from "./../../constants/ActiveConstants";
+import Active from "./../Active";
 
 export default class ActiveValuer
 {
   /**
-   * 
+   *
    * @param item
    * @param date
    * @param sign
@@ -17,82 +18,90 @@ export default class ActiveValuer
   {
     if (item)
     {
+      const {
+        sell_trades,
+        type_id,
+        buy_trades,
+        sell_at_datetime,
+        rate_type_id,
+        buy_sum,
+        sell_sum,
+        last_valuation,
+        payments,
+        income,
+      } = item;
+
+      const lotsize = item?.item.lotsize ? item?.item.lotsize : 1;
+
       //если актив не продан и является купонным, то нужно проверить дату, если дата погашения прошла и нет оценок, то рассчитываем оценку по номиналу
-      if (item.sell_trades?.length)
+      if (sell_trades?.length)
       {
-        let sum = ActiveValueCalculator.getSum(item.sell_trades, original) + ActiveValueCalculator.getCouponSellSum(item, original) - ActiveValueCalculator.getCommissionSum(item.sell_trades, original) - ActiveValueCalculator.getCommissionSum(item.buy_trades, original) + ActiveValueCalculator.getDividendSum(item, original);
+        let sum = ActiveValueCalculator.getSum(sell_trades, original) + ActiveValueCalculator.getCouponSellSum(item, original) - ActiveValueCalculator.getCommissionSum(sell_trades, original) - ActiveValueCalculator.getCommissionSum(buy_trades, original) + ActiveValueCalculator.getDividendSum(item, original);
 
         return {sum: sum, code: code, sign: sign};
-      } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length)
+      } else if (ActiveConstants.COUPON_GROUP.indexOf(type_id) !== -1 && buy_trades?.length)
       {
-        let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+        let sellDate = moment(sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
         if (date && sellDate && sellDate.isBefore(date))
         {
-          let count = Active.getCountSum(item, item.buy_trades);
-          let buySum = (item.buy_sum * count) + ActiveValueCalculator.getCouponSellSum(item, original);// + ActiveValueCalculator.getCouponBuySum(item);
+          let count = Active.getCountSum(item, buy_trades);
+          let buySum = (buy_sum * count) + ActiveValueCalculator.getCouponSellSum(item, original);// + ActiveValueCalculator.getCouponBuySum(item);
           return {sum: buySum, code: code, sign: sign};
         }
-      } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
+      } else if (ActiveConstants.DEBT_GROUP.indexOf(type_id) !== -1)
       {
-        let sellDate = moment(item.sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+        let sellDate = moment(sell_at_datetime, 'DD.MM.YYYY HH:mm:ss');
         let sellSum = 0;
-        switch (item.rate_type_id)
+        switch (rate_type_id)
         {
           case ActiveConstants.SIMPLE:
-            sellSum = Active.getConfirmedPaymentsSum(item.payments) + item.buy_sum;
+            sellSum = Active.getConfirmedPaymentsSum(payments) + buy_sum;
             break;
           case ActiveConstants.DIFFERENTIAL:
-            sellSum = Active.getConfirmedPaymentsSum(item.payments);
+            sellSum = Active.getConfirmedPaymentsSum(payments);
             break;
         }
 
         return {sum: sellSum, code: code, sign: sign};
-      } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
+      } else if (ActiveConstants.PROPERTY_GROUP.indexOf(type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(type_id) !== -1)
       {
-        if (item.sell_sum > 0)
+        if (sell_sum > 0)
         {
-          let sellSum = item.sell_sum;
+          let sellSum = sell_sum;
           return {sum: sellSum, code: code, sign: sign};
-        } else if (item.last_valuation)
+        } else if (last_valuation)
         {
-          let lotsize = item?.item ? item.item.lotsize : 1;
-
-          return {sum: item.last_valuation.current_sum / lotsize, code: ''};
+          return {sum: last_valuation.current_sum / lotsize, code: ''};
         } else
         {
-          return {sum: item.buy_sum, code: code, sign: sign};
+          return {sum: buy_sum, code: code, sign: sign};
         }
-      } else if ([[...ActiveConstants.CREDIT_GROUP], ...[ActiveConstants.CUSTOM_OBLIGATION]].indexOf(item.type_id) !== -1)
+      } else if ([[...ActiveConstants.CREDIT_GROUP], ...[ActiveConstants.CUSTOM_OBLIGATION]].indexOf(type_id) !== -1)
       {
-        return {sum: item.income * 12, code: code, sign: sign};
-      } else if (item.type_id === ActiveConstants.MONEY_ACTIVE)
+        return {sum: income * 12, code: code, sign: sign};
+      } else if (type_id === ActiveConstants.MONEY_ACTIVE)
       {
 
-        return {sum: item.buy_sum, code: code, sign: sign};
+        return {sum: buy_sum, code: code, sign: sign};
       }
 
-      if (item.last_valuation && item.last_valuation.morph === 'active.user.valuation')
+      if (last_valuation && last_valuation.morph === 'active.user.valuation')
       {
-        let count = Active.getCountSum(item, item.buy_trades);
+        let count = Active.getCountSum(item, buy_trades);
 
-        let lastValuation = item.last_valuation;
-
-        let lotsize = item?.item ? item.item.lotsize : 1;
-
-        let buySum = (lastValuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+        let buySum = (last_valuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
 
         return {sum: buySum, code: code, sign: sign};
       }
 
-      if (item.last_valuation && item.buy_trades?.length)
+      if (last_valuation && buy_trades?.length)
       {
-        let count = Active.getCountSum(item, item.buy_trades);
+        let count = Active.getCountSum(item, buy_trades);
 
-        let lastTrade = item.buy_trades[item.buy_trades?.length - 1];
-        let lastValuation = item.last_valuation;
+        let lastTrade = buy_trades[buy_trades?.length - 1];
 
         let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
-        let lastValuationDate = moment(lastValuation.value_at_date, 'DD.MM.YYYY');
+        let lastValuationDate = moment(last_valuation.value_at_date, 'DD.MM.YYYY');
 
         let buySum = 0;
 
@@ -108,28 +117,25 @@ export default class ActiveValuer
 
         if (lastTradeDate.isBefore(lastValuationDate))
         {
-          let lotsize = item?.item ? item.item.lotsize : 1;
-
-          buySum = (lastValuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+          buySum = (last_valuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
         } else
         {
           buySum = (lastTrade.price * count) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
         }
 
         return {sum: buySum, code: code, sign: sign};
-      } else if (item.buy_trades?.length)
+      } else if (buy_trades?.length)
       {
-        if (item.buy_trades?.length === 1)
+        if (buy_trades?.length === 1)
         {
-          let buySum = item.buy_trades[item.buy_trades?.length - 1].sum + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+          let buySum = buy_trades[buy_trades?.length - 1].sum + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
 
           return {sum: buySum, code: code, sign: sign};
         }
-
-        let lotsize = item?.item ? item.item.lotsize : 1;
-        let count = Active.getCountSum(item, item.buy_trades);
-        let lastPrice = Active.getNotNullPrice(item.buy_trades, 'price');
-        let buySum = (lastPrice * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item) + ActiveValueCalculator.getDividendSum(item);
+        
+        let count = Active.getCountSum(item, buy_trades);
+        let lastPrice = Active.getNotNullPrice(buy_trades, 'price');
+        let buySum = (lastPrice * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
 
         return {sum: buySum, code: code, sign: sign};
       }

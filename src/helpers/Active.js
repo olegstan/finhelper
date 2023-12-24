@@ -118,8 +118,6 @@ export default class Active
     items.map((trade) =>
     {
       count += trade.count;
-
-
     });
 
     return count * lotsize;
@@ -138,8 +136,6 @@ export default class Active
     items.map((trade) =>
     {
       count += trade.count;
-
-
     });
 
     return count;
@@ -161,8 +157,6 @@ export default class Active
         {
           sum += payment.sum;
         }
-
-
       });
     }
 
@@ -185,8 +179,6 @@ export default class Active
         {
           sum += payment.original_sum;
         }
-
-
       });
     }
 
@@ -620,7 +612,6 @@ export default class Active
     if (item.sell_trades?.length)
     {
       let diff = ActiveValueCalculator.getSum(item.sell_trades) - ActiveValueCalculator.getSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - ActiveValueCalculator.getCommissionSum(item.sell_trades) - ActiveValueCalculator.getCommissionSum(item.buy_trades) + ActiveValueCalculator.getDividendSum(item);
-
 
       return diff;
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length)
