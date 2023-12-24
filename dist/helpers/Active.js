@@ -348,12 +348,4 @@ export default class Active {
       return true;
     }
   }
-  getSumRubble(items) {
-    let now = moment();
-    let sum = 0;
-    items.map(item => {
-      sum += Active.getDiffRubble(item, now);
-    });
-    return sum;
-  }
 }

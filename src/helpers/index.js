@@ -1,7 +1,6 @@
 import Account from './Account';
 import Active from './Active';
 import ActiveValueCalculator from './Active/ActiveValueCalculator';
-import ActiveDiffer from './Active/ActiveDiffer';
 import ActiveValuer from './Active/ActiveValuer';
 import ActiveCustomType from './ActiveCustomType';
 import ChatLoad from './ChatLoad';
@@ -28,7 +27,6 @@ export {
   Account,
   Active,
   ActiveValuer,
-  ActiveDiffer,
   ActiveValueCalculator,
   ActiveCustomType,
   ChatLoad,
