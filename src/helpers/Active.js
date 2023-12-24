@@ -6,6 +6,7 @@ import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
 import CurrencyConstants from "../constants/CurrencyConstants";
+import ActiveValueCalculator from "src/helpers/Active/ActiveValueCalculator";
 
 export default class Active
 {
@@ -239,46 +240,6 @@ export default class Active
    * @param item
    * @returns {number}
    */
-  static getCouponBuySum(item)
-  {
-    let sum = 0;
-
-    if (item.buy_trades?.length)
-    {
-      for (let n = 0; n < item.buy_trades.length; n++)
-      {
-        sum -= item.buy_trades[n].accumulated_coupon
-      }
-    }
-
-    return sum;
-  }
-
-  /**
-   *
-   * @param item
-   * @returns {number}
-   */
-  static getCouponBuyOriginalSum(item)
-  {
-    let sum = 0;
-
-    if (item.buy_trades?.length)
-    {
-      for (let n = 0; n < item.buy_trades.length; n++)
-      {
-        sum -= item.buy_trades[n].original_accumulated_coupon
-      }
-    }
-
-    return sum;
-  }
-
-  /**
-   *
-   * @param item
-   * @returns {number}
-   */
   static getDividendSum(item)
   {
     let sum = 0;
@@ -373,38 +334,6 @@ export default class Active
   }
 
   /**
-   * 
-   * @param item
-   * @param original
-   * @return {number}
-   */
-  static getCouponSellSum(item, original = false)
-  {
-    let sum = 0;
-
-    if (item.sell_trades?.length)
-    {
-      for (let n = 0; n < item.sell_trades.length; n++)
-      {
-        sum += original ? item.sell_trades[n].original_accumulated_coupon : item.sell_trades[n].accumulated_coupon
-      }
-    }
-
-    return sum;
-  }
-
-
-  /**
-   *
-   * @param item
-   * @returns {number}
-   */
-  static getCouponSellOriginalSum(item)
-  {
-    return this.getCouponSellSum(item, true)
-  }
-
-  /**
    *
    * @param items
    * @param original
@@ -492,7 +421,7 @@ export default class Active
       //если актив не продан и является купонным, то нужно проверить дату, если дата погашения прошла и нет оценок, то рассчитываем оценку по номиналу
       if (item.sell_trades?.length)
       {
-        let sum = ActiveValueCalculator.getSum(item.sell_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.sell_trades) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
+        let sum = ActiveValueCalculator.getSum(item.sell_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getCommission(item.sell_trades) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
 
         return {sum: sum, code: '', sign: sign};
       } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length)
@@ -501,7 +430,7 @@ export default class Active
         if (date && sellDate && sellDate.isBefore(date))
         {
           let count = Active.getCountSum(item, item.buy_trades);
-          let buySum = (item.buy_sum * count) + Active.getCouponSellSum(item);// + Active.getCouponBuySum(item);
+          let buySum = (item.buy_sum * count) + ActiveValueCalculator.getCouponSellSum(item);// + ActiveValueCalculator.getCouponBuySum(item);
           return {sum: buySum, code: '', sign: sign};
         }
       } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
@@ -551,7 +480,7 @@ export default class Active
 
         let lotsize = item?.item ? item.item.lotsize : 1;
 
-        let buySum = (lastValuation.current_sum * count / lotsize) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
+        let buySum = (lastValuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendSum(item);
 
         return {sum: buySum, code: '', sign: sign};
       }
@@ -582,10 +511,10 @@ export default class Active
         {
           let lotsize = item?.item ? item.item.lotsize : 1;
 
-          buySum = (lastValuation.current_sum * count / lotsize) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
+          buySum = (lastValuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendSum(item);
         } else
         {
-          buySum = (lastTrade.price * count) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
+          buySum = (lastTrade.price * count) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendSum(item);
         }
 
         return {sum: buySum, code: '', sign: sign};
@@ -593,7 +522,7 @@ export default class Active
       {
         if (item.buy_trades?.length === 1)
         {
-          let buySum = item.buy_trades[item.buy_trades?.length - 1].sum + Active.getCouponSellSum(item) + Active.getDividendSum(item);
+          let buySum = item.buy_trades[item.buy_trades?.length - 1].sum + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendSum(item);
 
           return {sum: buySum, code: '', sign: sign};
         }
@@ -601,7 +530,7 @@ export default class Active
         let lotsize = item?.item ? item.item.lotsize : 1;
         let count = Active.getCountSum(item, item.buy_trades);
         let lastPrice = Active.getNotNullPrice(item.buy_trades, 'price');
-        let buySum = (lastPrice * count / lotsize) + Active.getCouponSellSum(item) + Active.getDividendSum(item);
+        let buySum = (lastPrice * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendSum(item);
 
         return {sum: buySum, code: '', sign: sign};
       }
@@ -615,7 +544,7 @@ export default class Active
       //если актив не продан и является купонным, то нужно проверить дату, если дата погашения прошла и нет оценок, то рассчитываем оценку по номиналу
       if (item.sell_trades?.length)
       {
-        let sum = ActiveValueCalculator.getOriginalSum(item.sell_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.sell_trades) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+        let sum = ActiveValueCalculator.getOriginalSum(item.sell_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.sell_trades) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
         let code = CurrencyConstants.getCurrencyCodeByActive(item);
         let sign = CurrencyConstants.getCurrencySignByActive(item);
 
@@ -640,7 +569,7 @@ export default class Active
         if (date && sellDate && sellDate.isBefore(date))
         {
           let count = Active.getCountSum(item, item.buy_trades);
-          let buySum = (item.original_buy_sum * count) + Active.getCouponSellOriginalSum(item);
+          let buySum = (item.original_buy_sum * count) + ActiveValueCalculator.getCouponSellSum(item);
           return {sum: buySum, code: code, sign: sign};
         }
       } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
@@ -697,7 +626,7 @@ export default class Active
         let lastValuation = item.last_valuation;
 
         let lotsize = item?.item ? item.item.lotsize : 1;
-        let buySum = (lastValuation.original_current_sum * count / lotsize) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+        let buySum = (lastValuation.original_current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
 
         let {code, sign} = this.getCodeAndSign(item);
 
@@ -729,10 +658,10 @@ export default class Active
         {
           let lotsize = item?.item ? item.item.lotsize : 1;
 
-          buySum = (lastValuation.original_current_sum * count / lotsize) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+          buySum = (lastValuation.original_current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
         } else
         {
-          buySum = (lastTrade.original_price * count) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+          buySum = (lastTrade.original_price * count) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
         }
 
         let {code, sign} = this.getCodeAndSign(item);
@@ -742,7 +671,7 @@ export default class Active
       {
         if (item.buy_trades?.length === 1)
         {
-          let buySum = item.buy_trades[item.buy_trades?.length - 1].original_sum + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+          let buySum = item.buy_trades[item.buy_trades?.length - 1].original_sum + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
           let code = CurrencyConstants.getCurrencyCodeByActive(item);
           let sign = CurrencyConstants.getCurrencySignByActive(item);
 
@@ -752,7 +681,7 @@ export default class Active
         let count = Active.getCountSum(item, item.buy_trades);
         let lastPrice = Active.getNotNullPrice(item.buy_trades, 'original_price');
         let lotsize = item?.item ? item.item.lotsize : 1;
-        let buySum = (lastPrice * count / lotsize) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+        let buySum = (lastPrice * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
         let code = CurrencyConstants.getCurrencyCodeByActive(item);
         let sign = CurrencyConstants.getCurrencySignByActive(item);
 
@@ -765,7 +694,7 @@ export default class Active
   {
     if (item.sell_trades?.length)
     {
-      let diff = ActiveValueCalculator.getOriginalSum(item.sell_trades) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.sell_trades) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+      let diff = ActiveValueCalculator.getOriginalSum(item.sell_trades) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.sell_trades) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
       let code = CurrencyConstants.getCurrencyCodeByActive(item);
       let sign = CurrencyConstants.getCurrencySignByActive(item);
 
@@ -798,7 +727,7 @@ export default class Active
         let count = Active.getCountSum(item, item.buy_trades);
         let sellSum = item.original_buy_sum * count;//умножаем номинальную цену на количество
 
-        let diff = sellSum - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades);
+        let diff = sellSum - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.buy_trades);
         let code = CurrencyConstants.getCurrencyCodeByActive(item);
         let sign = CurrencyConstants.getCurrencySignByActive(item);
 
@@ -879,7 +808,7 @@ export default class Active
       let lastValuation = item.last_valuation;
 
       let lotsize = item?.item ? item.item.lotsize : 1;
-      let diff = (lastValuation.original_current_sum * count / lotsize) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+      let diff = (lastValuation.original_current_sum * count / lotsize) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
 
       let {code, sign} = this.getCodeAndSign(item);
 
@@ -911,10 +840,10 @@ export default class Active
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
 
-        diff = (lastValuation.original_current_sum * count / lotsize) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+        diff = (lastValuation.original_current_sum * count / lotsize) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
       } else
       {
-        diff = (lastTrade.original_price * count) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) + Active.getDividendOriginalSum(item);
+        diff = (lastTrade.original_price * count) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) + Active.getDividendOriginalSum(item);
       }
 
       let {code, sign} = this.getCodeAndSign(item);
@@ -928,7 +857,7 @@ export default class Active
 
       let lotsize = item?.item ? item.item.lotsize : 1;
       let sellSum = lastPrice * count / lotsize;
-      let diff = sellSum - buySum + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+      let diff = sellSum - buySum + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
 
       let code = CurrencyConstants.getCurrencyCodeByActive(item);
       let sign = CurrencyConstants.getCurrencySignByActive(item);
@@ -976,7 +905,7 @@ export default class Active
   {
     if (item.sell_trades?.length)
     {
-      let diff = ActiveValueCalculator.getOriginalSum(item.sell_trades) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.sell_trades) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+      let diff = ActiveValueCalculator.getOriginalSum(item.sell_trades) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.sell_trades) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
       let course = item.sell_trades[item.sell_trades?.length - 1].sum_rub_course;
 
       let calcDiff = course * diff;
@@ -1005,7 +934,7 @@ export default class Active
         let sellSum = item.original_buy_sum * count;
         let course = item.buy_sum_rub_course;
 
-        let diff = sellSum - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades);
+        let diff = sellSum - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.buy_trades);
 
         let calcDiff = course * diff;
 
@@ -1093,11 +1022,11 @@ export default class Active
       if (lastTradeDate.isBefore(lastValuationDate))
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
-        diff = (lastValuation.original_current_sum * count / lotsize) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+        diff = (lastValuation.original_current_sum * count / lotsize) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
         course = lastValuation.current_sum_rub_course;
       } else
       {
-        diff = (lastTrade.original_price * count) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+        diff = (lastTrade.original_price * count) - ActiveValueCalculator.getOriginalSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
         course = lastTrade.price_rub_course;
       }
 
@@ -1115,7 +1044,7 @@ export default class Active
       let count = Active.getCountSum(item, item.buy_trades);
       let lastPrice = Active.getNotNullPrice(item.buy_trades, 'original_price');
       let sellSum = lastPrice * count;
-      let diff = sellSum - buySum + Active.getCouponSellOriginalSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
+      let diff = sellSum - buySum + ActiveValueCalculator.getCouponSellSum(item) - Active.getOriginalCommission(item.buy_trades) + Active.getDividendOriginalSum(item);
       let course = item.buy_trades[item.buy_trades?.length - 1].sum_rub_course;
 
       let calcDiff = course * diff;
@@ -1128,7 +1057,7 @@ export default class Active
   {
     if (item.sell_trades?.length)
     {
-      let diff = ActiveValueCalculator.getSum(item.sell_trades) - ActiveValueCalculator.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.sell_trades) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
+      let diff = ActiveValueCalculator.getSum(item.sell_trades) - ActiveValueCalculator.getSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getCommission(item.sell_trades) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
 
 
       return diff;
@@ -1152,7 +1081,7 @@ export default class Active
         let count = Active.getCountSum(item, item.buy_trades);
         let sellSum = item.buy_sum * count;
 
-        let diff = sellSum - ActiveValueCalculator.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades);
+        let diff = sellSum - ActiveValueCalculator.getSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getCommission(item.buy_trades);
 
         return diff;
       }
@@ -1221,7 +1150,7 @@ export default class Active
 
       let lotsize = item?.item ? item.item.lotsize : 1;
 
-      let diff = (lastValuation.current_sum * count / lotsize) - ActiveValueCalculator.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
+      let diff = (lastValuation.current_sum * count / lotsize) - ActiveValueCalculator.getSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
 
       return diff;
     }
@@ -1250,10 +1179,10 @@ export default class Active
       if (lastTradeDate.isBefore(lastValuationDate))
       {
         let lotsize = item?.item ? item.item.lotsize : 1;
-        diff = (lastValuation.current_sum * count / lotsize) - ActiveValueCalculator.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
+        diff = (lastValuation.current_sum * count / lotsize) - ActiveValueCalculator.getSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
       } else
       {
-        diff = (lastTrade.price * count) - ActiveValueCalculator.getSum(item.buy_trades) + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
+        diff = (lastTrade.price * count) - ActiveValueCalculator.getSum(item.buy_trades) + ActiveValueCalculator.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
       }
 
       return diff;
@@ -1270,7 +1199,7 @@ export default class Active
 
       let lotsize = item?.item ? item.item.lotsize : 1;
       let sellSum = lastPrice * count / lotsize;
-      let diff = sellSum - buySum + Active.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
+      let diff = sellSum - buySum + ActiveValueCalculator.getCouponSellSum(item) - Active.getCommission(item.buy_trades) + Active.getDividendSum(item);
 
       return diff;
     }
