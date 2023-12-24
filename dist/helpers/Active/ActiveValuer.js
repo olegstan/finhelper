@@ -26,7 +26,7 @@ export default class ActiveValuer {
         payments,
         income
       } = item;
-      const lotsize = item?.item.lotsize ? item?.item.lotsize : 1;
+      const lotsize = item?.item ? item?.item.lotsize : 1;
 
       //если актив не продан и является купонным, то нужно проверить дату, если дата погашения прошла и нет оценок, то рассчитываем оценку по номиналу
       if (sell_trades?.length) {

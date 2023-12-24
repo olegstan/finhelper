@@ -1,6 +1,5 @@
 import moment from "moment/moment";
 import ActiveConstants from "../constants/ActiveConstants";
-import TradeCommissionConstants from "../constants/TradeCommissionConstants";
 import { Api } from "laravel-request";
 import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
@@ -352,8 +351,12 @@ export default class Active {
     };
   }
   static getCodeAndSign(item) {
-    let code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-    let sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+    let code = '';
+    let sign = '';
+    if (item.last_valuation) {
+      code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
+      sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+    }
     if (!code && !sign) {
       code = CurrencyConstants.getCurrencyCodeByActive(item);
       sign = CurrencyConstants.getCurrencySignByActive(item);
