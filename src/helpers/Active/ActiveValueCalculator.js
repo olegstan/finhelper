@@ -252,6 +252,6 @@ export default class ActiveValueCalculator
    */
   static getCommissionOriginalSum(items)
   {
-    return this.getCommission(items, true)
+    return this.getCommissionSum(items, true)
   }
 }

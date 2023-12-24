@@ -24,12 +24,13 @@ export default class ActiveValuer
         buy_trades,
         sell_at_datetime,
         rate_type_id,
-        buy_sum,
-        sell_sum,
         last_valuation,
         payments,
-        income,
       } = item;
+
+      let buy_sum = original ? item.original_buy_sum : item.buy_sum;
+      let sell_sum = original ? item.original_sell_sum : item.sell_sum;
+      let income = original ? item.original_income : item.income;
 
       const lotsize = item?.item ? item?.item.lotsize : 1;
 
@@ -55,10 +56,10 @@ export default class ActiveValuer
         switch (rate_type_id)
         {
           case ActiveConstants.SIMPLE:
-            sellSum = Active.getConfirmedPaymentsSum(payments) + buy_sum;
+            sellSum = Active.getConfirmedPaymentsSum(payments, original) + buy_sum;
             break;
           case ActiveConstants.DIFFERENTIAL:
-            sellSum = Active.getConfirmedPaymentsSum(payments);
+            sellSum = Active.getConfirmedPaymentsSum(payments, original);
             break;
         }
 
@@ -67,11 +68,11 @@ export default class ActiveValuer
       {
         if (sell_sum > 0)
         {
-          let sellSum = sell_sum;
-          return {sum: sellSum, code: code, sign: sign};
+          return {sum: sell_sum, code: code, sign: sign};
         } else if (last_valuation)
         {
-          return {sum: last_valuation.current_sum / lotsize, code: ''};
+          let valuation = original ? last_valuation.original_current_sum : last_valuation.current_sum;
+          return {sum: valuation / lotsize, code: ''};
         } else
         {
           return {sum: buy_sum, code: code, sign: sign};
@@ -88,8 +89,8 @@ export default class ActiveValuer
       if (last_valuation && last_valuation.morph === 'active.user.valuation')
       {
         let count = Active.getCountSum(item, buy_trades);
-
-        let buySum = (last_valuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+        let valuation = original ? last_valuation.original_current_sum : last_valuation.current_sum;
+        let buySum = (valuation * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
 
         return {sum: buySum, code: code, sign: sign};
       }
@@ -103,7 +104,7 @@ export default class ActiveValuer
         let lastTradeDate = moment(lastTrade.trade_at_date, 'DD.MM.YYYY');
         let lastValuationDate = moment(last_valuation.value_at_date, 'DD.MM.YYYY');
 
-        let buySum = 0;
+        let buySum;
 
         if (!lastTradeDate.isValid())
         {
@@ -117,10 +118,14 @@ export default class ActiveValuer
 
         if (lastTradeDate.isBefore(lastValuationDate))
         {
-          buySum = (last_valuation.current_sum * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+          let valuation = original ? last_valuation.original_current_sum : last_valuation.current_sum;
+
+          buySum = (valuation * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
         } else
         {
-          buySum = (lastTrade.price * count) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+          let valuation = original ? lastTrade.original_price : lastTrade.price;
+
+          buySum = (valuation * count) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
         }
 
         return {sum: buySum, code: code, sign: sign};
@@ -128,13 +133,16 @@ export default class ActiveValuer
       {
         if (buy_trades?.length === 1)
         {
-          let buySum = buy_trades[buy_trades?.length - 1].sum + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+          let lastTrade = buy_trades[buy_trades?.length - 1];
+          let buySum = original ? lastTrade.original_sum : lastTrade.sum;
+
+          buySum += ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
 
           return {sum: buySum, code: code, sign: sign};
         }
         
         let count = Active.getCountSum(item, buy_trades);
-        let lastPrice = Active.getNotNullPrice(buy_trades, 'price');
+        let lastPrice = Active.getNotNullPrice(buy_trades, original ? 'original_price' : 'price');
         let buySum = (lastPrice * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
 
         return {sum: buySum, code: code, sign: sign};
@@ -142,6 +150,12 @@ export default class ActiveValuer
     }
   }
 
+  /**
+   *
+   * @param item
+   * @param date
+   * @return {{code: string, sum: number}|{code: string, sign, sum: number}|{code: string, sign, sum: *}}
+   */
   static getOriginalValuation(item, date)
   {
     let {code, sign} = Active.getCodeAndSign(item);
