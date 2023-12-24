@@ -1,7 +1,7 @@
 import ActiveConstants from "../constants/ActiveConstants"
 import ActiveModel from "../models/Active"
 import AccountConstants from "../constants/AccountConstants"
-import ActiveValuer from "src/helpers/Active/ActiveValuer";
+import ActiveValuer from "./Active/ActiveValuer";
 
 class GroupHelper
 {

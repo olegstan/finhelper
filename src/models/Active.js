@@ -5,7 +5,7 @@ import BuyTrade from "./BuyTrade";
 import SellTrade from "./SellTrade";
 import Payment from "./Payment";
 import moment from "moment/moment";
-import ActiveValuer from "src/helpers/Active/ActiveValuer";
+import ActiveValuer from "./../helpers/Active/ActiveValuer";
 
 export default class Active extends BaseModel
 {

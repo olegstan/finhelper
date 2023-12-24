@@ -382,8 +382,8 @@ class InvestCalc {
               let copyTrade = new BuyTrade({
                 ...trade
               });
-              copyTrade.price = trade.price + Active.getCommission([trade]) / trade.count;
-              copyTrade.original_price = trade.original_price + Active.getCommission([trade]) / trade.count;
+              copyTrade.price = trade.price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+              copyTrade.original_price = trade.original_price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
               let tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
               if (lastTradeDate === null) {
                 lastTradeDate = tradeDate;
@@ -424,8 +424,8 @@ class InvestCalc {
               let copyTrade = new SellTrade({
                 ...trade
               });
-              copyTrade.price = trade.price - Active.getCommission([trade]) / trade.count;
-              copyTrade.original_price = trade.original_price - Active.getCommission([trade]) / trade.count;
+              copyTrade.price = trade.price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+              copyTrade.original_price = trade.original_price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
               let tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
               lastTradeDate = tradeDate;
               if (tradeDate.isSameOrBefore(firstBuyDate)) {
@@ -750,8 +750,8 @@ class InvestCalc {
           let copyTrade = new BuyTrade({
             ...trade
           });
-          copyTrade.price = trade.price + Active.getCommission([trade]) / trade.count;
-          copyTrade.original_price = trade.original_price + Active.getCommission([trade]) / trade.count;
+          copyTrade.price = trade.price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+          copyTrade.original_price = trade.original_price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
           grid.push({
             item: copyTrade,
             type: 'buy_trade'
@@ -764,8 +764,8 @@ class InvestCalc {
           let copyTrade = new SellTrade({
             ...trade
           });
-          copyTrade.price = trade.price - Active.getCommission([trade]) / trade.count;
-          copyTrade.original_price = trade.original_price - Active.getCommission([trade]) / trade.count;
+          copyTrade.price = trade.price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+          copyTrade.original_price = trade.original_price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
           grid.push({
             item: copyTrade,
             type: 'sell_trade'

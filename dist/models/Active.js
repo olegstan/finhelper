@@ -5,6 +5,7 @@ import BuyTrade from "./BuyTrade";
 import SellTrade from "./SellTrade";
 import Payment from "./Payment";
 import moment from "moment/moment";
+import ActiveValuer from "./../helpers/Active/ActiveValuer";
 export default class Active extends BaseModel {
   /**
    *
@@ -185,7 +186,7 @@ export default class Active extends BaseModel {
   }
   get valuation() {
     if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined') {
-      let obj = ActiveHelper.getValuation(this.attributes);
+      let obj = ActiveValuer.getValuation(this.attributes);
       if (obj) {
         this['tmp_valuation'] = obj.sum;
       } else {

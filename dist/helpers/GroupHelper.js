@@ -1,7 +1,7 @@
 import ActiveConstants from "../constants/ActiveConstants";
-import Active from "../helpers/Active";
 import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
+import ActiveValuer from "./Active/ActiveValuer";
 class GroupHelper {
   /**
    *
@@ -263,7 +263,7 @@ class GroupHelper {
    */
   static setValuation(items) {
     items.map(item => {
-      let obj = Active.getValuation(item.attributes);
+      let obj = ActiveValuer.getValuation(item.attributes);
       if (obj) {
         item.attributes['valuation'] = obj.sum;
       } else {
