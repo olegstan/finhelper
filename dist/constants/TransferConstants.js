@@ -98,7 +98,6 @@ export default class TransferConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }
@@ -114,7 +113,6 @@ export default class TransferConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }

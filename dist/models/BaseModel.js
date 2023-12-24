@@ -25,6 +25,38 @@ export default class BaseModel {
     this.attributes = attributes;
     this.setGetters(attributes);
   }
+  get id() {
+    return this.attributes.id;
+  }
+  set id(x) {
+    this.attributes.id = x;
+  }
+
+  /**
+   *
+   * @param attributes
+   * @return {BaseModel}
+   */
+  static create(attributes) {
+    return new this(attributes);
+  }
+
+  /**
+   *
+   * @param array
+   * @returns {*}
+   */
+  static load(array) {
+    return array.map(item => {
+      return this.create(item);
+    });
+  }
+  static getInstance() {
+    return new this();
+  }
+  static fetch(method = 'index', params = {}) {
+    return Api.get(this.getInstance().controller, method, params);
+  }
   setGetters(attributes) {
     for (const index in attributes) {
       if (typeof this.related[index] !== 'undefined' || index === 'attributes' || index === 'related' || index === 'modelFields' || index === 'currencyFields') {} else {
@@ -47,32 +79,6 @@ export default class BaseModel {
 
   /**
    *
-   * @param attributes
-   * @return {BaseModel}
-   */
-  static create(attributes) {
-    return new this(attributes);
-  }
-
-  /**
-   *
-   * @param array
-   * @returns {*}
-   */
-  static load(array) {
-    return array.map(item => {
-      return this.create(item);
-    });
-  }
-  get id() {
-    return this.attributes.id;
-  }
-  set id(x) {
-    this.attributes.id = x;
-  }
-
-  /**
-   *
    * @param prop
    * @returns {*}
    */
@@ -87,11 +93,5 @@ export default class BaseModel {
    */
   set(prop, value) {
     this.attributes[prop] = value;
-  }
-  static getInstance() {
-    return new this();
-  }
-  static fetch(method = 'index', params = {}) {
-    return Api.get(this.getInstance().controller, method, params);
   }
 }

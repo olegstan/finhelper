@@ -8,9 +8,9 @@ export default class Money {
       if (amount === '') {
         return '';
       }
-      decimalCount = Math.abs(decimalCount);
-      decimalCount = isNaN(decimalCount) ? '' : decimalCount;
-      const negativeSign = amount < 0 ? "-" : "";
+      const __ret = this.getDecimal(decimalCount, amount);
+      decimalCount = __ret.decimalCount;
+      const negativeSign = __ret.negativeSign;
       let amountInt = parseInt(amount = Math.abs(Number(amount) || '').toFixed(decimalCount)).toString();
       let amountFloat = Math.abs(amount - amountInt);
       let j = amountInt.length > 3 ? amountInt.length % 3 : 0;
@@ -19,6 +19,15 @@ export default class Money {
       console.error(e);
       return '';
     }
+  }
+  static getDecimal(decimalCount, amount) {
+    decimalCount = Math.abs(decimalCount);
+    decimalCount = isNaN(decimalCount) ? '' : decimalCount;
+    const negativeSign = amount < 0 ? "-" : "";
+    return {
+      decimalCount,
+      negativeSign
+    };
   }
 
   //TODO написать проверку, если цифра заканчивается на больше e+20, такие числа toFixed не может правильно обработать
@@ -49,9 +58,9 @@ export default class Money {
       if (!isFinite(amount)) {
         return '∞';
       }
-      decimalCount = Math.abs(decimalCount);
-      decimalCount = isNaN(decimalCount) ? '' : decimalCount;
-      const negativeSign = amount < 0 ? "-" : "";
+      const __ret = this.getDecimal(decimalCount, amount);
+      decimalCount = __ret.decimalCount;
+      const negativeSign = __ret.negativeSign;
       let amountInt = parseInt(amount = Math.abs(Number(amount) || '')).toString();
       let amountFloat = Money.toFixed(Math.abs(exactMath.sub(amount, amountInt)), decimalCount).slice(2); //убрали 0. ноль и точку
 
@@ -161,7 +170,6 @@ export default class Money {
         if (item.cb_currency.currency.id === id) {
           course = item;
         }
-
       });
     }
     return course;

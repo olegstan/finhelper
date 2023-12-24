@@ -10,5 +10,4 @@ export function isset(obj) {
   return true;
 }
 
-
 // export {isset}

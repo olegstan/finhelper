@@ -26,7 +26,6 @@ export default class TradeCommissionConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }

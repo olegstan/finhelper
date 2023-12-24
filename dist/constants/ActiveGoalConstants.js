@@ -83,6 +83,8 @@ export default class ActiveGoalConstants {
     "item_search": "Сектор",
     "item_slug": "sector"
   }];
+  static NOW = 1;
+  static AFTER = 0;
   static getTypes(i18n = {}) {
     return [{
       id: ActiveGoalConstants.SHORT,
@@ -154,8 +156,6 @@ export default class ActiveGoalConstants {
       name: 'Знаю сумму платежа'
     }];
   }
-  static NOW = 1;
-  static AFTER = 0;
   static getPeriods() {
     return [{
       id: ActiveGoalConstants.NOW,
@@ -180,7 +180,6 @@ export default class ActiveGoalConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }
@@ -190,7 +189,6 @@ export default class ActiveGoalConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }
@@ -200,7 +198,6 @@ export default class ActiveGoalConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }

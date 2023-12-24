@@ -4,7 +4,6 @@ import ModelHelper from "../helpers/ModelHelper";
 import moment from "moment/moment";
 import ActiveConstants from "./ActiveConstants";
 import CurrencyConstants from "./CurrencyConstants";
-import ActiveModel from "../models/Active";
 let types = [1, 2, 3, 4];
 if (process.env.REACT_APP_ENV === 'test') {
   // types.push(5)
@@ -266,7 +265,6 @@ export default class AccountConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }
@@ -285,7 +283,6 @@ export default class AccountConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }

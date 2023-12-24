@@ -51,7 +51,6 @@ export default class CurrencyConstants {
       if (item.id === id) {
         currency = item;
       }
-
     });
     return currency;
   }

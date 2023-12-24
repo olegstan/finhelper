@@ -87,41 +87,22 @@ export default class Active extends BaseModel {
       if (buyTrades?.length) {
         for (let i = 0; i < buyTrades.length; i++) {
           let trade = buyTrades[i];
-          if (trade.trade_at) {
-            if (date) {
-              let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
-              let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
-
-              //каждая следующая дата будет больше прошлой,
-              //поэтому всегда двигаемся вперед
-              date.add(diffInDays / 2, 'days');
-            } else {
-              date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
-            }
-          }
+          date = ActiveHelper.getAvgDate(trade, date);
         }
         this['tmp_avg_own_date'] = date ? date.format('DD.MM.YYYY') : '';
       }
       if (sellTrades?.length) {
         for (let i = 0; i < sellTrades.length; i++) {
           let trade = sellTrades[i];
-          if (trade.trade_at) {
-            if (date) {
-              let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
-              let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
-
-              //каждая следующая дата будет больше прошлой,
-              //поэтому всегда двигаемся вперед
-              date.add(diffInDays / 2, 'days');
-            } else {
-              date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
-            }
-          }
+          date = ActiveHelper.getAvgDate(trade, date);
         }
         this['tmp_avg_own_date'] = date ? date.format('DD.MM.YYYY') : '';
       }
     }
     return this['tmp_avg_own_date'];
+  }
+  set avg_own_date(x) {
+    this['tmp_avg_own_date'] = x;
   }
   get trades() {
     if (!this.related.trades.loaded) {
@@ -163,6 +144,9 @@ export default class Active extends BaseModel {
     }
     return this['tmp_trades'] ? this['tmp_trades'] : [];
   }
+  set trades(x) {
+    this['tmp_trades'] = x;
+  }
   get payments() {
     if (!this.related.payments.loaded && this.attributes['payments'] && this.attributes['payments'].length) {
       this['tmp_payments'] = this.attributes['payments'].map(item => {
@@ -171,6 +155,9 @@ export default class Active extends BaseModel {
       this.related.payments.loaded = true;
     }
     return this['tmp_payments'] ? this['tmp_payments'] : [];
+  }
+  set payments(x) {
+    this['tmp_payments'] = x;
   }
   get buy_trades() {
     if (!this.related.buy_trades.loaded && this.attributes['buy_trades'] && this.attributes['buy_trades'].length) {
@@ -181,6 +168,9 @@ export default class Active extends BaseModel {
     }
     return this['tmp_buy_trades'] ? this['tmp_buy_trades'] : [];
   }
+  set buy_trades(x) {
+    this['tmp_buy_trades'] = x;
+  }
   get sell_trades() {
     if (!this.related.sell_trades.loaded && this.attributes['sell_trades'] && this.attributes['sell_trades'].length) {
       this['tmp_sell_trades'] = this.attributes['sell_trades'].map(item => {
@@ -189,6 +179,9 @@ export default class Active extends BaseModel {
       this.related.sell_trades.loaded = true;
     }
     return this['tmp_sell_trades'] ? this['tmp_sell_trades'] : [];
+  }
+  set sell_trades(x) {
+    this['tmp_sell_trades'] = x;
   }
   get valuation() {
     if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined') {
@@ -237,20 +230,5 @@ export default class Active extends BaseModel {
   }
   set annuallyPercent(x) {
     this['tmp_annuallyPercent'] = x;
-  }
-  set payments(x) {
-    this['tmp_payments'] = x;
-  }
-  set trades(x) {
-    this['tmp_trades'] = x;
-  }
-  set buy_trades(x) {
-    this['tmp_buy_trades'] = x;
-  }
-  set sell_trades(x) {
-    this['tmp_sell_trades'] = x;
-  }
-  set avg_own_date(x) {
-    this['tmp_avg_own_date'] = x;
   }
 }

@@ -17,6 +17,7 @@ export default class TradeConstants {
       name: 'Продажа'
     }];
   }
+
   /**
    *
    * @returns {*[]}
@@ -42,7 +43,6 @@ export default class TradeConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }
@@ -58,7 +58,6 @@ export default class TradeConstants {
       if (item.id === id) {
         type = item;
       }
-
     });
     return type;
   }
