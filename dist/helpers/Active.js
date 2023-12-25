@@ -5,7 +5,6 @@ import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
 import CurrencyConstants from "../constants/CurrencyConstants";
-import ActiveValueCalculator from "./Active/ActiveValueCalculator";
 export default class Active {
   /**
    *
@@ -207,12 +206,16 @@ export default class Active {
     }
     return 0;
   }
-  static getAccountsByDate(self, bindString, data, clientId, date = moment(), callback) {
-    Api.get('user-account', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('user_id', clientId).where('is_visible', 1).with('accounts', 'accounts.currency').all(() => {
+  static getAccountsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
+    let query = Api.get('user-account', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('user_id', clientId).where('is_visible', 1).with('accounts', 'accounts.currency');
+    if (accountBanks.length) {
+      query.whereIn('bank_id', accountBanks);
+    }
+    query.all(() => {
       callback();
     }).bind(self, bindString);
   }
-  static getBalanceByDate(self, accounts, currencyData, clientId, date = moment(), callback, types, courses) {
+  static getBalanceByDate(self, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses) {
     self.setState(prv => {
       prv.brokerBalance.sum = 0;
       prv.cashBalance.sum = 0;
@@ -249,7 +252,7 @@ export default class Active {
       }
     });
   }
-  static getActivesByDate(self, bindString, data, clientId, date = moment(), callback) {
+  static getActivesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
     data.user_id = clientId;
@@ -271,27 +274,27 @@ export default class Active {
       });
     });
   }
-  static getInvestsByDate(self, bindString, data, clientId, date = moment(), callback) {
+  static getInvestsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
     data.user_id = clientId;
     data.exchange_valuation = 1;
     data.with_convert_trade = 1;
     data.profitability = 1;
-    Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where(query => {
-      return query.where('type_id', ActiveConstants.OBLIGATION).whereDoesntHave('sell_trades', query => {
-        return query.whereDate('trade_at', '<=', now);
-      });
-    }).orWhere(query => {
+    Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).orWhere(query => {
       return query.whereIn('type_id', [ActiveConstants.DEPOSIT, ActiveConstants.DEBT, ActiveConstants.FUNDED_LIFE_INSURANCE]);
     }).orWhere(query => {
-      return query.whereIn('type_id', [ActiveConstants.COMMODITY, ActiveConstants.PRECIOUS_METAL, ActiveConstants.CRYPTO, ActiveConstants.ETF, ActiveConstants.PIF, ActiveConstants.BPIF, ActiveConstants.HEDGE_FUND]).whereDoesntHave('sell_trades', query => {
+      query.whereIn('type_id', ActiveConstants.PACKAGE_GROUP).whereDoesntHave('sell_trades', query => {
         return query.whereDate('trade_at', '<=', now);
       });
-    }).orWhere(query => {
-      return query.whereIn('type_id', ActiveConstants.DIVIDEND_GROUP).whereDoesntHave('sell_trades', query => {
-        return query.whereDate('trade_at', '<=', now);
-      });
+      if (accountBanks.length) {
+        query.whereHas('buy_trades.from_account.user_account', query => {
+          return query.whereIn('bank_id', accountBanks);
+        }).orWhereHas('buy_trades.to_account.user_account', query => {
+          return query.whereIn('bank_id', accountBanks);
+        });
+      }
+      return query;
     }).orWhere(query => {
       return query.where('group_id', ActiveConstants.INVEST).whereDate('buy_at', '<=', before).where(query => {
         return query.where('sell_at', '>', now).orWhereNull('sell_at').whereDoesntHave('sell');
@@ -309,7 +312,7 @@ export default class Active {
       });
     });
   }
-  static getPropertiesByDate(self, bindString, data, clientId, date = moment(), callback) {
+  static getPropertiesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     data.user_id = clientId;
     Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', now).where(query => {
@@ -329,7 +332,7 @@ export default class Active {
       callback();
     }).bind(self, bindString);
   }
-  static getObligationsByDate(self, bindString, data, clientId, date = moment(), callback) {
+  static getObligationsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     data.user_id = clientId;
     Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereObligationType(true).with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(response => {
       self.setState(prv => {

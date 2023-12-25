@@ -5,7 +5,6 @@ import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
 import CurrencyConstants from "../constants/CurrencyConstants";
-import ActiveValueCalculator from "./Active/ActiveValueCalculator";
 
 export default class Active
 {
@@ -270,13 +269,20 @@ export default class Active
     return 0;
   }
 
-  static getAccountsByDate(self, bindString, data, clientId, date = moment(), callback)
+  static getAccountsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
-    Api.get('user-account', 'index', data)
+    let query = Api.get('user-account', 'index', data)
       .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
       .where('user_id', clientId)
       .where('is_visible', 1)
-      .with('accounts', 'accounts.currency')
+      .with('accounts', 'accounts.currency');
+
+    if (accountBanks.length)
+    {
+      query.whereIn('bank_id', accountBanks);
+    }
+
+    query
       .all(() =>
       {
         callback()
@@ -284,7 +290,7 @@ export default class Active
       .bind(self, bindString)
   }
 
-  static getBalanceByDate(self, accounts, currencyData, clientId, date = moment(), callback, types, courses)
+  static getBalanceByDate(self, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses)
   {
     self.setState((prv) =>
     {
@@ -333,7 +339,7 @@ export default class Active
     })
   }
 
-  static getActivesByDate(self, bindString, data, clientId, date = moment(), callback)
+  static getActivesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
@@ -386,7 +392,7 @@ export default class Active
       });
   }
 
-  static getInvestsByDate(self, bindString, data, clientId, date = moment(), callback)
+  static getInvestsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
@@ -398,14 +404,6 @@ export default class Active
 
     Api.get('active', 'invest-grid-index', data)
       .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
-      .where((query) =>
-      {
-        return query.where('type_id', ActiveConstants.OBLIGATION)
-          .whereDoesntHave('sell_trades', (query) =>
-          {
-            return query.whereDate('trade_at', '<=', now);
-          })
-      })
       .orWhere((query) =>
       {
         return query.whereIn('type_id', [
@@ -416,27 +414,23 @@ export default class Active
       })
       .orWhere((query) =>
       {
-        return query.whereIn('type_id', [
-          ActiveConstants.COMMODITY,
-          ActiveConstants.PRECIOUS_METAL,
-          ActiveConstants.CRYPTO,
-          ActiveConstants.ETF,
-          ActiveConstants.PIF,
-          ActiveConstants.BPIF,
-          ActiveConstants.HEDGE_FUND,
-        ])
+        query.whereIn('type_id', ActiveConstants.PACKAGE_GROUP)
           .whereDoesntHave('sell_trades', (query) =>
           {
             return query.whereDate('trade_at', '<=', now);
           })
-      })
-      .orWhere((query) =>
-      {
-        return query.whereIn('type_id', ActiveConstants.DIVIDEND_GROUP)
-          .whereDoesntHave('sell_trades', (query) =>
-          {
-            return query.whereDate('trade_at', '<=', now);
-          })
+
+        if(accountBanks.length)
+        {
+          query.whereHas('buy_trades.from_account.user_account', (query) => {
+              return query.whereIn('bank_id', accountBanks);
+            })
+            .orWhereHas('buy_trades.to_account.user_account', (query) => {
+              return query.whereIn('bank_id', accountBanks);
+            })
+        }
+
+        return query;
       })
       .orWhere((query) =>
       {
@@ -452,7 +446,6 @@ export default class Active
       })
       .all((response) =>
       {
-
         self.setState((prv) =>
         {
           prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) =>
@@ -471,7 +464,7 @@ export default class Active
       });
   }
 
-  static getPropertiesByDate(self, bindString, data, clientId, date = moment(), callback)
+  static getPropertiesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
 
@@ -534,7 +527,7 @@ export default class Active
       .bind(self, bindString);
   }
 
-  static getObligationsByDate(self, bindString, data, clientId, date = moment(), callback)
+  static getObligationsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     data.user_id = clientId;
 

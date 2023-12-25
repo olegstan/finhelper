@@ -32,7 +32,7 @@ export default class UserValuation {
     sum += UserValuation.getAccountValuation(state.digitBalance);
     return sum;
   }
-  static async getValuation(clientId, currencyId, courses) {
+  static async getValuation(clientId, currencyId, accountBanks = [], courses) {
     var component = new ReactComponentEmulator();
     component.state = {
       accounts: [],
@@ -63,19 +63,14 @@ export default class UserValuation {
         let currencyData = {
           currency_id: currencyId
         };
-        Active.getAccountsByDate(component, 'accounts', currencyData, clientId, now, () => {
-          Active.getBalanceByDate(component, component.state.accounts, currencyData, clientId, now, () => {
-            Active.getInvestsByDate(component, 'invests', currencyData, clientId, now, () => {
-              Active.getPropertiesByDate(component, 'properties', currencyData, clientId, now, () => {
-                Api.get('active', 'index', currencyData).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).whereObligationType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').with('invests', 'sell').all(response => {
-                  component.setState(prv => {
-                    prv['obligations'] = ActiveModel.load(response.data);
-                    return prv;
-                  }, () => {
-                    let valuation = UserValuation.getWholeActivesSum(component.state);
-                    Cache.setItem('cache.' + clientId, valuation);
-                    resolve(valuation);
-                  });
+        Active.getAccountsByDate(component, 'accounts', currencyData, clientId, accountBanks, now, () => {
+          Active.getBalanceByDate(component, component.state.accounts, currencyData, clientId, accountBanks, now, () => {
+            Active.getInvestsByDate(component, 'invests', currencyData, clientId, accountBanks, now, () => {
+              Active.getPropertiesByDate(component, 'properties', currencyData, clientId, accountBanks, now, () => {
+                Active.getObligationsByDate(component, 'obligations', currencyData, clientId, accountBanks, now, () => {
+                  let valuation = UserValuation.getWholeActivesSum(component.state);
+                  Cache.setItem('cache.' + clientId, valuation);
+                  resolve(valuation);
                 });
               });
             });
