@@ -84,8 +84,9 @@ export default class AccountConstants
 
         let cbCurrency = subAccount?.currency?.cb_currency;
 
+        let code = CurrencyConstants.getCurrencyCodeById(subAccount.currency_id)
         let name = CurrencyConstants.getCurrencyNameById(subAccount.currency_id)
-        let keyName = accountId + name + '-' + cbCurrency?.id;
+        let keyName = accountId + '-' + code + '-' + cbCurrency?.id;
 
         if (index.indexOf(keyName) === -1)
         {
@@ -94,7 +95,7 @@ export default class AccountConstants
           let key = index.indexOf(keyName);
 
           let newItem = {};
-          switch (name)
+          switch (code)
           {
             case 'GLD':
             case 'SLV':
