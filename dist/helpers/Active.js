@@ -281,24 +281,26 @@ export default class Active {
     data.exchange_valuation = 1;
     data.with_convert_trade = 1;
     data.profitability = 1;
-    Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).orWhere(query => {
-      return query.whereIn('type_id', [ActiveConstants.DEPOSIT, ActiveConstants.DEBT, ActiveConstants.FUNDED_LIFE_INSURANCE]);
-    }).orWhere(query => {
-      query.whereIn('type_id', ActiveConstants.PACKAGE_GROUP).whereDoesntHave('sell_trades', query => {
-        return query.whereDate('trade_at', '<=', now);
-      });
-      if (accountBanks.length) {
-        query.whereHas('buy_trades.from_account.user_account', query => {
-          return query.whereIn('bank_id', accountBanks);
-        }).orWhereHas('buy_trades.to_account.user_account', query => {
-          return query.whereIn('bank_id', accountBanks);
+    Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('type_id', '!=', ActiveConstants.CURRENCY).where(query => {
+      return query.orWhere(query => {
+        return query.whereIn('type_id', [ActiveConstants.DEPOSIT, ActiveConstants.DEBT, ActiveConstants.FUNDED_LIFE_INSURANCE]);
+      }).orWhere(query => {
+        query.whereIn('type_id', ActiveConstants.PACKAGE_GROUP).whereDoesntHave('sell_trades', query => {
+          return query.whereDate('trade_at', '<=', now);
         });
-      }
-      return query;
-    }).orWhere(query => {
-      return query.where('group_id', ActiveConstants.INVEST).whereDate('buy_at', '<=', before).where(query => {
-        return query.where('sell_at', '>', now).orWhereNull('sell_at').whereDoesntHave('sell');
-      }).wherePropertyType(true);
+        if (accountBanks.length) {
+          query.whereHas('buy_trades.from_account.user_account', query => {
+            return query.whereIn('bank_id', accountBanks);
+          }).orWhereHas('buy_trades.to_account.user_account', query => {
+            return query.whereIn('bank_id', accountBanks);
+          });
+        }
+        return query;
+      }).orWhere(query => {
+        return query.where('group_id', ActiveConstants.INVEST).whereDate('buy_at', '<=', before).where(query => {
+          return query.where('sell_at', '>', now).orWhereNull('sell_at').whereDoesntHave('sell');
+        }).wherePropertyType(true);
+      });
     }).all(response => {
       self.setState(prv => {
         prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) => {
