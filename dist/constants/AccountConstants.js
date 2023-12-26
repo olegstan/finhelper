@@ -162,26 +162,40 @@ export default class AccountConstants {
     });
     return preparedAccounts;
   }
-  static getSubAccountById(subAccountId) {
+
+  /**
+   *
+   * @param subAccountId
+   * @param accounts
+   * @return {null}
+   */
+  static getSubAccountById(subAccountId, accounts = ModelHelper.accounts) {
     let account = null;
-    for (let i = 0; i < ModelHelper.accounts.length; i++) {
-      for (let n = 0; n < ModelHelper.accounts[i].accounts.length; n++) {
-        if (subAccountId === ModelHelper.accounts[i].accounts[n].id) {
-          account = ModelHelper.accounts[i].accounts[n];
+    for (let i = 0; i < accounts.length; i++) {
+      for (let n = 0; n < accounts[i].accounts.length; n++) {
+        if (subAccountId === accounts[i].accounts[n].id) {
+          account = accounts[i].accounts[n];
         }
       }
     }
     return account;
   }
-  static getAccountBySubAccountId(subAccountId) {
-    if (!subAccountId || !ModelHelper.accounts) {
+
+  /**
+   *
+   * @param subAccountId
+   * @param accounts
+   * @return {null}
+   */
+  static getAccountBySubAccountId(subAccountId, accounts = ModelHelper.accounts) {
+    if (!subAccountId || !accounts) {
       return null;
     }
     let account = null;
-    for (let i = 0; i < ModelHelper.accounts.length; i++) {
-      for (let n = 0; n < ModelHelper.accounts[i].accounts.length; n++) {
-        if (subAccountId === ModelHelper.accounts[i].accounts[n].id) {
-          account = ModelHelper.accounts[i];
+    for (let i = 0; i < accounts.length; i++) {
+      for (let n = 0; n < accounts[i].accounts.length; n++) {
+        if (subAccountId === accounts[i].accounts[n].id) {
+          account = accounts[i];
         }
       }
     }
