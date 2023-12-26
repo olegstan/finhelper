@@ -240,6 +240,23 @@ export default class ActiveConstants
   static YAHOO_QUOTES = 2;
   static MOSCOW_EXCHANGE_QUOTES = 3;
 
+  /**
+   * catalogs
+   */
+  static CB_CATALOG = 'catalog.1';
+  static YAHOO_CATALOG = 'catalog.2';
+  static MOEX_CATALOG = 'catalog.3';
+  static CUSTOM_CATALOG = 'catalog.4';
+  static CBONDS_CATALOG = 'catalog.5';
+
+  static CATALOGS = [
+    ActiveConstants.CB_CATALOG,
+    ActiveConstants.YAHOO_CATALOG,
+    ActiveConstants.MOEX_CATALOG,
+    ActiveConstants.CUSTOM_CATALOG,
+    ActiveConstants.CBONDS_CATALOG,
+  ];
+
   static DAILY = 1;
   static WEEKLY = 2;
   static MONTHLY = 3;

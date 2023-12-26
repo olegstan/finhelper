@@ -25,6 +25,13 @@ export default class BaseModel {
     this.attributes = attributes;
     this.setGetters(attributes);
   }
+  /**
+   * Override the getRelated method to return the 'related' property
+   * @returns {Object}
+   */
+  static getRelated() {
+    return this.related;
+  }
   get id() {
     return this.attributes.id;
   }
@@ -59,7 +66,9 @@ export default class BaseModel {
   }
   setGetters(attributes) {
     for (const index in attributes) {
-      if (typeof this.related[index] !== 'undefined' || index === 'attributes' || index === 'related' || index === 'modelFields' || index === 'currencyFields') {} else {
+      if (typeof this.related[index] !== 'undefined' || index === 'attributes' || index === 'related' || index === 'modelFields' || index === 'currencyFields') {
+        console.log(this.related);
+      } else {
         try {
           Object.defineProperty(this, index, {
             get() {
@@ -74,7 +83,6 @@ export default class BaseModel {
         }
       }
     }
-    // debugger
   }
 
   /**

@@ -14,6 +14,14 @@ export default class Payment extends BaseModel
     'account': {loaded: false}
   };
 
+  constructor(attributes)
+  {
+    super();
+    this.attributes = attributes;
+
+    this.setGetters(attributes);
+  }
+
   get currency()
   {
     if (!this.modelFields.currency.loaded && this.attributes['currency_id'])

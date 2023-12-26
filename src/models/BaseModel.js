@@ -29,6 +29,13 @@ export default class BaseModel
 
     this.setGetters(attributes);
   }
+  /**
+   * Override the getRelated method to return the 'related' property
+   * @returns {Object}
+   */
+  static getRelated() {
+    return this.related;
+  }
 
   get id()
   {
@@ -73,6 +80,17 @@ export default class BaseModel
     return Api.get(this.getInstance().controller, method, params)
   }
 
+  /**
+   *
+   * @param attributes
+   * @return {*}
+   *
+   * в JavaScript, свойства дочернего класса инициализируются
+   * после вызова конструктора родительского класса.
+   * Это означает, что внутри конструктора родительского
+   * класса вы не сможете обратиться к свойствам, определенным в
+   * дочернем классе, потому что они еще не были созданы.
+   */
   setGetters(attributes)
   {
     for (const index in attributes)
@@ -100,7 +118,6 @@ export default class BaseModel
         }
       }
     }
-    // debugger
   }
 
   /**

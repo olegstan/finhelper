@@ -6,6 +6,7 @@ import SellTrade from "./SellTrade";
 import Payment from "./Payment";
 import moment from "moment/moment";
 import ActiveValuer from "./../helpers/Active/ActiveValuer";
+import Catalog from "./Catalog";
 
 export default class Active extends BaseModel
 {
@@ -23,6 +24,7 @@ export default class Active extends BaseModel
     'payments': {func: Payment.create, loaded: false},
     'buy_trades': {func: BuyTrade.create, loaded: false},
     'sell_trades': {func: SellTrade.create, loaded: false},
+    'item': {func: Catalog.create, loaded: false},
     'trades': {loaded: false}
   };
 
@@ -31,6 +33,18 @@ export default class Active extends BaseModel
     'income_currency',
     'sell_currency',
   ];
+
+  /**
+   *
+   * @param {Array} attributes
+   */
+  constructor(attributes)
+  {
+    super();
+    this.attributes = attributes;
+
+    this.setGetters(attributes);
+  }
 
   get avg_own_date_by_value()
   {
@@ -331,5 +345,21 @@ export default class Active extends BaseModel
   set annuallyPercent(x)
   {
     this['tmp_annuallyPercent'] = x;
+  }
+
+  set buy_trades(x)
+  {
+    this['tmp_buy_trades'] = x;
+  }
+
+  get item()
+  {
+    if (!this.related.item.loaded && this.attributes['item'])
+    {
+      this['tmp_item'] = new Catalog(this.attributes['item']);
+      this.related.item.loaded = true;
+    }
+
+    return this['tmp_item'] ? this['tmp_item'] : new Catalog({});
   }
 }
