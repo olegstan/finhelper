@@ -1,6 +1,11 @@
 import ModelHelper from "../helpers/ModelHelper";
 import Trade from "./Trade";
 export default class BuyTrade extends Trade {
+  constructor(attributes) {
+    super();
+    this.attributes = attributes;
+    this.setGetters(attributes);
+  }
   loadConvertTrade() {
     if (!this.modelFields.convert_trade.loaded && this.attributes?.convert_trade?.active?.buy_trades?.length > 0) {
       let trade = this.attributes?.convert_trade?.active?.buy_trades[0];

@@ -64,11 +64,21 @@ export default class BaseModel {
   static fetch(method = 'index', params = {}) {
     return Api.get(this.getInstance().controller, method, params);
   }
+
+  /**
+   *
+   * @param attributes
+   * @return {*}
+   *
+   * в JavaScript, свойства дочернего класса инициализируются
+   * после вызова конструктора родительского класса.
+   * Это означает, что внутри конструктора родительского
+   * класса вы не сможете обратиться к свойствам, определенным в
+   * дочернем классе, потому что они еще не были созданы.
+   */
   setGetters(attributes) {
     for (const index in attributes) {
-      if (typeof this.related[index] !== 'undefined' || index === 'attributes' || index === 'related' || index === 'modelFields' || index === 'currencyFields') {
-        console.log(this.related);
-      } else {
+      if (typeof this.related[index] !== 'undefined' || index === 'attributes' || index === 'related' || index === 'modelFields' || index === 'currencyFields') {} else {
         try {
           Object.defineProperty(this, index, {
             get() {

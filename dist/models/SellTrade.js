@@ -1,3 +1,9 @@
 import ModelHelper from "../helpers/ModelHelper";
 import Trade from "./Trade";
-export default class SellTrade extends Trade {}
+export default class SellTrade extends Trade {
+  constructor(attributes) {
+    super();
+    this.attributes = attributes;
+    this.setGetters(attributes);
+  }
+}

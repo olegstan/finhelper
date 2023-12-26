@@ -251,8 +251,6 @@ export default class Active extends BaseModel {
     this['tmp_buy_trades'] = x;
   }
   get item() {
-    console.log(1111);
-    console.log(this.attributes['item']);
     if (!this.related.item.loaded && this.attributes['item']) {
       this['tmp_item'] = new Catalog(this.attributes['item']);
       this.related.item.loaded = true;
