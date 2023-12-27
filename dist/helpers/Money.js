@@ -32,8 +32,6 @@ export default class Money {
 
   //TODO написать проверку, если цифра заканчивается на больше e+20, такие числа toFixed не может правильно обработать
   static format = (amount, decimalCount = 2, decimalSign = ".", thousands = " ") => {
-    // console.log('number format input')
-    // console.log(amount)
     try {
       if (typeof amount === 'number') {
         amount = amount.toString();

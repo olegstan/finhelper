@@ -672,9 +672,6 @@ class InvestCalc {
         prevPrice = valuation.item.price;
         hasSell = true;
       }
-
-      // console.log(valuation)
-
       prevValuation = valuation;
     });
     return multiplier;

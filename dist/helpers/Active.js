@@ -206,6 +206,17 @@ export default class Active {
     }
     return 0;
   }
+
+  /**
+   *
+   * @param self
+   * @param bindString
+   * @param data
+   * @param clientId
+   * @param accountBanks
+   * @param date
+   * @param callback
+   */
   static getAccountsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let query = Api.get('user-account', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('user_id', clientId).where('is_visible', 1).with('accounts', 'accounts.currency');
     if (accountBanks.length) {
@@ -215,6 +226,19 @@ export default class Active {
       callback();
     }).bind(self, bindString);
   }
+
+  /**
+   *
+   * @param self
+   * @param accounts
+   * @param currencyData
+   * @param clientId
+   * @param accountBanks
+   * @param date
+   * @param callback
+   * @param types
+   * @param courses
+   */
   static getBalanceByDate(self, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses) {
     self.setState(prv => {
       prv.brokerBalance.sum = 0;
@@ -252,6 +276,17 @@ export default class Active {
       }
     });
   }
+
+  /**
+   *
+   * @param self
+   * @param bindString
+   * @param data
+   * @param clientId
+   * @param accountBanks
+   * @param date
+   * @param callback
+   */
   static getActivesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
@@ -281,7 +316,6 @@ export default class Active {
     data.exchange_valuation = 1;
     data.with_convert_trade = 1;
     data.profitability = 1;
-    console.log(Builder.availableMethod);
     Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('type_id', '!=', ActiveConstants.CURRENCY).where(query => {
       return query.orWhere(query => {
         return query.whereIn('type_id', [ActiveConstants.DEPOSIT, ActiveConstants.DEBT, ActiveConstants.FUNDED_LIFE_INSURANCE]);

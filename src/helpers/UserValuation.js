@@ -106,30 +106,16 @@ export default class UserValuation
 
         Active.getAccountsByDate(component, 'accounts', currencyData, clientId, accountBanks, now, () =>
         {
-          // Active.getBalanceByDate(component, component.state.accounts, currencyData, clientId, accountBanks, now, () =>
-          // {
             Active.getInvestsByDate(component, 'invests', currencyData, clientId, accountBanks, now, () =>
             {
-              // Active.getPropertiesByDate(component, 'properties', currencyData, clientId, accountBanks, now, () =>
-              // {
-              //   Active.getObligationsByDate(component, 'obligations', currencyData, clientId, accountBanks, now, () =>
-              //   {
-                  let valuation = UserValuation.getInvestActivesValuation(component.state);
+                  let valuation = UserValuation.getInvestActivesSum(component.state);
 
                   if(valuation > 0)
                   {
                     Cache.setItem('cache.' + clientId, valuation)
                   }
                   resolve(valuation)
-              //   })
-              // })
             })
-          // }, [
-          //   AccountConstants.BROKER_ACCOUNT,
-          //   AccountConstants.BANK_ACCOUNT,
-          //   AccountConstants.CASH,
-          //   AccountConstants.DIGIT_MONEY
-          // ], courses)
         })
       }))
     }

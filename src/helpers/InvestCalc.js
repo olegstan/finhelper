@@ -989,8 +989,6 @@ class InvestCalc
         hasSell = true;
       }
 
-      // console.log(valuation)
-
       prevValuation = valuation;
     });
 
