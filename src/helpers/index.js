@@ -22,6 +22,7 @@ import GroupHelper from './GroupHelper';
 import CaseGroupHelper from './CaseGroupHelper';
 import UserValuation from './UserValuation';
 import Cache from './Cache';
+import IndexedDBCache from './IndexedDBCache';
 
 export {
   Account,
@@ -48,4 +49,5 @@ export {
   CaseGroupHelper,
   UserValuation,
   Cache,
+  IndexedDBCache
 };

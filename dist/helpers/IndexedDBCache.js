@@ -1,74 +1,103 @@
 export default class IndexedDBCache {
   static _db;
-  static storeName;
-  static ensureDatabaseOpened(databaseName = 'AppStorage', storeName = 'DataStore') {
+  static _storeName;
+
+  /**
+   *
+   * @param databaseName
+   * @param storeName
+   */
+  static async ensureDatabaseOpened(databaseName = 'AppStorage', storeName = 'DataStore') {
     if (!this._db) {
-      this.openDatabase(databaseName, storeName);
+      await this.openDatabase(databaseName, storeName);
     }
   }
+
+  /**
+   *
+   * @param databaseName
+   * @param storeName
+   * @return {Promise<unknown>}
+   */
   static openDatabase(databaseName, storeName) {
-    const request = indexedDB.open(databaseName, 1);
-    request.onerror = event => {
-      throw new Error('Error opening IndexedDB');
-    };
-    request.onupgradeneeded = event => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains(storeName)) {
-        db.createObjectStore(storeName, {
-          keyPath: 'key'
-        });
-      }
-    };
-    this.storeName = storeName; // Set the storeName
-    this._db = request.result;
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(databaseName, 1);
+      request.onerror = event => {
+        throw new Error('Error opening IndexedDB');
+      };
+      request.onupgradeneeded = event => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains(storeName)) {
+          db.createObjectStore(storeName, {
+            keyPath: 'key'
+          });
+        }
+      };
+      request.onsuccess = () => {
+        // Store the DB reference here instead
+        this._db = request.result;
+        this._storeName = storeName;
+        resolve();
+      };
+    });
   }
-  static set(key, value, expirationTimeInMs = null) {
-    this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this.storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this.storeName);
-    const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null;
-    const data = {
-      key,
-      value,
-      expirationTime
-    };
-    objectStore.put(data, key);
+  static async set(key, value, expirationTimeInMs = null) {
+    await this.ensureDatabaseOpened();
+    return new Promise((resolve, reject) => {
+      const transaction = this._db.transaction([this._storeName], 'readwrite');
+      const objectStore = transaction.objectStore(this._storeName);
+      const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null;
+      const data = {
+        key,
+        value,
+        expirationTime
+      };
+      const request = objectStore.put(data);
+      request.onsuccess = () => {
+        resolve();
+      };
+      request.onerror = event => {
+        reject(new Error(`Error putting JSON data: ${event.target.error}`));
+      };
+    });
   }
-  static get(key) {
-    this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this.storeName], 'readonly');
-    const objectStore = transaction.objectStore(this.storeName);
+  static async get(key) {
+    await this.ensureDatabaseOpened();
+    const transaction = this._db.transaction([this._storeName], 'readonly');
+    const objectStore = transaction.objectStore(this._storeName);
     const request = objectStore.get(key);
     let result;
     request.onsuccess = event => {
       const data = event.target.result;
+      console.log(data);
       if (data && (!data.expirationTime || data.expirationTime > Date.now())) {
         result = data.value;
       }
     };
 
     // Wait for the transaction to complete
-    transaction.oncomplete = () => result;
-
-    // Return a promise to maintain compatibility with asynchronous usage
-    return new Promise(resolve => resolve(result));
+    return new Promise(resolve => {
+      transaction.oncomplete = () => {
+        resolve(result);
+      };
+    });
   }
-  static delete(key) {
-    this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this.storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this.storeName);
+  static async delete(key) {
+    await this.ensureDatabaseOpened();
+    const transaction = this._db.transaction([this._storeName], 'readwrite');
+    const objectStore = transaction.objectStore(this._storeName);
     objectStore.delete(key);
   }
-  static clearAll() {
-    this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this.storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this.storeName);
+  static async clearAll() {
+    await this.ensureDatabaseOpened();
+    const transaction = this._db.transaction([this._storeName], 'readwrite');
+    const objectStore = transaction.objectStore(this._storeName);
     objectStore.clear();
   }
-  static clearByPattern(pattern) {
-    this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this.storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this.storeName);
+  static async clearByPattern(pattern) {
+    await this.ensureDatabaseOpened();
+    const transaction = this._db.transaction([this._storeName], 'readwrite');
+    const objectStore = transaction.objectStore(this._storeName);
     objectStore.openCursor().onsuccess = event => {
       const cursor = event.target.result;
       if (cursor) {
@@ -77,6 +106,31 @@ export default class IndexedDBCache {
         }
         cursor.continue();
       }
+    };
+  }
+  static async clearExpiredData() {
+    await this.ensureDatabaseOpened();
+    const transaction = this._db.transaction([this._storeName], 'readwrite');
+    const objectStore = transaction.objectStore(this._storeName);
+    const currentTime = Date.now();
+    const request = objectStore.openCursor();
+    request.onsuccess = event => {
+      const cursor = event.target.result;
+      if (cursor) {
+        const data = cursor.value;
+
+        // Check if the data has an expiry property and if it is expired
+        if (data.expiry && data.expiry <= currentTime) {
+          // If expired, delete the item
+          objectStore.delete(cursor.primaryKey);
+        }
+
+        // Move to the next item
+        cursor.continue();
+      }
+    };
+    request.onerror = event => {
+      console.error('Error clearing expired data:', event.target.error);
     };
   }
 }
