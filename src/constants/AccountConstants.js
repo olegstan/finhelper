@@ -56,6 +56,12 @@ export default class AccountConstants
   static FREEDOM_BROKER = 3010;
   static CUSTOM_BROKER = 4001;
 
+  /**
+   *
+   * @param accounts
+   * @param currency
+   * @return {*[]}
+   */
   static appendCurrencyActives(accounts, currency)
   {
     let preparedAccounts = [];
@@ -76,11 +82,6 @@ export default class AccountConstants
         //объединяем все остатки по одному счету, если одна валюта, то субсчета просуммируются
         let accountId = account.id;
         let sum = subAccount.sum;
-
-        if (currency && currency.id !== 'none')
-        {
-          sum = Money.convert(sum, currency.id, subAccount.currency_id);
-        }
 
         let cbCurrency = subAccount?.currency?.cb_currency;
 

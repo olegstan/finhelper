@@ -285,7 +285,7 @@ export default class Active
       .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
       .where('user_id', clientId)
       .where('is_visible', 1)
-      .with('accounts', 'accounts.currency');
+      .with('accounts', 'accounts.currency', 'accounts.currency.cb_currency');
 
     if (accountBanks.length)
     {
@@ -484,8 +484,6 @@ export default class Active
       {
         self.setState((prv) =>
         {
-
-
           prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) =>
           {
             let valuation1 = c1.valuation;

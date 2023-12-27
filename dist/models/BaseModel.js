@@ -25,16 +25,19 @@ export default class BaseModel {
     this.attributes = attributes;
     this.setGetters(attributes);
   }
+
   /**
-   * Override the getRelated method to return the 'related' property
-   * @returns {Object}
+   *
+   * @return {*}
    */
-  static getRelated() {
-    return this.related;
-  }
   get id() {
     return this.attributes.id;
   }
+
+  /**
+   *
+   * @param x
+   */
   set id(x) {
     this.attributes.id = x;
   }
@@ -58,10 +61,22 @@ export default class BaseModel {
       return this.create(item);
     });
   }
+
+  /**
+   *
+   * @return {BaseModel}
+   */
   static getInstance() {
     return new this();
   }
-  static fetch(method = 'index', params = {}) {
+
+  /**
+   *
+   * @param params
+   * @return {*}
+   */
+  static fetch(params = {}) {
+    const method = 'index';
     return Api.get(this.getInstance().controller, method, params);
   }
 
