@@ -80,8 +80,6 @@ export default class IndexedDBCache {
     request.onsuccess = (event) => {
       const data = event.target.result;
 
-      console.log(data)
-
       if (data && (!data.expirationTime || data.expirationTime > Date.now())) {
         result = data.value;
       }

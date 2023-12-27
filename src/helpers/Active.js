@@ -1,6 +1,6 @@
 import moment from "moment/moment";
 import ActiveConstants from "../constants/ActiveConstants";
-import {Api} from "laravel-request";
+import {Api, Builder} from "laravel-request";
 import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
@@ -402,6 +402,8 @@ export default class Active
     data.with_convert_trade = 1;
     data.profitability = 1;
 
+    console.log(Builder.availableMethod)
+
     Api.get('active', 'invest-grid-index', data)
       .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
       .where('type_id', '!=', ActiveConstants.CURRENCY)
@@ -452,6 +454,8 @@ export default class Active
       {
         self.setState((prv) =>
         {
+
+
           prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) =>
           {
             let valuation1 = c1.valuation;
@@ -459,6 +463,19 @@ export default class Active
 
             return (valuation1 < valuation2) ? 1 : (valuation1 > valuation2) ? -1 : 0
           });
+
+          let items = AccountConstants.appendCurrencyActives(prv.accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
+
+          items = items.map((item) => {
+            if(item.type_id === ActiveConstants.CURRENCY)
+            {
+              item.name_text = 'Свободные денежные средства';
+            }
+
+            return new ActiveModel(item);
+          })
+
+          prv[bindString] = [...items, ...prv[bindString]];
 
           return prv;
         }, () =>

@@ -38,17 +38,31 @@ export default class UserValuation
   {
     let sum = 0;
 
-    sum += InvestCalc.getValuation(state.properties);
+    // sum += InvestCalc.getValuation(state.properties);
     sum += InvestCalc.getValuation(state.invests);
-    sum += UserValuation.getAccountValuation(state.bankBalance);
-    sum += UserValuation.getAccountValuation(state.brokerBalance);
-    sum += UserValuation.getAccountValuation(state.cashBalance);
-    sum += UserValuation.getAccountValuation(state.digitBalance);
+    // sum += UserValuation.getAccountValuation(state.bankBalance);
+    // sum += UserValuation.getAccountValuation(state.brokerBalance);
+    // sum += UserValuation.getAccountValuation(state.cashBalance);
+    // sum += UserValuation.getAccountValuation(state.digitBalance);
 
     return sum;
   }
 
-  static async getValuation(clientId, currencyId, accountBanks = [], courses)
+  static getInvestActivesSum(state)
+  {
+    let sum = 0;
+
+    // sum += InvestCalc.getValuation(state.properties);
+    sum += InvestCalc.getValuation(state.invests);
+    // sum += UserValuation.getAccountValuation(state.bankBalance);
+    // sum += UserValuation.getAccountValuation(state.brokerBalance);
+    // sum += UserValuation.getAccountValuation(state.cashBalance);
+    // sum += UserValuation.getAccountValuation(state.digitBalance);
+
+    return sum;
+  }
+
+  static async getInvestActivesValuation(clientId, currencyId, accountBanks = [], courses)
   {
     var component = new ReactComponentEmulator();
 
@@ -86,31 +100,36 @@ export default class UserValuation
         let now = moment();
 
         let currencyData = {
-          currency_id: currencyId
+          currency_id: currencyId,
+          user_id: clientId
         };
 
         Active.getAccountsByDate(component, 'accounts', currencyData, clientId, accountBanks, now, () =>
         {
-          Active.getBalanceByDate(component, component.state.accounts, currencyData, clientId, accountBanks, now, () =>
-          {
+          // Active.getBalanceByDate(component, component.state.accounts, currencyData, clientId, accountBanks, now, () =>
+          // {
             Active.getInvestsByDate(component, 'invests', currencyData, clientId, accountBanks, now, () =>
             {
-              Active.getPropertiesByDate(component, 'properties', currencyData, clientId, accountBanks, now, () =>
-              {
-                Active.getObligationsByDate(component, 'obligations', currencyData, clientId, accountBanks, now, () =>
-                {
-                  let valuation = UserValuation.getWholeActivesSum(component.state);
-                  Cache.setItem('cache.' + clientId, valuation)
+              // Active.getPropertiesByDate(component, 'properties', currencyData, clientId, accountBanks, now, () =>
+              // {
+              //   Active.getObligationsByDate(component, 'obligations', currencyData, clientId, accountBanks, now, () =>
+              //   {
+                  let valuation = UserValuation.getInvestActivesValuation(component.state);
+
+                  if(valuation > 0)
+                  {
+                    Cache.setItem('cache.' + clientId, valuation)
+                  }
                   resolve(valuation)
-                })
-              })
+              //   })
+              // })
             })
-          }, [
-            AccountConstants.BROKER_ACCOUNT,
-            AccountConstants.BANK_ACCOUNT,
-            AccountConstants.CASH,
-            AccountConstants.DIGIT_MONEY
-          ], courses)
+          // }, [
+          //   AccountConstants.BROKER_ACCOUNT,
+          //   AccountConstants.BANK_ACCOUNT,
+          //   AccountConstants.CASH,
+          //   AccountConstants.DIGIT_MONEY
+          // ], courses)
         })
       }))
     }
