@@ -79,7 +79,7 @@ export default class ActiveValuer {
         if (sell_trades?.length) {
           let sum = ActiveValueCalculator.getSum(sell_trades, original) + ActiveValueCalculator.getCouponSellSum(item, original) - ActiveValueCalculator.getCommissionSum(sell_trades, original) - ActiveValueCalculator.getCommissionSum(buy_trades, original) + ActiveValueCalculator.getDividendSum(item, original);
           return {
-            sum: sum,
+            sum: parseFloat(sum),
             code: code,
             sign: sign
           };
@@ -89,7 +89,7 @@ export default class ActiveValuer {
             let count = Active.getCountSum(item, buy_trades);
             let buySum = buy_sum * count + ActiveValueCalculator.getCouponSellSum(item, original); // + ActiveValueCalculator.getCouponBuySum(item);
             return {
-              sum: buySum,
+              sum: parseFloat(buySum),
               code: code,
               sign: sign
             };
@@ -100,7 +100,7 @@ export default class ActiveValuer {
           let valuation = original ? last_valuation.original_current_sum : last_valuation.current_sum;
           let buySum = valuation * count / lotsize + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
           return {
-            sum: buySum,
+            sum: parseFloat(buySum),
             code: code,
             sign: sign
           };
@@ -125,7 +125,7 @@ export default class ActiveValuer {
             buySum = valuation * count + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
           }
           return {
-            sum: buySum,
+            sum: parseFloat(buySum),
             code: code,
             sign: sign
           };
@@ -135,7 +135,7 @@ export default class ActiveValuer {
             let buySum = original ? lastTrade.original_sum : lastTrade.sum;
             buySum += ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
             return {
-              sum: buySum,
+              sum: parseFloat(buySum),
               code: code,
               sign: sign
             };
@@ -144,7 +144,7 @@ export default class ActiveValuer {
           let lastPrice = Active.getNotNullPrice(buy_trades, original ? 'original_price' : 'price');
           let buySum = lastPrice * count / lotsize + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
           return {
-            sum: buySum,
+            sum: parseFloat(buySum),
             code: code,
             sign: sign
           };
@@ -163,39 +163,39 @@ export default class ActiveValuer {
               break;
           }
           return {
-            sum: sellSum,
+            sum: parseFloat(sellSum),
             code: code,
             sign: sign
           };
         } else if (ActiveConstants.PROPERTY_GROUP.indexOf(type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(type_id) !== -1) {
           if (sell_sum > 0) {
             return {
-              sum: sell_sum,
+              sum: parseFloat(sell_sum),
               code: code,
               sign: sign
             };
           } else if (last_valuation) {
             let valuation = original ? last_valuation.original_current_sum : last_valuation.current_sum;
             return {
-              sum: valuation / lotsize,
+              sum: parseFloat(valuation) / lotsize,
               code: ''
             };
           } else {
             return {
-              sum: buy_sum,
+              sum: parseFloat(buy_sum),
               code: code,
               sign: sign
             };
           }
         } else if ([[...ActiveConstants.CREDIT_GROUP], ...[ActiveConstants.CUSTOM_OBLIGATION]].indexOf(type_id) !== -1) {
           return {
-            sum: income * 12,
+            sum: parseFloat(income * 12),
             code: code,
             sign: sign
           };
         } else if (type_id === ActiveConstants.MONEY_ACTIVE) {
           return {
-            sum: buy_sum,
+            sum: parseFloat(buy_sum),
             code: code,
             sign: sign
           };

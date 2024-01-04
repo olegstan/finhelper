@@ -17,6 +17,7 @@ import ActiveTagConstants from './ActiveTagConstants';
 import ContactConstants from './ContactConstants';
 import ContactTaskRepeatConstants from './ContactTaskRepeatConstants';
 import UserTaskTypeConstants from './UserTaskTypeConstants';
+import ActiveGoalItemsConstants from './ActiveGoalItemsConstants';
 
 export {
   AccountCommissionConstants,
@@ -38,4 +39,5 @@ export {
   ContactConstants,
   ContactTaskRepeatConstants,
   UserTaskTypeConstants,
+  ActiveGoalItemsConstants,
 };
