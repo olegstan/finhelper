@@ -30,6 +30,11 @@ export default class Active
       return item.type_text;
     }
 
+    if (item.type_id === ActiveConstants.CUSTOM_PROPERTY)
+    {
+      return item.name;
+    }
+
     return 'Без названия';
   }
 

@@ -21,6 +21,9 @@ export default class Active {
     if (item.type_text) {
       return item.type_text;
     }
+    if (item.type_id === ActiveConstants.CUSTOM_PROPERTY) {
+      return item.name;
+    }
     return 'Без названия';
   }
   static getGroup(items) {

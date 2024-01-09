@@ -276,8 +276,6 @@ class GroupHelper
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
 
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
-
-
           });
 
           item.attributes.sell_trades.map((trade) =>
@@ -285,15 +283,11 @@ class GroupHelper
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
 
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({...trade});
-
-
           });
         } else
         {
           key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType);
         }
-
-
       });
 
       GroupHelper.setValuation(sortedItems);
