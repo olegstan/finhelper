@@ -174,15 +174,28 @@ export default class ActiveValuer {
               code: code,
               sign: sign
             };
+          } else if (item.sell && item.sell.sum > 0) {
+            return {
+              sum: parseFloat(item.sell.sum),
+              code: code,
+              sign: sign
+            };
           } else if (last_valuation) {
             let valuation = original ? last_valuation.original_current_sum : last_valuation.current_sum;
             return {
               sum: parseFloat(valuation) / lotsize,
-              code: ''
+              code: code,
+              sign: sign
             };
           } else {
+            let addSum = 0;
+            if (item.invests && item.invests.length) {
+              item.invests.map(invest => {
+                addSum += parseFloat(invest.sum);
+              });
+            }
             return {
-              sum: parseFloat(buy_sum),
+              sum: parseFloat(buy_sum + addSum),
               code: code,
               sign: sign
             };

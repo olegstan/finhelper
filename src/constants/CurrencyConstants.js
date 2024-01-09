@@ -136,6 +136,8 @@ export default class CurrencyConstants
       if (item.buy_currency_id)
       {
         sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id)
+      }else if(item.sell && item.sell.currency_id){
+        sign = CurrencyConstants.getCurrencySignById(item.sell.currency_id)
       }
     }
 
@@ -165,6 +167,8 @@ export default class CurrencyConstants
       if (item.buy_currency_id)
       {
         code = CurrencyConstants.getCurrencyCodeById(item.buy_currency_id)
+      }else if(item.sell && item.sell.currency_id){
+        code = CurrencyConstants.getCurrencyCodeById(item.sell.currency_id)
       }
     }
 
