@@ -85,7 +85,10 @@ class InvestCalc {
       let sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id);
       return Money.format(item.original_buy_sum) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1) {
-      let sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id);
+      let {
+        code,
+        sign
+      } = Active.getCodeAndSign(item);
       return Money.format(item.original_buy_sum) + ' ' + sign;
     }
   }

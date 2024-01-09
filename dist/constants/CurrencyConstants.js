@@ -105,6 +105,11 @@ export default class CurrencyConstants {
         sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id);
       } else if (item.sell && item.sell.currency_id) {
         sign = CurrencyConstants.getCurrencySignById(item.sell.currency_id);
+      } else if (item.invests && item.invests?.length && item.invests[item.invests?.length - 1]?.child_item) {
+        let lastInvest = {
+          ...item.invests[item.invests?.length - 1].child_item
+        };
+        sign = CurrencyConstants.getCurrencySignById(lastInvest.currency_id);
       }
     }
     return sign;
@@ -128,6 +133,11 @@ export default class CurrencyConstants {
         code = CurrencyConstants.getCurrencyCodeById(item.buy_currency_id);
       } else if (item.sell && item.sell.currency_id) {
         code = CurrencyConstants.getCurrencyCodeById(item.sell.currency_id);
+      } else if (item.invests && item.invests?.length && item.invests[item.invests?.length - 1]?.child_item) {
+        let lastInvest = {
+          ...item.invests[item.invests?.length - 1].child_item
+        };
+        code = CurrencyConstants.getCurrencyCodeById(lastInvest.currency_id);
       }
     }
     return code;
