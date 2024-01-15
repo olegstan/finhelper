@@ -1,5 +1,6 @@
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
+import CurrencyConstants from "./../constants/CurrencyConstants";
 export default class Account {
   /**
    * если счет был удалён, то операция будет привязана к временному счету
@@ -74,9 +75,10 @@ export default class Account {
             } else {
               name = subAccount.name ? subAccount.name : 'Счёт без названия';
             }
+            let foundCurrency = CurrencyConstants.getCurrencyById(subAccount.currency_id);
             preparedAccounts.push({
               id: subAccount.id,
-              name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
+              name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + foundCurrency.sign
             });
           }
         });
@@ -88,9 +90,10 @@ export default class Account {
           } else {
             name = subAccount.name ? subAccount.name : 'Счёт без названия';
           }
+          let foundCurrency = CurrencyConstants.getCurrencyById(subAccount.currency_id);
           preparedAccounts.push({
             id: subAccount.id,
-            name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
+            name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + foundCurrency.sign
           });
         });
       }

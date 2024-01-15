@@ -2,6 +2,7 @@ import ActiveConstants from "../constants/ActiveConstants"
 import ActiveModel from "../models/Active"
 import AccountConstants from "../constants/AccountConstants"
 import ActiveValuer from "./Active/ActiveValuer";
+import CurrencyConstants from "./../constants/CurrencyConstants";
 
 class GroupHelper
 {
@@ -464,26 +465,24 @@ class GroupHelper
     {
       account.accounts.map((subAccount) =>
       {
-        if (index.indexOf(subAccount.currency.code) === -1)
+        let currency = CurrencyConstants.getCurrencyById(subAccount.currency_id)
+
+        if (index.indexOf(currency.code) === -1)
         {
-          index.push(subAccount.currency.code);
+          index.push(currency.code);
         }
         //
-        if (typeof groups[index.indexOf(subAccount.currency.code)] === 'undefined')
+        if (typeof groups[index.indexOf(currency.code)] === 'undefined')
         {
-          groups[index.indexOf(subAccount.currency.code)] = {
-            name: subAccount.currency.code,
-            sign: subAccount.currency.sign,
+          groups[index.indexOf(currency.code)] = {
+            name: currency.code,
+            sign: currency.sign,
             sum: 0,
           }
         }
 
-        groups[index.indexOf(subAccount.currency.code)].sum += subAccount.sum;
-
-
+        groups[index.indexOf(currency.code)].sum += subAccount.sum;
       });
-
-
     })
 
     return groups;
@@ -520,9 +519,11 @@ class GroupHelper
           }
         }
 
-        if (indexCurrency.indexOf(item.account.currency.sign) === -1)
+        let currency = CurrencyConstants.getCurrencyById(item.account.currency_id)
+
+        if (indexCurrency.indexOf(currency.sign) === -1)
         {
-          indexCurrency.push(item.account.currency.sign);
+          indexCurrency.push(currency.sign);
         }
 
         if (item.sum > 0 && item.item_type === 'transfer')

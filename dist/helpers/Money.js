@@ -161,6 +161,13 @@ export default class Money {
       return parseFloat(sum.replace(/,/g, '.').replace(/ /g, ''));
     }
   }
+
+  /**
+   *
+   * @param courses
+   * @param id
+   * @return {null}
+   */
   static getCourseByCurrencyId(courses, id) {
     let course = null;
     if (courses) {

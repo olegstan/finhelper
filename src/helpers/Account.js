@@ -1,5 +1,6 @@
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
+import CurrencyConstants from "./../constants/CurrencyConstants";
 
 export default class Account
 {
@@ -83,7 +84,6 @@ export default class Account
       let name = '';
       if (currency)
       {
-
         account.accounts.map((subAccount) =>
         {
           if (currency.id === subAccount.currency_id)
@@ -97,9 +97,11 @@ export default class Account
               name = subAccount.name ? subAccount.name : 'Счёт без названия';
             }
 
+            let foundCurrency = CurrencyConstants.getCurrencyById(subAccount.currency_id)
+
             preparedAccounts.push({
               id: subAccount.id,
-              name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
+              name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + foundCurrency.sign
             });
           }
         });
@@ -116,9 +118,11 @@ export default class Account
             name = subAccount.name ? subAccount.name : 'Счёт без названия';
           }
 
+          let foundCurrency = CurrencyConstants.getCurrencyById(subAccount.currency_id)
+
           preparedAccounts.push({
             id: subAccount.id,
-            name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + subAccount.currency.sign
+            name: name.capitalize() + ': ' + Money.format(subAccount.sum) + ' ' + foundCurrency.sign
           });
         });
       }

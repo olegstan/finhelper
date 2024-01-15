@@ -217,6 +217,12 @@ export default class Money
     }
   }
 
+  /**
+   *
+   * @param courses
+   * @param id
+   * @return {null}
+   */
   static getCourseByCurrencyId(courses, id)
   {
     let course = null;

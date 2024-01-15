@@ -61,7 +61,9 @@ export default class AccountConstants {
         //объединяем все остатки по одному счету, если одна валюта, то субсчета просуммируются
         let accountId = account.id;
         let sum = subAccount.sum;
-        let cbCurrency = subAccount?.currency?.cb_currency;
+
+        // let cbCurrency = subAccount?.currency?.cb_currency;
+        let cbCurrency = CurrencyConstants.getCurrencyById(subAccount?.currency_id);
         let code = CurrencyConstants.getCurrencyCodeById(subAccount.currency_id);
         let name = CurrencyConstants.getCurrencyNameById(subAccount.currency_id);
         let keyName = accountId + '-' + code + '-' + cbCurrency?.id;
@@ -214,7 +216,8 @@ export default class AccountConstants {
     });
   }
   static textByTypeWithSum(item) {
-    let code = item.currency ? item.currency.code : '';
+    let currency = CurrencyConstants.getCurrencyById(item.currency_id);
+    let code = currency ? currency.code : '';
     switch (item.type_id) {
       case AccountConstants.CASH:
         return item.name + ' ' + Money.format(item.sum) + ' ' + code;
@@ -229,7 +232,8 @@ export default class AccountConstants {
     }
   }
   static getText(subAccount) {
-    return (subAccount.name ? subAccount.name : 'Счёт без названия') + ': ' + Money.format(subAccount.sum) + ' ' + subAccount.currency.sign;
+    let currency = CurrencyConstants.getCurrencyById(subAccount.currency_id);
+    return (subAccount.name ? subAccount.name : 'Счёт без названия') + ': ' + Money.format(subAccount.sum) + ' ' + currency.sign;
   }
   static textByType(account) {
     switch (account.type_id) {
