@@ -66,7 +66,7 @@ export default class IndexedDBCache {
     const transaction = this._db.transaction([this._storeName], 'readonly');
     const objectStore = transaction.objectStore(this._storeName);
     const request = objectStore.get(key);
-    let result;
+    let result = null;
     request.onsuccess = event => {
       const data = event.target.result;
       if (data && (!data.expirationTime || data.expirationTime > Date.now())) {

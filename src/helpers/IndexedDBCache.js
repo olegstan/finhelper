@@ -75,7 +75,7 @@ export default class IndexedDBCache {
     const objectStore = transaction.objectStore(this._storeName);
     const request = objectStore.get(key);
 
-    let result;
+    let result = null;
 
     request.onsuccess = (event) => {
       const data = event.target.result;
