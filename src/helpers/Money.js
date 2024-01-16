@@ -72,7 +72,7 @@ export default class Money
           throw new Error('Error number is NaN');
         } catch (e)
         {
-          console.error(e.stack);
+          console.warn(e.stack);
         }
         return 0;
       }
