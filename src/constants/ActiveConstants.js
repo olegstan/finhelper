@@ -12,12 +12,21 @@ export default class ActiveConstants
   static STRATEGY = 4;
   static GOAL_RECALC = 5;
   static WAZZUP = 6;
-  static ATON_FILE_UPLOADER = 7;
-  static ATON_FILE_PARSE = 8;
   static MAIL = 9;
   static PLAN = 10;
-  static ATON_CRM_PARSE = 11;
   static BCS_FILE_PARSE = 12;
+  static ACTIVE_SET_PRICE = 13;
+  static CATALOG_COURSE = 14;
+  static IRR = 15;
+  static ALL_ACTIVES = 16;
+  static REFRESH_API = 17;
+  static ZENMONEY_RELATION_BROKER_API = 18;
+
+
+  static ATON_CRM_PARSE = 11;
+  static ATON_FILE_UPLOADER = 7;
+  static ATON_FILE_PARSE = 8;
+  static ATON_CLIENT_CREATE = 19;
 
   static ONCE = 1;
   static PERIOD = 2;

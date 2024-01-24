@@ -41,12 +41,12 @@ export default class IndexedDBCache {
       };
     });
   }
-  static async set(key, value, expirationTimeInMs = null) {
+  static async set(key, value, expirationTimeInMs = 1000 * 60 * 60 * 24) {
     await this.ensureDatabaseOpened();
     return new Promise((resolve, reject) => {
       const transaction = this._db.transaction([this._storeName], 'readwrite');
       const objectStore = transaction.objectStore(this._storeName);
-      const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null;
+      const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null; //TODO нужно дописать проверку что дата установлена, так как без даты запись не удалится
       const data = {
         key,
         value,
