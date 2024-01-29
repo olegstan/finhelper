@@ -7,7 +7,7 @@ export default class UserTaskTypeConstants {
   static DONE = 1006;
   static BIRTH_DAY = 1007;
   static PERSONAL = 1008;
-  static MESSAGE = 1008;
+  static MESSAGE = 1009;
   static statuses = [UserTaskTypeConstants.CALLS, UserTaskTypeConstants.MEETINGS, UserTaskTypeConstants.CONSULTATION, UserTaskTypeConstants.LETTERS, UserTaskTypeConstants.BUSINESS, UserTaskTypeConstants.DONE, UserTaskTypeConstants.BIRTH_DAY, UserTaskTypeConstants.PERSONAL, UserTaskTypeConstants.MESSAGE];
   static getTextByType(type) {
     switch (type) {
