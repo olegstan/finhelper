@@ -197,7 +197,6 @@ export default class ActiveValuer
             return {sum: parseFloat(valuation) / lotsize, code: code, sign: sign};
           } else
           {
-            console.log(item)
             let addSum = 0;
 
             if(item.invests && item.invests.length)

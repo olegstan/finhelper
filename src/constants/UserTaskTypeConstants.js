@@ -8,6 +8,7 @@ export default class UserTaskTypeConstants
   static DONE = 1006;
   static BIRTH_DAY = 1007;
   static PERSONAL = 1008;
+  static MESSAGE = 1008;
 
   static statuses = [
     UserTaskTypeConstants.CALLS,
@@ -18,6 +19,7 @@ export default class UserTaskTypeConstants
     UserTaskTypeConstants.DONE,
     UserTaskTypeConstants.BIRTH_DAY,
     UserTaskTypeConstants.PERSONAL,
+    UserTaskTypeConstants.MESSAGE,
   ];
 
   static getTextByType(type)
@@ -40,6 +42,8 @@ export default class UserTaskTypeConstants
         return 'День рождения';
       case UserTaskTypeConstants.PERSONAL:
         return 'Личное';
+      case UserTaskTypeConstants.MESSAGE:
+        return 'Сообщение в чате';
     }
   }
 }

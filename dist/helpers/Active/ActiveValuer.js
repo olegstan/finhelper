@@ -188,7 +188,6 @@ export default class ActiveValuer {
               sign: sign
             };
           } else {
-            console.log(item);
             let addSum = 0;
             if (item.invests && item.invests.length) {
               item.invests.map(investAction => {
