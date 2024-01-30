@@ -84,7 +84,7 @@ export default class AccountConstants
         let sum = subAccount.sum;
 
         // let cbCurrency = subAccount?.currency?.cb_currency;
-        let cbCurrency = CurrencyConstants.getCurrencyById(subAccount?.currency_id);
+        let cbCurrency = CurrencyConstants.getCurrencyById(subAccount?.currency_id)?.cb_currency;
 
         let code = CurrencyConstants.getCurrencyCodeById(subAccount.currency_id)
         let name = CurrencyConstants.getCurrencyNameById(subAccount.currency_id)
@@ -101,49 +101,49 @@ export default class AccountConstants
           {
             case 'GLD':
             case 'SLV':
-              newItem = {
-                id: subAccount.id,
-                type_id: ActiveConstants.PRECIOUS_METAL,
-                type_text: 'Драгоценные металлы',
-                name_text: name,
-                user_id: account.user_id,
-                valuations: [],
-                sell_trades: [],
-                buy_trades: [
-                  {
-                    "id": null,
-                    "active_id": subAccount.id,
-                    "from_account_id": subAccount.id,
-                    "currency_id": subAccount.currency_id,
-                    "type_id": 1,
-                    "original_price": 0,
-                    "price": 0,
-                    "original_sum": sum,
-                    "sum": sum,
-                    "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
-                    "trade_at_date": date.format('DD.MM.YYYY'),
-                    "trade_at_datetime": date.format('DD.MM.YYYY HH:mm:ss'),
-                    "count": subAccount.sum,
-                    "morph": "active.trade",
-                    "sum_course": 1,
-                    "sum_rub_course": 1,
-                    "price_course": 1,
-                    "price_rub_course": 1,
-                    "currency": {
-                      "id": 1,
-                      "name": "Российский рубль",
-                      "code": "RUB",
-                      "sign": "₽",
-                      "order": 1
-                    },
-                  }
-                ],
-                item: cbCurrency,
-                item_id: cbCurrency?.id,
-                item_type: cbCurrency?.ticker,
-              }
-
-              preparedAccounts[key] = newItem;
+              // newItem = {
+              //   id: subAccount.id,
+              //   type_id: ActiveConstants.PRECIOUS_METAL,
+              //   type_text: 'Драгоценные металлы',
+              //   name_text: name,
+              //   user_id: account.user_id,
+              //   valuations: [],
+              //   sell_trades: [],
+              //   buy_trades: [
+              //     {
+              //       "id": null,
+              //       "active_id": subAccount.id,
+              //       "from_account_id": subAccount.id,
+              //       "currency_id": subAccount.currency_id,
+              //       "type_id": 1,
+              //       "original_price": 0,
+              //       "price": 0,
+              //       "original_sum": sum,
+              //       "sum": sum,
+              //       "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
+              //       "trade_at_date": date.format('DD.MM.YYYY'),
+              //       "trade_at_datetime": date.format('DD.MM.YYYY HH:mm:ss'),
+              //       "count": subAccount.sum,
+              //       "morph": "active.trade",
+              //       "sum_course": 1,
+              //       "sum_rub_course": 1,
+              //       "price_course": 1,
+              //       "price_rub_course": 1,
+              //       "currency": {
+              //         "id": 1,
+              //         "name": "Российский рубль",
+              //         "code": "RUB",
+              //         "sign": "₽",
+              //         "order": 1
+              //       },
+              //     }
+              //   ],
+              //   item: cbCurrency,
+              //   item_id: cbCurrency?.id,
+              //   item_type: cbCurrency?.ticker,
+              // }
+              //
+              // preparedAccounts[key] = newItem;
               break;
             default:
               newItem = {

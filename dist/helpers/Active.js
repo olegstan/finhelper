@@ -87,6 +87,7 @@ export default class Active {
   static getCountSum(active, items) {
     let count = 0;
     let lotsize = active.item ? active.item.lotsize : 1;
+    console.log(lotsize);
     items.map(trade => {
       count += trade.count;
     });
