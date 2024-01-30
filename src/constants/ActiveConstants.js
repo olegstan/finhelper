@@ -735,7 +735,7 @@ export default class ActiveConstants
   {
     if (ActiveConstants.isPackage(item.type_id))
     {
-      if (item.buy_trades?.length)
+      if (item?.buy_trades?.length)
       {
         if (item.buy_trades[0] && item.buy_trades[0].from_account_id)
         {
@@ -779,7 +779,7 @@ export default class ActiveConstants
   static getAccountIdByActive(item)
   {
     //TODO correct grouping
-    if (item.buy_trades?.length)
+    if (item?.buy_trades?.length)
     {
       if (item.buy_trades[0] && item.buy_trades[0].from_account_id)
       {

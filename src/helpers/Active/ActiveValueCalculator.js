@@ -73,7 +73,7 @@ export default class ActiveValueCalculator
   {
     let sum = 0;
 
-    if (item.buy_trades?.length)
+    if (item?.buy_trades?.length)
     {
       for (let n = 0; n < item.buy_trades.length; n++)
       {

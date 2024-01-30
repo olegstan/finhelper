@@ -653,7 +653,7 @@ export default class ActiveConstants {
   }
   static getAccountNameByActive(item) {
     if (ActiveConstants.isPackage(item.type_id)) {
-      if (item.buy_trades?.length) {
+      if (item?.buy_trades?.length) {
         if (item.buy_trades[0] && item.buy_trades[0].from_account_id) {
           let account = AccountConstants.getAccountBySubAccountId(item.buy_trades[0].from_account_id);
           return account ? account.name ? account.name : account.bank_text : '';
@@ -681,7 +681,7 @@ export default class ActiveConstants {
   }
   static getAccountIdByActive(item) {
     //TODO correct grouping
-    if (item.buy_trades?.length) {
+    if (item?.buy_trades?.length) {
       if (item.buy_trades[0] && item.buy_trades[0].from_account_id) {
         return item.buy_trades[0].from_account_id;
       }

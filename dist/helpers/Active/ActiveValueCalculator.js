@@ -58,7 +58,7 @@ export default class ActiveValueCalculator {
    */
   static getCouponBuySum(item, original = false) {
     let sum = 0;
-    if (item.buy_trades?.length) {
+    if (item?.buy_trades?.length) {
       for (let n = 0; n < item.buy_trades.length; n++) {
         sum -= original ? item.buy_trades[n].original_accumulated_coupon : item.buy_trades[n].accumulated_coupon;
       }

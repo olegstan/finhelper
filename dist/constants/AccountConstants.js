@@ -54,6 +54,12 @@ export default class AccountConstants {
       return AccountConstants.BROKER_ACCOUNT === account.type_id;
     }).map(account => {
       account.accounts.filter(subAccount => {
+        let code = CurrencyConstants.getCurrencyCodeById(subAccount.currency_id);
+        switch (code) {
+          case 'GLD':
+          case 'SLV':
+            return false;
+        }
         return parseInt(subAccount.sum) !== 0;
       }).map(subAccount => {
         let date = moment();
