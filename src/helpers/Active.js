@@ -118,8 +118,6 @@ export default class Active
     let count = 0;
     let lotsize = active.item ? active.item.lotsize : 1;
 
-    console.log(lotsize)
-
     items.map((trade) =>
     {
       count += trade.count;

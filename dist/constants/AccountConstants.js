@@ -67,7 +67,6 @@ export default class AccountConstants {
         let code = CurrencyConstants.getCurrencyCodeById(subAccount.currency_id);
         let name = CurrencyConstants.getCurrencyNameById(subAccount.currency_id);
         let keyName = accountId + '-' + code + '-' + cbCurrency?.id;
-        console.log(cbCurrency);
         if (index.indexOf(keyName) === -1) {
           index.push(keyName);
           let key = index.indexOf(keyName);

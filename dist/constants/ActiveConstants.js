@@ -117,7 +117,7 @@ export default class ActiveConstants {
   static BY_BOND_DATE = 6;
   static BY_CURRENCY = 7;
   static BY_BROKER_NAME = 8;
-  static GROUP_QUERY_CATALOG = [ActiveConstants.STOCK, ActiveConstants.ETF, ActiveConstants.OBLIGATION, ActiveConstants.FUTURES, ActiveConstants.PIF];
+  static GROUP_QUERY_CATALOG = [ActiveConstants.STOCK, ActiveConstants.ETF, ActiveConstants.OBLIGATION, ActiveConstants.FUTURES, ActiveConstants.PIF, ActiveConstants.PRECIOUS_METAL];
   static PROPERTY_GROUP = [ActiveConstants.FLAT, ActiveConstants.HOUSE, ActiveConstants.LAND, ActiveConstants.CAR, ActiveConstants.MOTO, ActiveConstants.TECHNIC, ActiveConstants.JEWELRY, ActiveConstants.PERSONAL_TECHNIC];
   static INSURANCES_GROUP = [ActiveConstants.CAR_INSURANCE, ActiveConstants.PROPERTY_INSURANCE, ActiveConstants.HEALTH_INSURANCE, ActiveConstants.VMI_INSURANCE, ActiveConstants.TRAVEL_INSURANCE, ActiveConstants.SPORT_INSURANCE, ActiveConstants.UNIT_LINKED_INSURANCE, ActiveConstants.LOSE_JOB_INSURANCE, ActiveConstants.RESPONSIBILITY_INSURANCE, ActiveConstants.INVESTMENT_LIFE_INSURANCE, ActiveConstants.FUNDED_LIFE_INSURANCE];
   static DIVIDEND_GROUP = [ActiveConstants.STOCK];

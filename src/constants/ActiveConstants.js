@@ -139,6 +139,7 @@ export default class ActiveConstants
     ActiveConstants.OBLIGATION,
     ActiveConstants.FUTURES,
     ActiveConstants.PIF,
+    ActiveConstants.PRECIOUS_METAL,
   ];
 
   static PROPERTY_GROUP = [
