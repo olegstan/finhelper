@@ -246,7 +246,7 @@ class CaseGroupHelper {
     });
     return data;
   }
-  static group(actives, groupType) {
+  static group(actives, groupType, colors = Color.colors) {
     let index = [];
     let data = [];
     let sortedItems = [];
@@ -361,11 +361,11 @@ class CaseGroupHelper {
         data[itemKey]['value1'] = 0;
         data[itemKey]['value2'] = 0;
         data[itemKey]['value3'] = 0;
-        if (typeof Color.colors[colorIndex] === 'undefined') {
+        if (typeof colors[colorIndex] === 'undefined') {
           colorIndex = 0;
         }
         data[itemKey]['colorIndex'] = colorIndex;
-        data[itemKey]['color'] = Color.colors[colorIndex].color;
+        data[itemKey]['color'] = colors[colorIndex].color;
         colorIndex++;
       }
       data[itemKey]['value1'] += parseFloat(item.valuation);
