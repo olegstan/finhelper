@@ -674,6 +674,11 @@ export default class ActiveConstants
     return ActiveConstants.getActiveCompanyByText(Active.getName(item));
   }
 
+  /**
+   *
+   * @param item
+   * @return {string|string|*}
+   */
   static getActiveNameByType(item)
   {
     if (item)
@@ -726,11 +731,21 @@ export default class ActiveConstants
     return '';
   }
 
+  /**
+   *
+   * @param item
+   * @return {*|string}
+   */
   static getActiveNameByGroup(item)
   {
     return item.group_type_text ? item.group_type_text : 'Без категории';
   }
 
+  /**
+   *
+   * @param item
+   * @return {string|*|string}
+   */
   static getAccountNameByActive(item)
   {
     if (ActiveConstants.isPackage(item.type_id))

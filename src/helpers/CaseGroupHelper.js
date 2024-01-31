@@ -1,7 +1,6 @@
 import ActiveConstants from "../constants/ActiveConstants"
 import Active from "../helpers/Active"
 import ActiveModel from "../models/Active"
-import AccountConstants from "../constants/AccountConstants"
 import Color from "../helpers/Color"
 import Money from "../helpers/Money"
 
@@ -19,7 +18,7 @@ class CaseGroupHelper
       name = ActiveConstants.getActiveNameByGroup(item);
     } else if (groupType === ActiveConstants.BY_ACCOUNT)
     {
-      name = AccountConstants.getAccountNameByActive(item);
+      name = ActiveConstants.getAccountNameByActive(item);
     } else if (groupType === ActiveConstants.BY_COMPANY)
     {
       name = ActiveConstants.getActiveCompany(item);
@@ -360,7 +359,7 @@ class CaseGroupHelper
     return data;
   }
 
-  static group(actives, groupType, colors = Color.colors)
+  static group(actives, groupType, colors = Color.colors, sortCallback)
   {
     let index = [];
     let data = [];
@@ -374,25 +373,7 @@ class CaseGroupHelper
       {
         item.attributes.buy_trades.map((trade) =>
         {
-          let name = '';
-
-          if (groupType === ActiveConstants.BY_TYPE)
-          {
-            name = ActiveConstants.getActiveNameByType(item);
-          } else if (groupType === ActiveConstants.BY_GROUP)
-          {
-            name = ActiveConstants.getActiveNameByGroup(item);
-          } else if (groupType === ActiveConstants.BY_ACCOUNT)
-          {
-            name = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
-          } else if (groupType === ActiveConstants.BY_COMPANY)
-          {
-            name = ActiveConstants.getActiveCompany(item);
-          } else if (groupType === ActiveConstants.BY_NAME)
-          {
-            name = Active.getName(item);
-          }
-
+          let name = CaseGroupHelper.getNameByGroup(item, groupType);
 
           let key = item.id + name;
 
@@ -416,24 +397,7 @@ class CaseGroupHelper
 
         item.attributes.sell_trades.map((trade) =>
         {
-          let name = '';
-
-          if (groupType === ActiveConstants.BY_TYPE)
-          {
-            name = ActiveConstants.getActiveNameByType(item);
-          } else if (groupType === ActiveConstants.BY_GROUP)
-          {
-            name = ActiveConstants.getActiveNameByGroup(item);
-          } else if (groupType === ActiveConstants.BY_ACCOUNT)
-          {
-            name = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
-          } else if (groupType === ActiveConstants.BY_COMPANY)
-          {
-            name = ActiveConstants.getActiveCompany(item);
-          } else if (groupType === ActiveConstants.BY_NAME)
-          {
-            name = Active.getName(item);
-          }
+          let name = CaseGroupHelper.getNameByGroup(item, groupType);
 
           let key = item.id + name;
 
@@ -456,27 +420,9 @@ class CaseGroupHelper
         });
       } else
       {
-        let name = '';
-
-        if (groupType === ActiveConstants.BY_TYPE)
-        {
-          name = ActiveConstants.getActiveNameByType(item);
-        } else if (groupType === ActiveConstants.BY_GROUP)
-        {
-          name = ActiveConstants.getActiveNameByGroup(item);
-        } else if (groupType === ActiveConstants.BY_ACCOUNT)
-        {
-          name = AccountConstants.getAccountBySubAccountId(item.buy_account_id);
-        } else if (groupType === ActiveConstants.BY_COMPANY)
-        {
-          name = ActiveConstants.getActiveCompany(item);
-        } else if (groupType === ActiveConstants.BY_NAME)
-        {
-          name = Active.getName(item);
-        }
+        let name = CaseGroupHelper.getNameByGroup(item, groupType);
 
         let key = item.id + name + 'none';
-
 
         if (activeIndex.indexOf(key) === -1)
         {
@@ -491,33 +437,12 @@ class CaseGroupHelper
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
         }
       }
-
-
     });
 
-
     let colorIndex = 0;
-    let subColorIndex = 0;
     sortedItems.map((item) =>
     {
-      let name = '';
-
-      if (groupType === ActiveConstants.BY_TYPE)
-      {
-        name = ActiveConstants.getActiveNameByType(item);
-      } else if (groupType === ActiveConstants.BY_GROUP)
-      {
-        name = ActiveConstants.getActiveNameByGroup(item);
-      } else if (groupType === ActiveConstants.BY_ACCOUNT)
-      {
-        name = ActiveConstants.getAccountNameByActive(item);
-      } else if (groupType === ActiveConstants.BY_COMPANY)
-      {
-        name = ActiveConstants.getActiveCompany(item);
-      } else if (groupType === ActiveConstants.BY_NAME)
-      {
-        name = Active.getName(item);
-      }
+      let name = CaseGroupHelper.getNameByGroup(item, groupType);
 
       if (index.indexOf(name) === -1)
       {
@@ -534,19 +459,29 @@ class CaseGroupHelper
         data[itemKey]['value1'] = 0;
         data[itemKey]['value2'] = 0;
         data[itemKey]['value3'] = 0;
-
-        if (typeof colors[colorIndex] === 'undefined')
-        {
-          colorIndex = 0;
-        }
-
-        data[itemKey]['colorIndex'] = colorIndex;
-        data[itemKey]['color'] = colors[colorIndex].color;
-        colorIndex++;
       }
 
       data[itemKey]['value1'] += parseFloat(item.valuation);
     });
+
+    if(typeof sortCallback === 'function')
+    {
+      data = data.sort(sortCallback);
+    }
+
+    data.map((item) =>
+    {
+      if (typeof colors[colorIndex] === 'undefined')
+      {
+        colorIndex = 0;
+      }
+
+      item.colorIndex = colorIndex;
+      item.color = colors[colorIndex].color;
+      colorIndex++;
+
+      return item;
+    })
 
     return data;
   }
