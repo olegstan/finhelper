@@ -1,10 +1,8 @@
 import moment from "moment/moment";
-import AccountConstants from "./../constants/AccountConstants";
-import { Api } from "laravel-request";
 import Cache from "./Cache";
 import Active from "./Active";
 import InvestCalc from "./InvestCalc";
-import ActiveModel from "./../models/Active";
+import IndexedDBCache from "./IndexedDBCache";
 class ReactComponentEmulator {
   state = {};
   setState(param, callback) {
@@ -68,7 +66,7 @@ export default class UserValuation {
         sum: 0
       }
     };
-    let cachedValue = Cache.getItem('cache.' + clientId);
+    let cachedValue = await IndexedDBCache.get('client.valuation.' + clientId);
     if (cachedValue !== null) {
       return cachedValue;
     } else {
@@ -82,7 +80,7 @@ export default class UserValuation {
           Active.getInvestsByDate(component, 'invests', currencyData, clientId, accountBanks, now, () => {
             let valuation = UserValuation.getInvestActivesSum(component.state);
             if (valuation > 0) {
-              Cache.setItem('cache.' + clientId, valuation);
+              Cache.setItem('client.valuation.' + clientId, valuation);
             }
             resolve(valuation);
           });
