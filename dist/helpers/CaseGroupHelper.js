@@ -38,8 +38,8 @@ class CaseGroupHelper {
           }
           if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
             sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({
-              ...item
-            }.attributes);
+              ...item.attributes
+            });
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
           }
@@ -55,8 +55,8 @@ class CaseGroupHelper {
           }
           if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
             sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({
-              ...item
-            }.attributes);
+              ...item.attributes
+            });
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
           }
@@ -72,8 +72,8 @@ class CaseGroupHelper {
         }
         if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
           sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({
-            ...item
-          }.attributes);
+            ...item.attributes
+          });
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
         }
@@ -260,8 +260,8 @@ class CaseGroupHelper {
           }
           if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
             sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({
-              ...item
-            }.attributes);
+              ...item.attributes
+            });
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
           }
@@ -277,8 +277,8 @@ class CaseGroupHelper {
           }
           if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
             sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({
-              ...item
-            }.attributes);
+              ...item.attributes
+            });
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
           }
@@ -294,8 +294,8 @@ class CaseGroupHelper {
         }
         if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
           sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({
-            ...item
-          }.attributes);
+            ...item.attributes
+          });
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
           sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
         }

@@ -74,7 +74,7 @@ class GroupHelper
             {
               let account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
 
-              let key = item.id + account?.id;
+              let key = item.id + (account ? account.id : 'none');
 
               if (activeIndex.indexOf(key) === -1)
               {
@@ -107,7 +107,7 @@ class GroupHelper
               }
 
 
-              let key = item.id + account?.id;
+              let key = item.id + (account ? account.id : 'none');
 
               if (activeIndex.indexOf(key) === -1)
               {
@@ -131,7 +131,7 @@ class GroupHelper
             {
               let account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
 
-              let key = item.id + account?.id;
+              let key = item.id + (account ? account.id : 'none');
 
               let keyId = activeIndex.indexOf(key)
 
@@ -153,7 +153,7 @@ class GroupHelper
                 account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
               }
 
-              let key = item.id + account?.id;
+              let key = item.id + (account ? account.id : 'none');
 
               let keyId = activeIndex.indexOf(key)
 
@@ -169,7 +169,7 @@ class GroupHelper
             {
               let account = AccountConstants.getAccountBySubAccountId(item.buy_account_idd);
 
-              key = item.id + account?.id;
+              key = item.id + (account ? account.id : 'none');
             }
 
             if (activeIndex.indexOf(key) === -1)
@@ -237,15 +237,19 @@ class GroupHelper
 
     let key = item.id + name + subName + 'none';
 
+    console.log(key)
+
     if (activeIndex.indexOf(key) === -1)
     {
       activeIndex.push(key);
     }
 
+
     if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined')
     {
-      sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({...item}.attributes);
+      sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({...item.attributes});
 
+      sortedItems[activeIndex.indexOf(key)].attributes.trades = [];
       sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
       sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
     }
@@ -277,6 +281,8 @@ class GroupHelper
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
 
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
+
+            console.log('trade added')
           });
 
           item.attributes.sell_trades.map((trade) =>
