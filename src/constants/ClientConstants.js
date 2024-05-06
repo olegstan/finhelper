@@ -11,7 +11,6 @@ export default class ClientConstants
   static DEPARTMENT_BOSS = 'departmentboss';
 
   static MANAGER_GROUP = [
-    ClientConstants.CLIENT,
     ClientConstants.MANAGER,
     ClientConstants.OWNER,
     ClientConstants.DIRECTOR,

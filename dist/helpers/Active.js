@@ -1,6 +1,6 @@
 import moment from "moment/moment";
 import ActiveConstants from "../constants/ActiveConstants";
-import { Api, Builder } from "laravel-request";
+import { Api } from "laravel-request";
 import ActiveModel from "../models/Active";
 import AccountConstants from "../constants/AccountConstants";
 import Money from "./Money";
@@ -221,7 +221,7 @@ export default class Active {
    * @param callback
    */
   static getAccountsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
-    let query = Api.get('user-account', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('user_id', clientId).where('is_visible', 1).with('accounts', 'accounts.currency', 'accounts.currency.cb_currency');
+    let query = Api.get('user-account', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('user_id', clientId).where('is_visible', 1).with('accounts', 'accounts.currency', 'accounts.currency.cb_currency', 'accounts.blocked');
     if (accountBanks.length) {
       query.whereIn('bank_id', accountBanks);
     }

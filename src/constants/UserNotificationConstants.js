@@ -21,4 +21,6 @@ export default class UserNotificationConstants
 
   static CONTACT_BIRTHDAY = 2003;
   static ATON_CLIENT_CREATE = 2004;
+  static ATON_ERROR_PARSE = 2005;
+  static ATON_DEPOSIT_MONEY = 2006;
 }

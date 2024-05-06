@@ -8,7 +8,7 @@ export default class ClientConstants {
   static PARTNER = 'partner';
   static DRIVER = 'driver';
   static DEPARTMENT_BOSS = 'departmentboss';
-  static MANAGER_GROUP = [ClientConstants.CLIENT, ClientConstants.MANAGER, ClientConstants.OWNER, ClientConstants.DIRECTOR, ClientConstants.ASSISTANT, ClientConstants.ACCOUNTANT, ClientConstants.PARTNER, ClientConstants.DRIVER, ClientConstants.DEPARTMENT_BOSS];
+  static MANAGER_GROUP = [ClientConstants.MANAGER, ClientConstants.OWNER, ClientConstants.DIRECTOR, ClientConstants.ASSISTANT, ClientConstants.ACCOUNTANT, ClientConstants.PARTNER, ClientConstants.DRIVER, ClientConstants.DEPARTMENT_BOSS];
   static getRole = slug => {
     switch (slug) {
       case 'owner':
