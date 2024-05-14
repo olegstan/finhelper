@@ -581,9 +581,7 @@ export default class ActiveConstants {
         return 'NLMK';
       } else if (text.includes('гмк норильский никель')) {
         return 'GMKN';
-      } else {
-        console.log(text);
-      }
+      } else {}
     }
 
     // var re = /active\.([0-9]+)/i;

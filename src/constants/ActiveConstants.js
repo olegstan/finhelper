@@ -649,9 +649,6 @@ export default class ActiveConstants
         return 'GMKN';
       } else
       {
-
-
-        console.log(text)
       }
     }
 

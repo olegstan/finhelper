@@ -237,8 +237,6 @@ class GroupHelper
 
     let key = item.id + name + subName + 'none';
 
-    console.log(key)
-
     if (activeIndex.indexOf(key) === -1)
     {
       activeIndex.push(key);
@@ -281,8 +279,6 @@ class GroupHelper
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
 
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
-
-            console.log('trade added')
           });
 
           item.attributes.sell_trades.map((trade) =>

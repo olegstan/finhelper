@@ -58,6 +58,25 @@ export default class AccountConstants
 
   /**
    *
+   * @param subAccount
+   * @return {number}
+   */
+  static getBlockedSum(subAccount)
+  {
+    let blockedSum = 0;
+
+    if(subAccount?.blocked?.length)
+    {
+      subAccount?.blocked.map((blocked) => {
+        blockedSum += blocked.sum;
+      })
+    }
+
+    return blockedSum;
+  }
+
+  /**
+   *
    * @param accounts
    * @param currency
    * @return {*[]}
