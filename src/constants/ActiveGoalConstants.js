@@ -227,11 +227,34 @@ export default class ActiveGoalConstants
     return type;
   }
 
+  static isLeapYear(year) {
+    return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+  }
+
+  static getNextNonLeapYear(startYear) {
+    let year = startYear;
+    while (this.isLeapYear(year)) {
+      year++;
+    }
+    return year;
+  }
+
+  /**
+   *
+   * @param income
+   * @return {*[]}
+   */
   static defaultMask(income)
   {
     let data = [];
     let newIncome = 0;
-    let currentYear = moment().format('YYYY');
+
+    let currentYear = moment().year();
+
+    if(this.isLeapYear(currentYear))
+    {
+      currentYear = this.getNextNonLeapYear(currentYear);
+    }
 
     for (let i = 0; i < 12; i++)
     {
@@ -249,11 +272,19 @@ export default class ActiveGoalConstants
         newIncome += sum;
       }
 
+      console.log('--------------')
+      console.log(currentYear)
+      console.log((i + 1))
+      console.log(validDay)
+
       data[i] = {
         month: 1,
         sum: sum,
         rows: [
-          {day: validDay, sum: sum}
+          {
+            day: validDay,
+            sum: sum
+          }
         ]
       };
     }

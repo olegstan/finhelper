@@ -30,12 +30,12 @@ class GroupHelper {
           activeSortedItems[keyId].attributes.buy_trades = [];
           activeSortedItems[keyId].attributes.sell_trades = [];
         }
-        item.attributes.buy_trades.map(trade => {
+        item.attributes?.buy_trades?.map(trade => {
           activeSortedItems[keyId].attributes.buy_trades.push({
             ...trade
           });
         });
-        item.attributes.sell_trades.map(trade => {
+        item.attributes?.sell_trades?.map(trade => {
           activeSortedItems[keyId].attributes.sell_trades.push({
             ...trade
           });
@@ -49,7 +49,7 @@ class GroupHelper {
         let activeIndex = [];
         activeSortedItems.map(item => {
           if (ActiveConstants.isPackage(item.type_id)) {
-            item.attributes.buy_trades.map(trade => {
+            item.attributes?.buy_trades?.map(trade => {
               let account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
               let key = item.id + (account ? account.id : 'none');
               if (activeIndex.indexOf(key) === -1) {
@@ -66,7 +66,7 @@ class GroupHelper {
                 sortedItems[keyId].attributes.sell_trades = [];
               }
             });
-            item.attributes.sell_trades.map(trade => {
+            item.attributes?.sell_trades?.map(trade => {
               let account;
               if (item.type_id === ActiveConstants.CURRENCY) {
                 account = AccountConstants.getAccountBySubAccountId(trade.to_account_id);
@@ -88,7 +88,7 @@ class GroupHelper {
                 sortedItems[keyId].attributes.sell_trades = [];
               }
             });
-            item.attributes.buy_trades.map(trade => {
+            item.attributes?.buy_trades?.map(trade => {
               let account = AccountConstants.getAccountBySubAccountId(trade.from_account_id);
               let key = item.id + (account ? account.id : 'none');
               let keyId = activeIndex.indexOf(key);
@@ -96,7 +96,7 @@ class GroupHelper {
                 ...trade
               });
             });
-            item.attributes.sell_trades.map(trade => {
+            item.attributes?.sell_trades?.map(trade => {
               let account;
               if (item.type_id === ActiveConstants.CURRENCY) {
                 account = AccountConstants.getAccountBySubAccountId(trade.to_account_id);
@@ -192,13 +192,13 @@ class GroupHelper {
       let key = '';
       actives.map(item => {
         if (ActiveConstants.isPackage(item.type_id)) {
-          item.attributes.buy_trades.map(trade => {
+          item.attributes?.buy_trades?.map(trade => {
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({
               ...trade
             });
           });
-          item.attributes.sell_trades.map(trade => {
+          item.attributes?.sell_trades?.map(trade => {
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({
               ...trade

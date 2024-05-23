@@ -484,7 +484,6 @@ export default class Active
               .wherePropertyType(true)
           })
       })
-
       .all((response) =>
       {
         self.setState((prv) =>

@@ -48,7 +48,7 @@ class CaseGroupHelper
     {
       if (ActiveConstants.isPackage(item.type_id))
       {
-        item.attributes.buy_trades.map((trade) =>
+        item.attributes?.buy_trades?.map((trade) =>
         {
           let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
 
@@ -70,7 +70,7 @@ class CaseGroupHelper
           sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({...trade});
         });
 
-        item.attributes.sell_trades.map((trade) =>
+        item.attributes?.sell_trades?.map((trade) =>
         {
           let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
 
@@ -371,7 +371,7 @@ class CaseGroupHelper
     {
       if (ActiveConstants.isPackage(item.type_id))
       {
-        item.attributes.buy_trades.map((trade) =>
+        item.attributes?.buy_trades?.map((trade) =>
         {
           let name = CaseGroupHelper.getNameByGroup(item, groupType);
 
@@ -395,7 +395,7 @@ class CaseGroupHelper
 
         });
 
-        item.attributes.sell_trades.map((trade) =>
+        item.attributes?.sell_trades?.map((trade) =>
         {
           let name = CaseGroupHelper.getNameByGroup(item, groupType);
 
