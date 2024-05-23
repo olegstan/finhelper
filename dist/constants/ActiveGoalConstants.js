@@ -235,10 +235,6 @@ export default class ActiveGoalConstants {
         sum = Math.floor(income / 12);
         newIncome += sum;
       }
-      console.log('--------------');
-      console.log(currentYear);
-      console.log(i + 1);
-      console.log(validDay);
       data[i] = {
         month: 1,
         sum: sum,
