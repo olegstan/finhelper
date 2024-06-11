@@ -1,6 +1,6 @@
 {
   "name": "finhelper",
-  "version": "1.2.85",
+  "version": "1.2.86",
   "description": "",
   "main": "dist/index.js",
   "repository": {
@@ -14,7 +14,7 @@
     "url": "https://github.com/olegstan/finhelper/issues"
   },
   "scripts": {
-    "build": "babel src -d dist && copyfiles -u 1 src/assets/**/* dist/"
+    "build": "babel ./src -d dist && copyfiles -u 1 ./src/assets/**/* dist/"
   },
   "eslintConfig": {
     "extends": "react-app"
