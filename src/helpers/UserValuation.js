@@ -80,14 +80,15 @@ export default class UserValuation
    * @param atonValuation
    * @return {Promise<unknown>}
    */
-  static async getInvestActivesValuation(clientId, currencyId, accountBanks = [], courses, atonValuation = false )
+  static async getInvestActivesValuation(managerId, clientId, currencyId, accountBanks = [], courses, atonValuation = false )
   {
     if(atonValuation)
     {
       return await (new Promise((resolve, reject) =>
       {
-        Api.get('aton-portfolio', 'index', {user_id: clientId})
+        Api.get('aton-portfolio', 'index', {user_id: managerId})
           .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
+          .where('user_id', clientId)
           .all(({data}) =>
           {
             let sum = 0
