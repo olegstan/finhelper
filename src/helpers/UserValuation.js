@@ -86,7 +86,7 @@ export default class UserValuation
     {
       return await (new Promise((resolve, reject) =>
       {
-        Api.get('aton-portfolio', 'index', {user_id: managerId})
+        Api.get('aton-portfolio', 'index')
           .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
           .where('user_id', clientId)
           .all(({data}) =>
