@@ -656,6 +656,101 @@ export default class ActiveConstants {
   /**
    *
    * @param item
+   * @return {string|*}
+   */
+  static getNameWithCatalog(item) {
+    switch (item.type_id) {
+      case ActiveConstants.SALARY:
+      case ActiveConstants.FLAT:
+      case ActiveConstants.HOUSE:
+      case ActiveConstants.LAND:
+      case ActiveConstants.CAR:
+      case ActiveConstants.MOTO:
+      case ActiveConstants.TECHNIC:
+      case ActiveConstants.JEWELRY:
+      case ActiveConstants.PERSONAL_TECHNIC:
+      case ActiveConstants.DEPOSIT:
+      case ActiveConstants.DEBT:
+      case ActiveConstants.FUNDED_LIFE_INSURANCE:
+      case ActiveConstants.INVESTMENT_LIFE_INSURANCE:
+      case ActiveConstants.COMMODITY:
+      case ActiveConstants.CRYPTO:
+      case ActiveConstants.BPIF:
+      case ActiveConstants.HEDGE_FUND:
+      case ActiveConstants.STRUCTURE_PRODUCT:
+      case ActiveConstants.EXCHANGE_NOTE:
+      case ActiveConstants.OBLIGATION_NOTE:
+      case ActiveConstants.STRATEGY_DU:
+      case ActiveConstants.OPTION:
+      case ActiveConstants.RENT_CAR:
+      case ActiveConstants.RENT_FLAT:
+      case ActiveConstants.SPEND_LIFE:
+      case ActiveConstants.CAR_CREDIT:
+      case ActiveConstants.FLAT_CREDIT:
+      case ActiveConstants.CREDIT:
+      case ActiveConstants.PRODUCTS_SPEND:
+      case ActiveConstants.CAFE_SPEND:
+      case ActiveConstants.CAR_SPEND:
+      case ActiveConstants.TRANSPORT_SPEND:
+      case ActiveConstants.MEDICINE_SPEND:
+      case ActiveConstants.BEAUTY_SPEND:
+      case ActiveConstants.CLOTHES_ADULT_SPEND:
+      case ActiveConstants.CLOTHES_CHILD_SPEND:
+      case ActiveConstants.TOYS_SPEND:
+      case ActiveConstants.VACATION_SPEND:
+      case ActiveConstants.EDUCATION_SPEND:
+      case ActiveConstants.RENT_SPEND:
+      case ActiveConstants.FUN_SPEND:
+      case ActiveConstants.PRESENTS_SPEND:
+      case ActiveConstants.SPORT_SPEND:
+      case ActiveConstants.TELECOM_SPEND:
+      case ActiveConstants.SALARY_INCOME:
+      case ActiveConstants.BONUS_INCOME:
+      case ActiveConstants.RETIRE_INCOME:
+      case ActiveConstants.RENT_INCOME:
+      case ActiveConstants.RELATIVES_INCOME:
+      case ActiveConstants.PASSIVE_INCOME:
+      case ActiveConstants.AGENT_INCOME:
+      case ActiveConstants.CUSTOM_INCOME:
+      case ActiveConstants.CUSTOM_SALARY:
+      case ActiveConstants.CUSTOM_PROPERTY:
+      case ActiveConstants.CUSTOM_SPEND:
+      case ActiveConstants.CUSTOM_OBLIGATION:
+      case ActiveConstants.AUTO_INSURANCE:
+      case ActiveConstants.HEALTH_INSURANCE:
+      case ActiveConstants.LOSE_JOB_INSURANCE:
+      case ActiveConstants.CUSTOM_INSURANCE:
+      case ActiveConstants.PET_INSURANCE:
+      case ActiveConstants.PROPERTY_INSURANCE:
+      case ActiveConstants.RESPONSIBILITY_INSURANCE:
+      case ActiveConstants.SPORT_INSURANCE:
+      case ActiveConstants.TRAVEL_INSURANCE:
+      case ActiveConstants.UNIT_LINKED_INSURANCE:
+      case ActiveConstants.VMI_INSURANCE:
+        return item.name;
+      case ActiveConstants.CURRENCY:
+        let relate1 = item.item;
+        if (relate1) {
+          return item.name + ' ' + relate1.name;
+        }
+        return item.name;
+      case ActiveConstants.STOCK:
+      case ActiveConstants.ETF:
+      case ActiveConstants.OBLIGATION:
+      case ActiveConstants.FUTURES:
+      case ActiveConstants.PIF:
+      case ActiveConstants.PRECIOUS_METAL:
+        let relate2 = item.item;
+        if (relate2) {
+          return relate2.name + ' ' + relate2.secid;
+        }
+        return item.name;
+    }
+  }
+
+  /**
+   *
+   * @param item
    * @return {*|string}
    */
   static getActiveNameByGroup(item) {
