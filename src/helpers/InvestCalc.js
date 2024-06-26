@@ -12,47 +12,70 @@ import ActiveValueCalculator from "./Active/ActiveValueCalculator";
 
 class InvestCalc
 {
+  static getRoundPriceByValue(item, value) {
+    let number = 2;
+
+    // Логика для определения числа знаков после запятой
+    let parts = String(value).split('.');
+    if (parts.length > 1) {
+      if (parseInt(parts[0]) === 0) {
+        // Если целая часть равна 0, вернуть длину дробной части
+        return parts[1].length;
+      } else {
+        // Если целая часть больше 0, вернуть 2
+        return number;
+      }
+    } else {
+      // Если значение целое, вернуть 2
+      return number;
+    }
+
+    // Проверка типа для криптовалюты
+    if (item.type_id === ActiveConstants.CRYPTO || (item.item && item.item.type === 'CRYPTOCURRENCY')) {
+      number = 8;
+    }
+
+    return number;
+  }
+
   static getRoundPrice(item, field)
   {
     let number = 2;
-
     let smallestNumberPrice = null;
-    if (item?.buy_trades?.length)
-    {
-      item.buy_trades.map((trade) =>
-      {
-        if (smallestNumberPrice > trade[field] || smallestNumberPrice === null)
-        {
-          smallestNumberPrice = trade[field]
-        }
-      })
-      item.sell_trades.map((trade) =>
-      {
-        if (smallestNumberPrice > trade[field] || smallestNumberPrice === null)
-        {
-          smallestNumberPrice = trade[field]
-        }
-      })
 
-      if (smallestNumberPrice)
-      {
-        let parts = String(smallestNumberPrice).split('.')
+    if (item?.buy_trades?.length) {
+      item.buy_trades.forEach(trade => {
+        if (smallestNumberPrice > trade[field] || smallestNumberPrice === null) {
+          smallestNumberPrice = trade[field];
+        }
+      });
+    }
 
-        if (parts.length > 1 && parseInt(parts[0]) === 0)
-        {
+    if (item?.sell_trades?.length) {
+      item.sell_trades.forEach(trade => {
+        if (smallestNumberPrice > trade[field] || smallestNumberPrice === null) {
+          smallestNumberPrice = trade[field];
+        }
+      });
+    }
+
+    if (smallestNumberPrice !== null) {
+      let parts = String(smallestNumberPrice).split('.');
+      if (parts.length > 1) {
+        if (parseInt(parts[0]) === 0) {
           return parts[1].length;
+        } else {
+          return number;
         }
+      } else {
+        return number;
       }
     }
 
-    if (item.type_id === ActiveConstants.CRYPTO)
-    {
+    if (item.type_id === ActiveConstants.CRYPTO || (item.item && item.item.type === 'CRYPTOCURRENCY')) {
       number = 8;
     }
-    if (item.item && item.item.type === 'CRYPTOCURRENCY')
-    {
-      number = 8;
-    }
+
     return number;
   }
 
@@ -105,7 +128,8 @@ class InvestCalc
   {
     if (item?.buy_trades?.length)
     {
-      return Money.format(ActiveValueCalculator.getSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
+      let sum = ActiveValueCalculator.getSum(item.buy_trades);
+      return Money.format(ActiveValueCalculator.getSum(item.buy_trades), InvestCalc.getRoundPriceByValue(item, sum)) + ' ' + self.props.currency.sign;
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
     {
       let sum = item.buy_sum;
@@ -120,7 +144,8 @@ class InvestCalc
   {
     if (item?.buy_trades?.length)
     {
-      return Money.format(ActiveValueCalculator.getOriginalSum(item.buy_trades), InvestCalc.getRoundPrice(item, 'original_price')) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
+      let sum = ActiveValueCalculator.getOriginalSum(item.buy_trades);
+      return Money.format(sum, InvestCalc.getRoundPriceByValue(item, sum)) + ' ' + CurrencyConstants.getCurrencySignByActive(item);
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
     {
       let sign = CurrencyConstants.getCurrencySignById(item.buy_currency_id)
