@@ -5,6 +5,7 @@ export default class UserTaskTypeConstants
   static CONSULTATION = 1003;
   static LETTERS = 1004;
   static BUSINESS = 1005;
+  static OTHER = 1005;
   static DONE = 1006;
   static BIRTH_DAY = 1007;
   static PERSONAL = 1008;
@@ -35,7 +36,8 @@ export default class UserTaskTypeConstants
       case UserTaskTypeConstants.LETTERS:
         return 'Письмо';
       case UserTaskTypeConstants.BUSINESS:
-        return 'Дело';
+      case UserTaskTypeConstants.OTHER:
+        return 'Прочее';
       case UserTaskTypeConstants.DONE:
         return 'Выполнено';
       case UserTaskTypeConstants.BIRTH_DAY:
