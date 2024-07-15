@@ -824,6 +824,11 @@ export default class ActiveConstants
 
         if (relate2)
         {
+          if(relate2.ticker === ActiveConstants.MOEX_CATALOG)
+          {
+            return relate2.name + ' ' + relate2.secid + ' ' + relate2.isin;
+          }
+
           return relate2.name + ' ' + relate2.secid;
         }
         return item.name;

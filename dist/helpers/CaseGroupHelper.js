@@ -25,7 +25,7 @@ class CaseGroupHelper {
     }
     return name;
   }
-  static prepareSortedItems(actives) {
+  static prepareSortedItems(actives, firstGroupType) {
     let sortedItems = [];
     let activeIndex = [];
     actives.map(item => {
@@ -86,7 +86,7 @@ class CaseGroupHelper {
     let indexSecond = [];
     let indexThird = [];
     let data = [];
-    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems();
+    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems(actives, firstGroupType);
     sortedItems.map(item => {
       let name = CaseGroupHelper.getNameByGroup(item, firstGroupType);
       if (index.indexOf(name) === -1) {
@@ -141,7 +141,7 @@ class CaseGroupHelper {
     let index = [];
     let indexSecond = [];
     let data = [];
-    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems();
+    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems(actives, firstGroupType);
     let colorIndex = 0;
     let subColorIndex = 0;
     sortedItems.map(item => {

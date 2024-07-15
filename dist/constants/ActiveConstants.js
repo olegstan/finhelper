@@ -742,6 +742,9 @@ export default class ActiveConstants {
       case ActiveConstants.PRECIOUS_METAL:
         let relate2 = item.item;
         if (relate2) {
+          if (relate2.ticker === ActiveConstants.MOEX_CATALOG) {
+            return relate2.name + ' ' + relate2.secid + ' ' + relate2.isin;
+          }
           return relate2.name + ' ' + relate2.secid;
         }
         return item.name;

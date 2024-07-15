@@ -9,7 +9,28 @@ export default class UserTaskTypeConstants {
   static BIRTH_DAY = 1007;
   static PERSONAL = 1008;
   static MESSAGE = 1009;
-  static statuses = [UserTaskTypeConstants.CALLS, UserTaskTypeConstants.MEETINGS, UserTaskTypeConstants.CONSULTATION, UserTaskTypeConstants.LETTERS, UserTaskTypeConstants.BUSINESS, UserTaskTypeConstants.DONE, UserTaskTypeConstants.BIRTH_DAY, UserTaskTypeConstants.PERSONAL, UserTaskTypeConstants.MESSAGE];
+  static getStatuses() {
+    return [{
+      id: UserTaskTypeConstants.CALLS,
+      name: 'Звонок'
+    }, {
+      id: UserTaskTypeConstants.MEETINGS,
+      name: 'Встреча'
+    }, {
+      id: UserTaskTypeConstants.CONSULTATION,
+      name: 'Консультация'
+    }, {
+      id: UserTaskTypeConstants.LETTERS,
+      name: 'Письмо'
+    }, {
+      id: UserTaskTypeConstants.OTHER,
+      name: 'Прочее'
+    }, {
+      id: UserTaskTypeConstants.PERSONAL,
+      name: 'Личное'
+    }];
+  }
+  static statuses = [UserTaskTypeConstants.CALLS, UserTaskTypeConstants.MEETINGS, UserTaskTypeConstants.CONSULTATION, UserTaskTypeConstants.LETTERS, UserTaskTypeConstants.OTHER, UserTaskTypeConstants.DONE, UserTaskTypeConstants.BIRTH_DAY, UserTaskTypeConstants.PERSONAL, UserTaskTypeConstants.MESSAGE];
   static getTextByType(type) {
     switch (type) {
       case UserTaskTypeConstants.CALLS:

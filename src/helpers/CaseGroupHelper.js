@@ -39,7 +39,7 @@ class CaseGroupHelper
     return name;
   }
 
-  static prepareSortedItems(actives)
+  static prepareSortedItems(actives, firstGroupType)
   {
     let sortedItems = [];
     let activeIndex = [];
@@ -124,7 +124,7 @@ class CaseGroupHelper
     let indexThird = [];
     let data = [];
 
-    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems()
+    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems(actives, firstGroupType)
 
     sortedItems.map((item) =>
     {
@@ -213,7 +213,7 @@ class CaseGroupHelper
     let indexSecond = [];
     let data = [];
 
-    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems()
+    let [sortedItems, activeIndex] = CaseGroupHelper.prepareSortedItems(actives, firstGroupType)
 
     let colorIndex = 0;
     let subColorIndex = 0;
