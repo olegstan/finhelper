@@ -245,11 +245,6 @@ export default class Active extends BaseModel
     return this['tmp_buy_trades'] ? this['tmp_buy_trades'] : [];
   }
 
-  set buy_trades(x)
-  {
-    this['tmp_buy_trades'] = x;
-  }
-
   get sell_trades()
   {
     if (!this.related.sell_trades.loaded && this.attributes['sell_trades'] && this.attributes['sell_trades'].length)

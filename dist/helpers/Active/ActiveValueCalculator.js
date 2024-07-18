@@ -71,17 +71,8 @@ export default class ActiveValueCalculator {
    * @param item
    * @returns {number}
    */
-  static getCouponBuySum(item) {
-    return this.getCouponSellSum(item, true);
-  }
-
-  /**
-   *
-   * @param item
-   * @returns {number}
-   */
   static getCouponSellOriginalSum(item) {
-    return this.getCouponSellSum(item, true);
+    return this.get(item, true);
   }
 
   /**
