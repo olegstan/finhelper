@@ -86,22 +86,15 @@ export default class Active
     return ranges;
   }
 
-  static getAvgDate(trade, date)
+  static getAvgDate(trade, date = null)
   {
-    if (trade.trade_at)
-    {
-      if (date)
-      {
-        let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
-
-        let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
-
-        //каждая следующая дата будет больше прошлой,
-        //поэтому всегда двигаемся вперед
+    if (trade.trade_at_datetime) {
+      let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+      if (date) {
+        let diffInDays = tradeDate.diff(date, 'days');
         return date.add(diffInDays / 2, 'days');
-      } else
-      {
-        return moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
+      } else {
+        return tradeDate.clone().startOf('day');
       }
     }
   }

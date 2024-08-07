@@ -56,6 +56,15 @@ export default class Active extends BaseModel
       let value = 0;
       if (trades.length)
       {
+        trades.sort((a, b) => {
+          let dateA = moment(a.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+          let dateB = moment(b.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+          if (!dateA.isValid() || !dateB.isValid()) {
+            return 0; // если дата невалидна, считаем их равными
+          }
+          return dateA - dateB;
+        });
+
         for (let i = 0; i < trades.length; i++)
         {
           let trade = trades[i];
@@ -69,33 +78,45 @@ export default class Active extends BaseModel
               //разница в днях
               let tradeDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
 
-              let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
-
-              //сумма объёмов
-              let sumValue = value + trade.count;
-              //пропорция
-              //из будущего объёма вычитаем текущий
-              let diffValue = trade.count - value;
-              //процентное соотношение к общему объёму
-              let percentValue = Math.abs(diffValue) / sumValue;
-              //среднее количество дней учитывая вес объема
-              let avgDays = diffInDays / 100 * percentValue;
-
-              //для следующей итерации сохраняем объём по текущей дате
-              value = sumValue;
-
-              if (diffValue > 0)
+              if(tradeDate.isValid())
               {
-                date.add(avgDays, 'days');
-              } else
-              {
-                date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
-                date.add(avgDays, 'days');
+                let diffInDays = Math.abs(date.diff(tradeDate, 'days'));
+
+                //сумма объёмов
+                let sumValue = value + trade.count;
+                //пропорция
+                //из будущего объёма вычитаем текущий
+                let diffValue = trade.count - value;
+                //процентное соотношение к общему объёму
+                let percentValue = Math.abs(diffValue) / sumValue;
+                //среднее количество дней учитывая вес объема
+                let avgDays = diffInDays / 100 * percentValue;
+
+                //для следующей итерации сохраняем объём по текущей дате
+                value = sumValue;
+
+                if (diffValue > 0)
+                {
+                  date.add(avgDays, 'days');
+                } else
+                {
+                  let momentDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
+
+                  if(momentDate.isValid())
+                  {
+                    date.add(avgDays, 'days');
+                  }
+                }
               }
             } else
             {
               value = trade.count;
-              date = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
+              let momentDate = moment(trade.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss').clone().startOf('day');
+
+              if(momentDate.isValid())
+              {
+                date = momentDate;
+              }
             }
           }
         }
@@ -116,6 +137,24 @@ export default class Active extends BaseModel
       let sellTrades = this.sell_trades;
 
       let date = null;
+
+      buyTrades.sort((a, b) => {
+        let dateA = moment(a.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+        let dateB = moment(b.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+        if (!dateA.isValid() || !dateB.isValid()) {
+          return 0; // если дата невалидна, считаем их равными
+        }
+        return dateA - dateB;
+      });
+
+      sellTrades.sort((a, b) => {
+        let dateA = moment(a.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+        let dateB = moment(b.trade_at_datetime, 'DD.MM.YYYY HH:mm:ss');
+        if (!dateA.isValid() || !dateB.isValid()) {
+          return 0; // если дата невалидна, считаем их равными
+        }
+        return dateA - dateB;
+      });
 
       if (buyTrades?.length)
       {
