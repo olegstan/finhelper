@@ -140,6 +140,8 @@ export default class ActiveConstants
     ActiveConstants.FUTURES,
     ActiveConstants.PIF,
     ActiveConstants.PRECIOUS_METAL,
+
+    ActiveConstants.CRYPTO,
   ];
 
   static PROPERTY_GROUP = [
