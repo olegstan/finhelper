@@ -14,7 +14,7 @@ export default class Money
         return '';
       }
 
-      const __ret = this.getDecimal(decimalCount, amount);
+      const __ret = Money.getDecimal(decimalCount, amount);
       decimalCount = __ret.decimalCount;
       const negativeSign = __ret.negativeSign;
 
@@ -83,7 +83,7 @@ export default class Money
       }
 
 
-      const __ret = this.getDecimal(decimalCount, amount);
+      const __ret = Money.getDecimal(decimalCount, amount);
       decimalCount = __ret.decimalCount;
       const negativeSign = __ret.negativeSign;
 

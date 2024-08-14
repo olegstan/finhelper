@@ -8,7 +8,7 @@ export default class Money {
       if (amount === '') {
         return '';
       }
-      const __ret = this.getDecimal(decimalCount, amount);
+      const __ret = Money.getDecimal(decimalCount, amount);
       decimalCount = __ret.decimalCount;
       const negativeSign = __ret.negativeSign;
       let amountInt = parseInt(amount = Math.abs(Number(amount) || '').toFixed(decimalCount)).toString();
@@ -56,7 +56,7 @@ export default class Money {
       if (!isFinite(amount)) {
         return '∞';
       }
-      const __ret = this.getDecimal(decimalCount, amount);
+      const __ret = Money.getDecimal(decimalCount, amount);
       decimalCount = __ret.decimalCount;
       const negativeSign = __ret.negativeSign;
       let amountInt = parseInt(amount = Math.abs(Number(amount) || '')).toString();

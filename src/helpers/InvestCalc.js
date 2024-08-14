@@ -94,7 +94,7 @@ class InvestCalc
     return number;
   }
 
-  static getCount(item, now, self)
+  static getCount(item)
   {
     if (item?.buy_trades?.length)
     {
@@ -102,18 +102,18 @@ class InvestCalc
     }
   }
 
-  static getBuyPrice(item, now, self)
+  static getBuyPrice(item, sign)
   {
     if (item?.buy_trades?.length)
     {
-      return Money.format(ActiveValueCalculator.getAvgPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
+      return Money.format(ActiveValueCalculator.getAvgPrice(item, item.buy_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
       return '';
     }
   }
 
-  static getBuyOriginalPrice(item, now, self)
+  static getBuyOriginalPrice(item)
   {
     if (item?.buy_trades?.length)
     {
@@ -124,23 +124,23 @@ class InvestCalc
     }
   }
 
-  static getBuySum(item, now, self)
+  static getBuySum(item, sign)
   {
     if (item?.buy_trades?.length)
     {
       let sum = ActiveValueCalculator.getSum(item.buy_trades);
-      return Money.format(ActiveValueCalculator.getSum(item.buy_trades), InvestCalc.getRoundPriceByValue(item, sum)) + ' ' + self.props.currency.sign;
+      return Money.format(ActiveValueCalculator.getSum(item.buy_trades), InvestCalc.getRoundPriceByValue(item, sum)) + ' ' + sign;
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
     {
       let sum = item.buy_sum;
-      return Money.format(sum) + ' ' + self.props.currency.sign;
+      return Money.format(sum) + ' ' + sign;
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
-      return Money.format(item.buy_sum) + ' ' + self.props.currency.sign;
+      return Money.format(item.buy_sum) + ' ' + sign;
     }
   }
 
-  static getBuyOriginalSum(item, now, self)
+  static getBuyOriginalSum(item)
   {
     if (item?.buy_trades?.length)
     {
@@ -159,7 +159,7 @@ class InvestCalc
     }
   }
 
-  static getBuyDate(item, now, self)
+  static getBuyDate(item)
   {
     if (item?.buy_trades?.length)
     {
@@ -173,7 +173,7 @@ class InvestCalc
     }
   }
 
-  static getSellPrice(item, now, self)
+  static getSellPrice(item, now)
   {
     if (item.sell_trades?.length)
     {
@@ -188,7 +188,7 @@ class InvestCalc
     }
   }
 
-  static getSellOriginalPrice(item, now, self)
+  static getSellOriginalPrice(item)
   {
     if (item.sell_trades?.length)
     {
@@ -201,18 +201,18 @@ class InvestCalc
     }
   }
 
-  static getSellSum(item, now, self)
+  static getSellSum(item, now, sign)
   {
     if (item.sell_trades?.length)
     {
-      return Money.format(ActiveValueCalculator.getSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + self.props.currency.sign;
+      return Money.format(ActiveValueCalculator.getSum(item.sell_trades), InvestCalc.getRoundPrice(item, 'price')) + ' ' + sign;
     } else if (ActiveConstants.COUPON_GROUP.indexOf(item.type_id) !== -1 && item.buy_trades?.length)
     {
       let sellDate = moment(item.sell_at_date, 'DD.MM.YYYY');
       if (sellDate.isBefore(now))
       {
         let count = Active.getCountSum(item, item.buy_trades);
-        return Money.format(item.buy_sum * count) + ' ' + self.props.currency.sign;
+        return Money.format(item.buy_sum * count) + ' ' + sign;
       }
     } else if (ActiveConstants.DEBT_GROUP.indexOf(item.type_id) !== -1)
     {
@@ -220,7 +220,7 @@ class InvestCalc
 
       if (sellDate.isBefore(now))
       {
-        return Money.format(Active.getPaymentsSum(item.payments)) + ' ' + self.props.currency.sign;
+        return Money.format(Active.getPaymentsSum(item.payments)) + ' ' + sign;
       }
     } else if (ActiveConstants.PROPERTY_GROUP.indexOf(item.type_id) !== -1 || [ActiveConstants.CUSTOM_PROPERTY].indexOf(item.type_id) !== -1)
     {
@@ -228,10 +228,10 @@ class InvestCalc
       {
         let sell = item.sell.child_item;
 
-        return Money.format(sell.sum) + ' ' + self.props.currency.sign;
+        return Money.format(sell.sum) + ' ' + sign;
       }
 
-      return Money.format(item.sell_sum) + ' ' + self.props.currency.sign;
+      return Money.format(item.sell_sum) + ' ' + sign;
     }
   }
 
@@ -279,7 +279,7 @@ class InvestCalc
     return sign;
   }
 
-  static getSellDate(item, now, self)
+  static getSellDate(item, now)
   {
     if (item.sell_trades?.length)
     {
@@ -315,7 +315,7 @@ class InvestCalc
     }
   }
 
-  static getPeriod(item, now, self)
+  static getPeriod(item, now)
   {
     if (item.sell_trades?.length)
     {
@@ -380,21 +380,22 @@ class InvestCalc
     }
   }
 
+  //TODO похоже на зачикливание
   static getAnnuallyPercentByActives(actives, now, self)
   {
     let firstBuyDate = InvestCalc.getFirstBuyDate(actives);
 
     if (firstBuyDate)
     {
-      let hasSell = false;
-      let profit = InvestCalc.getAnnuallyPercentByActives(actives, now, self, hasSell);
+      // let hasSell = false;
+      // let profit = InvestCalc.getAnnuallyPercentByActives(actives, now, self, hasSell);
+      //
+      // let diffInDays = Math.abs(firstBuyDate.diff(moment().startOf('day'), 'days'));
+      // profit -= 1;
+      //
+      // let annulyProfit = (Math.pow(profit + 1, (360 / (diffInDays ? diffInDays : 1)) - 1));
 
-      let diffInDays = Math.abs(firstBuyDate.diff(moment().startOf('day'), 'days'));
-      profit -= 1;
-
-      let annulyProfit = (Math.pow(profit + 1, (360 / (diffInDays ? diffInDays : 1)) - 1));
-
-      return annulyProfit;
+      return 0;
     }
 
     return 0;
