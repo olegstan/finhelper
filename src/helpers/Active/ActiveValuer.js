@@ -139,7 +139,7 @@ export default class ActiveValuer
           {
             let valuation = original ? last_valuation.original_current_sum : last_valuation.current_sum;
 
-            buySum = (valuation * count / lotsize) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
+            buySum = (valuation * count) + ActiveValueCalculator.getCouponSellSum(item, original) + ActiveValueCalculator.getDividendSum(item, original);
           } else
           {
             let valuation = original ? lastTrade.original_price : lastTrade.price;
