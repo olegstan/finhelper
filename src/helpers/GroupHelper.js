@@ -3,6 +3,7 @@ import ActiveModel from "../models/Active"
 import AccountConstants from "../constants/AccountConstants"
 import ActiveValuer from "./Active/ActiveValuer";
 import CurrencyConstants from "./../constants/CurrencyConstants";
+import ActiveValueCalculator from "./Active/ActiveValueCalculator";
 
 class GroupHelper
 {
@@ -194,6 +195,7 @@ class GroupHelper
         });
 
         GroupHelper.setValuation(sortedItems);
+        GroupHelper.setPaidSum(sortedItems);
       }
 
       return GroupHelper.group(sortedItems, groupType);
@@ -294,6 +296,7 @@ class GroupHelper
       });
 
       GroupHelper.setValuation(sortedItems);
+      GroupHelper.setPaidSum(sortedItems);
 
       let groups = GroupHelper.group(sortedItems, groupType);
 
@@ -377,6 +380,28 @@ class GroupHelper
 
   /**
    *
+   * @param items
+   */
+  static setPaidSum(items)
+  {
+    items.map((item) =>
+    {
+      item.attributes['paid_sum'] = 1000000;
+      // let obj = ActiveValuer.getValuation(item.attributes)
+      //
+      // if (obj)
+      // {
+      //   item.attributes['valuation'] = obj.sum;
+      // } else
+      // {
+      //   item.attributes['valuation'] = 0;
+      // }
+    });
+  }
+
+
+  /**
+   *
    * @param sortedItems
    * @param groupType
    * @return {*[]}
@@ -432,6 +457,7 @@ class GroupHelper
         groups[nameIndex] = {
           name: name,
           sum: 0,
+          paid_sum: 0,
           groups: []
         }
       }
@@ -441,12 +467,17 @@ class GroupHelper
         groups[nameIndex].groups[nameSubIndex] = {
           name: subName,
           sum: 0,
+          paid_sum: 0,
           actives: []
         }
       }
 
+      let paidSum = ActiveValueCalculator.getSum(item.buy_trades)
+
       groups[nameIndex].sum += item.valuation;
+      groups[nameIndex].paid_sum += paidSum;
       groups[nameIndex].groups[nameSubIndex].sum += item.valuation;
+      groups[nameIndex].groups[nameSubIndex].paid_sum += paidSum;
       groups[nameIndex].groups[nameSubIndex].actives.push(item);
 
 
