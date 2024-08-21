@@ -788,7 +788,14 @@ export default class ActiveConstants {
     } else {
       if (item.buy_account_id) {
         let account = AccountConstants.getAccountBySubAccountId(item.buy_account_id);
-        return account ? account.name ? account.name : account.bank_text : '';
+        let accountText = account ? account.name ? account.name : account.bank_text : '';
+        if (accountText === '') {
+          let subAccount = AccountConstants.getSubAccountById(item.buy_account_id);
+          if (subAccount) {
+            return subAccount.name ?? '';
+          }
+        }
+        return accountText;
       }
     }
     return '';
