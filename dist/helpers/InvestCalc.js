@@ -1163,7 +1163,7 @@ class InvestCalc {
    * @param array
    * @return {number}
    */
-  getObligationCurrent(array) {
+  static getObligationCurrent(array) {
     let sum = 0;
     let now = moment();
     array.map(item => {
@@ -1182,7 +1182,7 @@ class InvestCalc {
    * @param birthAtDate
    * @return {number}
    */
-  getObligationLongTerm(array, birthAtDate) {
+  static getObligationLongTerm(array, birthAtDate) {
     let sum = 0;
     let now = moment();
     array.map(item => {
