@@ -1132,5 +1132,67 @@ class InvestCalc {
     }
     return sum / diffDays;
   }
+  static getWholeActivesSum(state) {
+    let sum = 0;
+    sum += InvestCalc.getValuation(state.properties ?? []);
+    sum += InvestCalc.getValuation(state.invests ?? []);
+    sum += InvestCalc.getAccountValuation(state.bankBalance ?? 0);
+    sum += InvestCalc.getAccountValuation(state.brokerBalance ?? 0);
+    sum += InvestCalc.getAccountValuation(state.cashBalance ?? 0);
+    sum += InvestCalc.getAccountValuation(state.digitBalance ?? 0);
+    return sum;
+  }
+  static getWholeObligationSum(state, birthAtDate) {
+    let sum = 0;
+    sum += InvestCalc.getObligationCurrent(state.obligations ?? []);
+    sum += InvestCalc.getObligationLongTerm(state.obligations ?? [], birthAtDate);
+    return sum;
+  }
+
+  /**
+   *
+   * @param array
+   * @return {*|number}
+   */
+  static getAccountValuation(array) {
+    return array.sum > 0 ? array.sum : 0;
+  }
+
+  /**
+   *
+   * @param array
+   * @return {number}
+   */
+  getObligationCurrent(array) {
+    let sum = 0;
+    let now = moment();
+    array.map(item => {
+      let obj = Active.getObligationCurrent(item, now);
+      if (obj) {
+        sum += parseFloat(obj.sum);
+      }
+      return null;
+    });
+    return sum;
+  }
+
+  /**
+   *
+   * @param array
+   * @param birthAtDate
+   * @return {number}
+   */
+  getObligationLongTerm(array, birthAtDate) {
+    let sum = 0;
+    let now = moment();
+    array.map(item => {
+      let obj = Active.getObligationLongTerm(item, now, moment(birthAtDate, 'DD.MM.YYYY'));
+      if (obj) {
+        sum += parseFloat(obj.sum);
+      }
+      return null;
+    });
+    return sum;
+  }
 }
 export default InvestCalc;
