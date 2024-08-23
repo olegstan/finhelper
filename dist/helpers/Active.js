@@ -229,7 +229,7 @@ export default class Active {
 
   /**
    *
-   * @param self
+   * @param state
    * @param accounts
    * @param currencyData
    * @param clientId
@@ -239,47 +239,43 @@ export default class Active {
    * @param types
    * @param courses
    */
-  static getBalanceByDate(self, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses) {
-    self.setState(prv => {
-      prv.brokerBalance.sum = 0;
-      prv.cashBalance.sum = 0;
-      prv.bankBalance.sum = 0;
-      prv.digitBalance.sum = 0;
-      accounts.map(item => {
-        item.accounts.map(account => {
-          try {
-            if (account.sum > 0) {
-              switch (item.type_id) {
-                case AccountConstants.BROKER_ACCOUNT:
-                  prv.brokerBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                  break;
-                case AccountConstants.CASH:
-                  prv.cashBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                  break;
-                case AccountConstants.BANK_ACCOUNT:
-                  prv.bankBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                  break;
-                case AccountConstants.DIGIT_MONEY:
-                  prv.digitBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
-                  break;
-              }
+  static getBalanceByDate(state, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses) {
+    state.brokerBalance.sum = 0;
+    state.cashBalance.sum = 0;
+    state.bankBalance.sum = 0;
+    state.digitBalance.sum = 0;
+    accounts.map(item => {
+      item.accounts.map(account => {
+        try {
+          if (account.sum > 0) {
+            switch (item.type_id) {
+              case AccountConstants.BROKER_ACCOUNT:
+                state.brokerBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                break;
+              case AccountConstants.CASH:
+                state.cashBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                break;
+              case AccountConstants.BANK_ACCOUNT:
+                state.bankBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                break;
+              case AccountConstants.DIGIT_MONEY:
+                state.digitBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                break;
             }
-          } catch (e) {
-            console.log(e);
           }
-        });
+        } catch (e) {
+          console.log(e);
+        }
       });
-      return prv;
-    }, () => {
-      if (typeof callback === 'function') {
-        callback();
-      }
     });
+    if (typeof callback === 'function') {
+      callback();
+    }
   }
 
   /**
    *
-   * @param self
+   * @param state
    * @param bindString
    * @param data
    * @param clientId
@@ -287,7 +283,7 @@ export default class Active {
    * @param date
    * @param callback
    */
-  static getActivesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
+  static getActivesByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
     data.user_id = clientId;
@@ -301,15 +297,11 @@ export default class Active {
     }).with('sell_trades', query => {
       return query.with('currency', 'commissions').where('trade_at', '<=', now);
     }).with('dividends').all(response => {
-      self.setState(prv => {
-        prv[bindString] = ActiveModel.load(response.data);
-        return prv;
-      }, () => {
-        callback();
-      });
+      state[bindString] = ActiveModel.load(response.data);
+      callback();
     });
   }
-  static getInvestsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
+  static getInvestsByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
     data.user_id = clientId;
@@ -337,58 +329,70 @@ export default class Active {
         }).wherePropertyType(true);
       });
     }).all(response => {
-      self.setState(prv => {
-        prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) => {
-          let valuation1 = c1.valuation;
-          let valuation2 = c2.valuation;
-          return valuation1 < valuation2 ? 1 : valuation1 > valuation2 ? -1 : 0;
-        });
-        let items = AccountConstants.appendCurrencyActives(prv.accounts, {
-          id: CurrencyConstants.RUBBLE_ID,
-          name: 'RUB'
-        });
-        items = items.map(item => {
-          if (item.type_id === ActiveConstants.CURRENCY) {
-            item.name_text = 'Свободные денежные средства';
-          }
-          return new ActiveModel(item);
-        });
-        prv[bindString] = [...items, ...prv[bindString]];
-        return prv;
-      }, () => {
-        callback();
+      state[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) => {
+        let valuation1 = c1.valuation;
+        let valuation2 = c2.valuation;
+        return valuation1 < valuation2 ? 1 : valuation1 > valuation2 ? -1 : 0;
       });
+      let items = AccountConstants.appendCurrencyActives(state.accounts, {
+        id: CurrencyConstants.RUBBLE_ID,
+        name: 'RUB'
+      });
+      items = items.map(item => {
+        if (item.type_id === ActiveConstants.CURRENCY) {
+          item.name_text = 'Свободные денежные средства';
+        }
+        return new ActiveModel(item);
+      });
+      state[bindString] = [...items, ...state[bindString]];
+      callback();
     });
   }
-  static getPropertiesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
+
+  /**
+   *
+   * @param state
+   * @param bindString
+   * @param data
+   * @param clientId
+   * @param accountBanks
+   * @param date
+   * @param callback
+   */
+  static getPropertiesByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     data.user_id = clientId;
     Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', now).where(query => {
       return query.where('sell_at', '>', now).orWhereNull('sell_at').whereDoesntHave('sell');
     }).where('group_id', ActiveConstants.OWN).wherePropertyType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').all(response => {
-      self.setState(prv => {
-        prv[bindString] = ActiveModel.load(response.data);
-        return prv;
-      }, () => {
-        callback();
-      });
+      state[bindString] = ActiveModel.load(response.data);
+      callback();
     });
   }
-  static getSpendingsByDate(self, bindString, data, clientId, date = moment(), callback) {
+
+  /**
+   *
+   * @param state
+   * @param bindString
+   * @param data
+   * @param clientId
+   * @param date
+   * @param callback
+   */
+  static getSpendingsByDate(state, bindString, data, clientId, date = moment(), callback) {
     data.user_id = clientId;
-    Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereSpendingType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(() => {
+    Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereSpendingType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(({
+      data
+    }) => {
+      state[bindString] = data;
       callback();
-    }).bind(self, bindString);
+    });
   }
-  static getObligationsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
+  static getObligationsByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     data.user_id = clientId;
     Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereObligationType(true).with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(response => {
-      self.setState(prv => {
-        prv[bindString] = ActiveModel.load(response.data);
-        return prv;
-      }, () => {
-        callback();
-      });
+      state[bindString] = ActiveModel.load(response.data);
+      callback();
     });
   }
   static isRetire(user, year) {

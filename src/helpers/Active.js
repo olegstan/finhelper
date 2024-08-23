@@ -300,7 +300,7 @@ export default class Active
 
   /**
    *
-   * @param self
+   * @param state
    * @param accounts
    * @param currencyData
    * @param clientId
@@ -310,14 +310,12 @@ export default class Active
    * @param types
    * @param courses
    */
-  static getBalanceByDate(self, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses)
+  static getBalanceByDate(state, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses)
   {
-    self.setState((prv) =>
-    {
-      prv.brokerBalance.sum = 0;
-      prv.cashBalance.sum = 0;
-      prv.bankBalance.sum = 0;
-      prv.digitBalance.sum = 0;
+      state.brokerBalance.sum = 0;
+      state.cashBalance.sum = 0;
+      state.bankBalance.sum = 0;
+      state.digitBalance.sum = 0;
       accounts.map((item) =>
       {
         item.accounts.map((account) =>
@@ -329,16 +327,16 @@ export default class Active
               switch (item.type_id)
               {
                 case AccountConstants.BROKER_ACCOUNT:
-                  prv.brokerBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  state.brokerBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
                   break;
                 case AccountConstants.CASH:
-                  prv.cashBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  state.cashBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
                   break;
                 case AccountConstants.BANK_ACCOUNT:
-                  prv.bankBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  state.bankBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
                   break;
                 case AccountConstants.DIGIT_MONEY:
-                  prv.digitBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
+                  state.digitBalance.sum += Money.convert(Money.toDigits(account.sum), currencyData.currency_id, account.currency_id);
                   break;
               }
             }
@@ -349,19 +347,15 @@ export default class Active
         })
       });
 
-      return prv;
-    }, () =>
-    {
       if (typeof callback === 'function')
       {
         callback();
       }
-    })
   }
 
   /**
    *
-   * @param self
+   * @param state
    * @param bindString
    * @param data
    * @param clientId
@@ -369,7 +363,7 @@ export default class Active
    * @param date
    * @param callback
    */
-  static getActivesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
+  static getActivesByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
@@ -410,19 +404,13 @@ export default class Active
       .with('dividends')
       .all((response) =>
       {
-        self.setState((prv) =>
-        {
-          prv[bindString] = ActiveModel.load(response.data);
+        state[bindString] = ActiveModel.load(response.data);
 
-          return prv;
-        }, () =>
-        {
-          callback()
-        });
+        callback()
       });
   }
 
-  static getInvestsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
+  static getInvestsByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
@@ -479,38 +467,42 @@ export default class Active
       })
       .all((response) =>
       {
-        self.setState((prv) =>
+        state[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) =>
         {
-          prv[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) =>
-          {
-            let valuation1 = c1.valuation;
-            let valuation2 = c2.valuation;
+          let valuation1 = c1.valuation;
+          let valuation2 = c2.valuation;
 
-            return (valuation1 < valuation2) ? 1 : (valuation1 > valuation2) ? -1 : 0
-          });
-
-          let items = AccountConstants.appendCurrencyActives(prv.accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
-
-          items = items.map((item) => {
-            if(item.type_id === ActiveConstants.CURRENCY)
-            {
-              item.name_text = 'Свободные денежные средства';
-            }
-
-            return new ActiveModel(item);
-          })
-
-          prv[bindString] = [...items, ...prv[bindString]];
-
-          return prv;
-        }, () =>
-        {
-          callback()
+          return (valuation1 < valuation2) ? 1 : (valuation1 > valuation2) ? -1 : 0
         });
+
+        let items = AccountConstants.appendCurrencyActives(state.accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
+
+        items = items.map((item) => {
+          if(item.type_id === ActiveConstants.CURRENCY)
+          {
+            item.name_text = 'Свободные денежные средства';
+          }
+
+          return new ActiveModel(item);
+        })
+
+        state[bindString] = [...items, ...state[bindString]];
+
+        callback()
       });
   }
 
-  static getPropertiesByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
+  /**
+   *
+   * @param state
+   * @param bindString
+   * @param data
+   * @param clientId
+   * @param accountBanks
+   * @param date
+   * @param callback
+   */
+  static getPropertiesByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
 
@@ -537,19 +529,22 @@ export default class Active
       .with('income_account')
       .all((response) =>
       {
-        self.setState((prv) =>
-        {
-          prv[bindString] = ActiveModel.load(response.data);
+          state[bindString] = ActiveModel.load(response.data);
 
-          return prv;
-        }, () =>
-        {
           callback()
-        });
       });
   }
 
-  static getSpendingsByDate(self, bindString, data, clientId, date = moment(), callback)
+  /**
+   *
+   * @param state
+   * @param bindString
+   * @param data
+   * @param clientId
+   * @param date
+   * @param callback
+   */
+  static getSpendingsByDate(state, bindString, data, clientId, date = moment(), callback)
   {
     data.user_id = clientId;
 
@@ -566,14 +561,15 @@ export default class Active
       .with('sell_account')
       .with('income_account')
       .with('payments')
-      .all(() =>
+      .all(({data}) =>
       {
+        state[bindString] = data;
+
         callback()
-      })
-      .bind(self, bindString);
+      });
   }
 
-  static getObligationsByDate(self, bindString, data, clientId, accountBanks = [], date = moment(), callback)
+  static getObligationsByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     data.user_id = clientId;
 
@@ -590,15 +586,9 @@ export default class Active
       .with('payments')
       .all((response) =>
       {
-        self.setState((prv) =>
-        {
-          prv[bindString] = ActiveModel.load(response.data);
+        state[bindString] = ActiveModel.load(response.data);
 
-          return prv;
-        }, () =>
-        {
-          callback()
-        });
+        callback()
       });
   }
 
