@@ -414,7 +414,7 @@ export default class Active
       });
   }
 
-  static getInvestsByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback)
+  static getInvestsByDate(state, accounts, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');
     let before = date.clone().add('12', 'months').format('YYYY-MM-DD HH:mm:ss');
@@ -479,7 +479,7 @@ export default class Active
           return (valuation1 < valuation2) ? 1 : (valuation1 > valuation2) ? -1 : 0
         });
 
-        let items = AccountConstants.appendCurrencyActives(state.accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
+        let items = AccountConstants.appendCurrencyActives(accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
 
         items = items.map((item) => {
           if(item.type_id === ActiveConstants.CURRENCY)
