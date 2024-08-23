@@ -1166,7 +1166,7 @@ class InvestCalc {
   static getObligationCurrent(array) {
     let sum = 0;
     let now = moment();
-    array.map(item => {
+    array?.map(item => {
       let obj = Active.getObligationCurrent(item, now);
       if (obj) {
         sum += parseFloat(obj.sum);
@@ -1185,7 +1185,7 @@ class InvestCalc {
   static getObligationLongTerm(array, birthAtDate) {
     let sum = 0;
     let now = moment();
-    array.map(item => {
+    array?.map(item => {
       let obj = Active.getObligationLongTerm(item, now, moment(birthAtDate, 'DD.MM.YYYY'));
       if (obj) {
         sum += parseFloat(obj.sum);

@@ -301,7 +301,7 @@ export default class Active {
     }).with('sell_trades', query => {
       return query.with('currency', 'commissions').where('trade_at', '<=', now);
     }).with('dividends').all(response => {
-      state[bindString] = ActiveModel.load(response.data);
+      state[bindString] = response.data;
       callback();
     });
   }
@@ -333,22 +333,21 @@ export default class Active {
         }).wherePropertyType(true);
       });
     }).all(response => {
-      state[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) => {
-        let valuation1 = c1.valuation;
-        let valuation2 = c2.valuation;
-        return valuation1 < valuation2 ? 1 : valuation1 > valuation2 ? -1 : 0;
-      });
-      let items = AccountConstants.appendCurrencyActives(accounts, {
-        id: CurrencyConstants.RUBBLE_ID,
-        name: 'RUB'
-      });
-      items = items.map(item => {
-        if (item.type_id === ActiveConstants.CURRENCY) {
-          item.name_text = 'Свободные денежные средства';
-        }
-        return new ActiveModel(item);
-      });
-      state[bindString] = [...items, ...state[bindString]];
+      state[bindString] = response.data;
+
+      // let items = AccountConstants.appendCurrencyActives(accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
+      //
+      // items = items.map((item) => {
+      //   if(item.type_id === ActiveConstants.CURRENCY)
+      //   {
+      //     item.name_text = 'Свободные денежные средства';
+      //   }
+      //
+      //   return new ActiveModel(item);
+      // })
+
+      // state[bindString] = [...items, ...state[bindString]];
+
       callback();
     });
   }
@@ -369,7 +368,7 @@ export default class Active {
     Api.get('active', 'index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', now).where(query => {
       return query.where('sell_at', '>', now).orWhereNull('sell_at').whereDoesntHave('sell');
     }).where('group_id', ActiveConstants.OWN).wherePropertyType(true).with('sell_trades').with('valuations').with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').all(response => {
-      state[bindString] = ActiveModel.load(response.data);
+      state[bindString] = response.data;
       callback();
     });
   }
@@ -395,7 +394,7 @@ export default class Active {
   static getObligationsByDate(state, bindString, data, clientId, accountBanks = [], date = moment(), callback) {
     data.user_id = clientId;
     Api.get('active', 'invest-grid-index', data).setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('buy_at', '<=', date.format('YYYY-MM-DD HH:mm:ss')).whereObligationType(true).with('buy_currency').with('sell_currency').with('income_currency').with('buy_account').with('sell_account').with('income_account').with('payments').all(response => {
-      state[bindString] = ActiveModel.load(response.data);
+      state[bindString] = response.data;
       callback();
     });
   }

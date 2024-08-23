@@ -408,7 +408,7 @@ export default class Active
       .with('dividends')
       .all((response) =>
       {
-        state[bindString] = ActiveModel.load(response.data);
+        state[bindString] = response.data;
 
         callback()
       });
@@ -471,26 +471,20 @@ export default class Active
       })
       .all((response) =>
       {
-        state[bindString] = ActiveModel.load(response.data)?.sort((c1, c2) =>
-        {
-          let valuation1 = c1.valuation;
-          let valuation2 = c2.valuation;
+        state[bindString] = response.data;
 
-          return (valuation1 < valuation2) ? 1 : (valuation1 > valuation2) ? -1 : 0
-        });
+        // let items = AccountConstants.appendCurrencyActives(accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
+        //
+        // items = items.map((item) => {
+        //   if(item.type_id === ActiveConstants.CURRENCY)
+        //   {
+        //     item.name_text = 'Свободные денежные средства';
+        //   }
+        //
+        //   return new ActiveModel(item);
+        // })
 
-        let items = AccountConstants.appendCurrencyActives(accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
-
-        items = items.map((item) => {
-          if(item.type_id === ActiveConstants.CURRENCY)
-          {
-            item.name_text = 'Свободные денежные средства';
-          }
-
-          return new ActiveModel(item);
-        })
-
-        state[bindString] = [...items, ...state[bindString]];
+        // state[bindString] = [...items, ...state[bindString]];
 
         callback()
       });
@@ -533,7 +527,7 @@ export default class Active
       .with('income_account')
       .all((response) =>
       {
-          state[bindString] = ActiveModel.load(response.data);
+          state[bindString] = response.data;
 
           callback()
       });
@@ -590,7 +584,7 @@ export default class Active
       .with('payments')
       .all((response) =>
       {
-        state[bindString] = ActiveModel.load(response.data);
+        state[bindString] = response.data;
 
         callback()
       });

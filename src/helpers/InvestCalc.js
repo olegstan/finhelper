@@ -1629,7 +1629,7 @@ class InvestCalc
   {
     let sum = 0;
     let now = moment();
-    array.map((item) =>
+    array?.map((item) =>
     {
       let obj = Active.getObligationCurrent(item, now);
 
@@ -1654,7 +1654,7 @@ class InvestCalc
   {
     let sum = 0;
     let now = moment();
-    array.map((item) =>
+    array?.map((item) =>
     {
       let obj = Active.getObligationLongTerm(item, now, moment(birthAtDate, 'DD.MM.YYYY'));
 
