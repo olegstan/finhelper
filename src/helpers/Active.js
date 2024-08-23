@@ -312,6 +312,10 @@ export default class Active
    */
   static getBalanceByDate(state, accounts, currencyData, clientId, accountBanks = [], date = moment(), callback, types, courses)
   {
+      state.brokerBalance = {};
+      state.cashBalance = {};
+      state.bankBalance = {};
+      state.digitBalance = {};
       state.brokerBalance.sum = 0;
       state.cashBalance.sum = 0;
       state.bankBalance.sum = 0;
