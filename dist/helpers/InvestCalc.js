@@ -904,7 +904,7 @@ class InvestCalc {
    */
   static getValuation(actives) {
     let sum = 0;
-    actives.map(active => {
+    actives?.map(active => {
       let value = active.valuation;
       if (value > 0) {
         sum += value;

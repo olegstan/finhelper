@@ -1257,7 +1257,7 @@ class InvestCalc
   {
     let sum = 0;
 
-    actives.map((active) =>
+    actives?.map((active) =>
     {
       let value = active.valuation;
 
