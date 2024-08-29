@@ -1,5 +1,6 @@
 import moment from "moment/moment";
 import TradeCommissionConstants from "./../../constants/TradeCommissionConstants";
+import exactMath from "exact-math";
 
 export default class ActiveValueCalculator
 {
@@ -16,17 +17,16 @@ export default class ActiveValueCalculator
    */
   static getAvgPrice(active, trades, original = false)
   {
-    let count = 0;
-    let sum = 0;
-    let lotsize = active.item ? active.item.lotsize : 1;
-    trades.map((trade) =>
-    {
-      let price = original ? trade.original_price : trade.price;
-      count += trade.count;
-      sum += price * count;
+    let totalCost = 0;
+    let totalCount = 0;
+    let lotsize = active.item && active.item.lotsize !== 0 ? active.item.lotsize : 1;
+
+    trades.forEach(trade => {
+      totalCost = exactMath.add(totalCost, exactMath.mul(trade.count, trade.price));
+      totalCount = exactMath.add(totalCount, trade.count);
     });
 
-    return sum / count / lotsize;
+    return exactMath.div(dexactMath.div(totalCost, totalCount), lotsize);
   }
 
   static getAvgOriginalPrice(active, trades) {
