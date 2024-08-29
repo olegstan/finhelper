@@ -21,7 +21,7 @@ export default class ActiveValueCalculator {
       totalCost = exactMath.add(totalCost, exactMath.mul(trade.count, trade.price));
       totalCount = exactMath.add(totalCount, trade.count);
     });
-    return exactMath.div(dexactMath.div(totalCost, totalCount), lotsize);
+    return exactMath.div(exactMath.div(totalCost, totalCount), lotsize);
   }
   static getAvgOriginalPrice(active, trades) {
     return this.getAvgPrice(active, trades, true);
