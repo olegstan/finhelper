@@ -21,8 +21,9 @@ export default class ActiveValueCalculator
     let lotsize = active.item ? active.item.lotsize : 1;
     trades.map((trade) =>
     {
+      let price = original ? trade.original_price : trade.price;
       count += trade.count;
-      sum += original ? trade.original_sum : trade.sum;
+      sum += price * count;
     });
 
     return sum / count / lotsize;
