@@ -19,14 +19,35 @@ export default class ActiveValueCalculator
   {
     let totalCost = 0;
     let totalCount = 0;
-    let lotsize = active.item && active.item.lotsize !== 0 ? active.item.lotsize : 1;
+    let lotsize = 1;
+
+    if(active.lotsize){
+      lotsize = active.lotsize;
+    }else if(active.item && active.item.lotsize){
+      lotsize = active.item.lotsize;
+    }
 
     trades.forEach(trade => {
-      totalCost = exactMath.add(totalCost, exactMath.mul(trade.count, trade.price));
+      totalCost = exactMath.add(totalCost, exactMath.mul(trade.count, original ? trade.original_price : trade.price));
       totalCount = exactMath.add(totalCount, trade.count);
     });
 
-    return exactMath.div(exactMath.div(totalCost, totalCount), lotsize);
+    let avgPrice = exactMath.div(exactMath.div(totalCost, totalCount), lotsize);
+
+    if(avgPrice === 0)
+    {
+      let count = 0;
+      let sum = 0;
+      trades.map((trade) =>
+      {
+        sum = exactMath.add(sum, original ? trade.original_sum : trade.sum);
+        count = exactMath.add(count, trade.count);
+      });
+
+      return exactMath.div(exactMath.div(sum, count), lotsize);
+    }else{
+      return avgPrice;
+    }
   }
 
   static getAvgOriginalPrice(active, trades) {
