@@ -106,16 +106,19 @@ export default class Money {
    * @return {*|string}
    */
   static toThousands(amount, fix = 2, space = '') {
+    const isNegative = amount < 0;
     let preparedAmount = Math.abs(amount);
+    let result;
     if (preparedAmount >= 1000000000) {
-      return Money.toFixed(amount / 1000000000, fix) + space + 'B';
+      result = Money.toFixed(preparedAmount / 1000000000, fix) + space + 'B';
     } else if (preparedAmount >= 1000000) {
-      return Money.toFixed(amount / 1000000, fix) + space + 'M';
+      result = Money.toFixed(preparedAmount / 1000000, fix) + space + 'M';
     } else if (preparedAmount >= 1000) {
-      return Money.toFixed(amount / 1000, fix) + space + 'K';
+      result = Money.toFixed(preparedAmount / 1000, fix) + space + 'K';
     } else {
-      return Money.toFixed(amount, fix);
+      result = Money.toFixed(preparedAmount, fix);
     }
+    return isNegative ? '-' + result : result;
   }
   static getAccumulatedCouponIncome(startDate, endDate, nominal, rate, ratePeriodTypeId) {
     let nowDate = moment();

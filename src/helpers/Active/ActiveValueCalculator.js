@@ -32,7 +32,7 @@ export default class ActiveValueCalculator
       totalCount = exactMath.add(totalCount, trade.count);
     });
 
-    let avgPrice = exactMath.div(exactMath.div(totalCost, totalCount), lotsize);
+    let avgPrice = exactMath.div(totalCost, totalCount);
 
     if(avgPrice === 0)
     {
@@ -44,7 +44,7 @@ export default class ActiveValueCalculator
         count = exactMath.add(count, trade.count);
       });
 
-      return exactMath.div(exactMath.div(sum, count), lotsize);
+      return exactMath.div(sum, count);
     }else{
       return avgPrice;
     }
