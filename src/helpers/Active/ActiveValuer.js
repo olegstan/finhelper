@@ -13,6 +13,7 @@ export default class ActiveValuer
    * @param code
    * @param original
    * @return {{code, sign, sum: number}}
+   * TODO сделать review для кеширования данных оценки
    */
   static getDiff(item, now, sign, code, original = false)
   {
