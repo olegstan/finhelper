@@ -178,6 +178,7 @@ export default class AccountConstants
                 id: subAccount.id,
                 type_id: ActiveConstants.CURRENCY,
                 type_text: 'Валюта',
+                group_type_text: 'Валюта',
                 name_text: name,
                 user_id: account.user_id,
                 valuations: [],
