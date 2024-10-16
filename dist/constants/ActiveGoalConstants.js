@@ -203,9 +203,9 @@ export default class ActiveGoalConstants {
     return type;
   }
   static isLeapYear(year) {
-    if (exactMath.mod(year, 4) === 0) {
-      if (exactMath.mod(year, 100) === 0) {
-        return exactMath.mod(year, 400) === 0;
+    if (exactMath.formula(`${year} % 4`) === 0) {
+      if (exactMath.formula(`${year} % 100`) === 0) {
+        return exactMath.formula(`${year} % 400`) === 0;
       } else {
         return true;
       }
