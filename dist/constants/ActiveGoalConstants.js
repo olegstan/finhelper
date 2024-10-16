@@ -1,6 +1,7 @@
 import moment from "moment/moment";
 import DateHelper from "../helpers/DateHelper";
 import Money from "../helpers/Money";
+import exactMath from "exact-math";
 export default class ActiveGoalConstants {
   static WITH_PLAN = 1;
   static WITHOUT_PLAN = 2;
@@ -202,7 +203,15 @@ export default class ActiveGoalConstants {
     return type;
   }
   static isLeapYear(year) {
-    return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+    if (exactMath.mod(year, 4) === 0) {
+      if (exactMath.mod(year, 100) === 0) {
+        return exactMath.mod(year, 400) === 0;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
   }
   static getNextNonLeapYear(startYear) {
     let year = startYear;
