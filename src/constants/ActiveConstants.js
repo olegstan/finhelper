@@ -870,6 +870,28 @@ export default class ActiveConstants
     return item.group_type_text ? item.group_type_text : 'Без категории';
   }
 
+  static getAccountName(account)
+  {
+    if(account)
+    {
+      if(account.name)
+      {
+        return account.name
+      }
+
+      if(account.bank_id)
+      {
+        return account.bank_text;
+      }
+
+      //если счет временный, то у него может не быть названия
+      if(account.type_id === AccountConstants.TEMP)
+      {
+        return AccountConstants.textByType(account);
+      }
+    }
+  }
+
   /**
    *
    * @param item
@@ -885,7 +907,7 @@ export default class ActiveConstants
         {
           let account = AccountConstants.getAccountBySubAccountId(item.buy_trades[0].from_account_id);
 
-          return account ? (account.name ? account.name : account.bank_text) : ''
+          return ActiveConstants.getAccountName(account);
         }
       }
 
@@ -898,12 +920,12 @@ export default class ActiveConstants
           {
             let account = AccountConstants.getAccountBySubAccountId(item.sell_trades[0].to_account_id);
 
-            return account ? (account.name ? account.name : account.bank_text) : ''
+            return ActiveConstants.getAccountName(account);
           } else
           {
             let account = AccountConstants.getAccountBySubAccountId(item.sell_trades[0].from_account_id);
 
-            return account ? (account.name ? account.name : account.bank_text) : ''
+            return ActiveConstants.getAccountName(account);
           }
         }
       }
@@ -913,7 +935,7 @@ export default class ActiveConstants
       {
         let account = AccountConstants.getAccountBySubAccountId(item.buy_account_id);
 
-        let accountText = account ? (account.name ? account.name : account.bank_text) : '';
+        let accountText = ActiveConstants.getAccountName(account);
 
         if(accountText === '')
         {

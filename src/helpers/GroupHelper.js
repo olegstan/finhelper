@@ -233,6 +233,7 @@ class GroupHelper
     } else if (groupType === ActiveConstants.BY_ACCOUNT)
     {
       account = AccountConstants.getAccountBySubAccountId(accountId);
+
       name = account ? account.name : 'Без названия';
       subName = ActiveConstants.getActiveNameByType(item);
     }

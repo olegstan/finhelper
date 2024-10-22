@@ -783,6 +783,21 @@ export default class ActiveConstants {
   static getActiveNameByGroup(item) {
     return item.group_type_text ? item.group_type_text : 'Без категории';
   }
+  static getAccountName(account) {
+    if (account) {
+      if (account.name) {
+        return account.name;
+      }
+      if (account.bank_id) {
+        return account.bank_text;
+      }
+
+      //если счет временный, то у него может не быть названия
+      if (account.type_id === AccountConstants.TEMP) {
+        return AccountConstants.textByType(account);
+      }
+    }
+  }
 
   /**
    *
@@ -794,7 +809,7 @@ export default class ActiveConstants {
       if (item?.buy_trades?.length) {
         if (item.buy_trades[0] && item.buy_trades[0].from_account_id) {
           let account = AccountConstants.getAccountBySubAccountId(item.buy_trades[0].from_account_id);
-          return account ? account.name ? account.name : account.bank_text : '';
+          return ActiveConstants.getAccountName(account);
         }
       }
       if (item.sell_trades?.length) {
@@ -802,17 +817,17 @@ export default class ActiveConstants {
           //если это продажа валюты, то нужно менять использовать другой счёт
           if (item.type_id === ActiveConstants.CURRENCY) {
             let account = AccountConstants.getAccountBySubAccountId(item.sell_trades[0].to_account_id);
-            return account ? account.name ? account.name : account.bank_text : '';
+            return ActiveConstants.getAccountName(account);
           } else {
             let account = AccountConstants.getAccountBySubAccountId(item.sell_trades[0].from_account_id);
-            return account ? account.name ? account.name : account.bank_text : '';
+            return ActiveConstants.getAccountName(account);
           }
         }
       }
     } else {
       if (item.buy_account_id) {
         let account = AccountConstants.getAccountBySubAccountId(item.buy_account_id);
-        let accountText = account ? account.name ? account.name : account.bank_text : '';
+        let accountText = ActiveConstants.getAccountName(account);
         if (accountText === '') {
           let subAccount = AccountConstants.getSubAccountById(item.buy_account_id);
           if (subAccount) {
