@@ -42,12 +42,7 @@ export default class UserValuation
   {
     let sum = 0;
 
-    // sum += InvestCalc.getValuation(state.properties);
     sum += InvestCalc.getValuation(state.invests);
-    // sum += UserValuation.getAccountValuation(state.bankBalance);
-    // sum += UserValuation.getAccountValuation(state.brokerBalance);
-    // sum += UserValuation.getAccountValuation(state.cashBalance);
-    // sum += UserValuation.getAccountValuation(state.digitBalance);
 
     return sum;
   }
@@ -61,12 +56,9 @@ export default class UserValuation
   {
     let sum = 0;
 
-    // sum += InvestCalc.getValuation(state.properties);
+    console.log(InvestCalc.getValuation(state.invests))
+
     sum += InvestCalc.getValuation(state.invests);
-    // sum += UserValuation.getAccountValuation(state.bankBalance);
-    // sum += UserValuation.getAccountValuation(state.brokerBalance);
-    // sum += UserValuation.getAccountValuation(state.cashBalance);
-    // sum += UserValuation.getAccountValuation(state.digitBalance);
 
     return sum;
   }
@@ -129,6 +121,8 @@ export default class UserValuation
 
       let cachedValue = await IndexedDBCache.get('client.valuation.' + clientId)
 
+      console.log(cachedValue)
+
       if (cachedValue !== null)
       {
         return cachedValue;
@@ -143,12 +137,18 @@ export default class UserValuation
             user_id: clientId
           };
 
+          console.log(1)
           Active.getAccountsByDate(component, 'accounts', currencyData, clientId, accountBanks, now, () =>
           {
-            Active.getInvestsByDate(component, [],'invests', currencyData, clientId, accountBanks, now, () =>
+            console.log(2)
+            Active.getInvestsByDate(component.state, [],'invests', currencyData, clientId, accountBanks, now, () =>
             {
+              console.log(3)
+              console.log(component.state)
               let valuation = UserValuation.getInvestActivesSum(component.state);
 
+              console.log('valuation')
+              console.log(valuation)
               if(valuation > 0)
               {
                 Cache.setItem('client.valuation.' + clientId, valuation)
