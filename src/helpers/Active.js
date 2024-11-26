@@ -414,6 +414,17 @@ export default class Active
       });
   }
 
+  /**
+   *
+   * @param state
+   * @param accounts
+   * @param bindString
+   * @param data
+   * @param clientId
+   * @param accountBanks
+   * @param date
+   * @param callback
+   */
   static getInvestsByDate(state, accounts, bindString, data, clientId, accountBanks = [], date = moment(), callback)
   {
     let now = date.clone().format('YYYY-MM-DD HH:mm:ss');

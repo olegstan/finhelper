@@ -73,6 +73,7 @@ export default class UserValuation
 
   /**
    *
+   * @param managerId
    * @param clientId
    * @param currencyId
    * @param accountBanks
@@ -144,7 +145,7 @@ export default class UserValuation
 
           Active.getAccountsByDate(component, 'accounts', currencyData, clientId, accountBanks, now, () =>
           {
-            Active.getInvestsByDate(component, 'invests', currencyData, clientId, accountBanks, now, () =>
+            Active.getInvestsByDate(component, [],'invests', currencyData, clientId, accountBanks, now, () =>
             {
               let valuation = UserValuation.getInvestActivesSum(component.state);
 
