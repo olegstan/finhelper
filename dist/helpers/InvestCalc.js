@@ -654,12 +654,9 @@ class InvestCalc {
    * @param ActiveModel[] actives
    * @return {number}
    */
-  static getFactPercentByActives(actives) {
+  static async getFactPercentByActives(actives) {
     let activesWithoutCurrency = actives.filter(active => {
       return active.type_id !== ActiveConstants.CURRENCY;
-    });
-    let activesOnlyCurrency = actives.filter(active => {
-      return active.type_id === ActiveConstants.CURRENCY;
     });
 
     // // 2. Рассчитываем последние оценки (lastValuations) для валют
@@ -669,8 +666,7 @@ class InvestCalc {
       lastValuationsHash
     } = InvestCalc.calculateCurrencyValuations(activesWithoutCurrency);
     let cacheKey = 'active.fact_percent.' + lastValuationsHash;
-    return IndexedDBCache.get(cacheKey).then(cachedValue => {
-      console.log(cachedValue);
+    return await IndexedDBCache.get(cacheKey).then(cachedValue => {
       if (cachedValue) {
         return cachedValue;
       } else {
@@ -683,7 +679,7 @@ class InvestCalc {
           grids,
           gridIndex,
           firstBuyDate
-        } = this.initActivesData(activesWithoutCurrency);
+        } = InvestCalc.initActivesData(activesWithoutCurrency);
 
         // Если не удалось определить дату покупки (нет покупок), возвращаем 0
         if (!firstBuyDate) {
@@ -691,10 +687,10 @@ class InvestCalc {
         }
 
         // 4. Идём по датам от первой покупки до текущей, считаем оценки
-        this.fillActivesDataByDates(activesWithoutCurrency, firstBuyDate, index, sums, values, sold, grids, gridIndex);
+        InvestCalc.fillActivesDataByDates(activesWithoutCurrency, firstBuyDate, index, sums, values, sold, grids, gridIndex);
 
         // 5. Считаем финальную доходность
-        let profit = this.calculateProfit(index, sums, activesWithoutCurrency, grids, gridIndex);
+        let profit = InvestCalc.calculateProfit(index, sums, activesWithoutCurrency, grids, gridIndex);
         IndexedDBCache.set(cacheKey, profit, 1000 * 60 * 60 * 24 * 7); //запомним на неделю
 
         return profit;
@@ -794,8 +790,14 @@ class InvestCalc {
     });
     return multiplier;
   }
-  static getFactPercentByItem(item) {
-    return InvestCalc.getFactPercentByActives([item]);
+
+  /**
+   *
+   * @param item
+   * @return {Promise<*>}
+   */
+  static async getFactPercentByItem(item) {
+    return await InvestCalc.getFactPercentByActives([item]);
   }
 
   /**
@@ -1013,8 +1015,8 @@ class InvestCalc {
    * @param item
    * @returns {number}
    */
-  static getAnnuallyPercentByItem(item) {
-    let profit = item.factPercent;
+  static async getAnnuallyPercentByItem(item) {
+    let profit = await InvestCalc.getFactPercentByItem(item);
     let firstBuyDate = InvestCalc.getFirstBuyDate([item]);
     if (firstBuyDate) {
       let diffInDays = Math.abs(firstBuyDate.diff(moment().startOf('day'), 'days'));

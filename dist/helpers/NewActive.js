@@ -1,5 +1,15 @@
 export default class NewActive {
+  /**
+   *
+   * @param item
+   */
   static getDiffCurrency(item) {}
+
+  /**
+   *
+   * @param item
+   * @return {*}
+   */
   static getDiff(item) {
     if (item?.profit?.instrument?.stock) {
       let firstKey = Object.keys(item.profit.instrument.stock)[0];
@@ -8,6 +18,12 @@ export default class NewActive {
       }
     }
   }
+
+  /**
+   *
+   * @param item
+   * @return {number}
+   */
   static getFactPercentByItem(item) {
     if (item?.profit?.instrument?.stock) {
       let firstKey = Object.keys(item.profit.instrument.stock)[0];
@@ -16,6 +32,12 @@ export default class NewActive {
       }
     }
   }
+
+  /**
+   *
+   * @param item
+   * @return {*}
+   */
   static getAnnuallyPercentByItem(item) {
     if (item?.profit?.instrument?.stock) {
       let firstKey = Object.keys(item.profit.instrument.stock)[0];

@@ -349,32 +349,54 @@ export default class Active extends BaseModel
     this['tmp_originValuation'] = x;
   }
 
-  get factPercent()
+  async getFactPercent()
   {
     if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
     {
-      this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
-      this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
+      this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
+      this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
     }
 
     return this['tmp_factPercent'];
   }
+
+  // get factPercent()
+  // {
+  //   if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
+  //   {
+  //     this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
+  //     this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
+  //   }
+  //
+  //   return this['tmp_factPercent'];
+  // }
 
   set factPercent(x)
   {
     this['tmp_factPercent'] = x;
   }
 
-  get annuallyPercent()
+  async getAnnuallyPercent()
   {
     if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
     {
-      this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
-      this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
+      this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
+      this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
     }
 
     return this['tmp_annuallyPercent'];
   }
+
+  // get annuallyPercent()
+  // {
+  //   if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
+  //   {
+  //     this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
+  //     this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
+  //   }
+  //
+  //   return this['tmp_annuallyPercent'];
+  // }
 
   set annuallyPercent(x)
   {
