@@ -121,8 +121,6 @@ export default class UserValuation
 
       let cachedValue = await IndexedDBCache.get('client.valuation.' + clientId)
 
-      console.log(cachedValue)
-
       if (cachedValue !== null)
       {
         return cachedValue;
