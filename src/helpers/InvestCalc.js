@@ -871,10 +871,15 @@ class InvestCalc
       return active.type_id !== ActiveConstants.CURRENCY;
     });
 
+    let ids = actives.map((active) =>
+    {
+      return active.id;
+    }).join(',');
+
     // // 2. Рассчитываем последние оценки (lastValuations) для валют
     const { currencyIndex, lastValuations, lastValuationsHash } = InvestCalc.calculateCurrencyValuations(activesWithoutCurrency);
 
-    let cacheKey = 'active.fact_percent.' + lastValuationsHash;
+    let cacheKey = 'active.fact_percent.actives.' + ids + '.hash.' + lastValuationsHash;
     return await IndexedDBCache.get(cacheKey).then((cachedValue) => {
 
       if(cachedValue)
@@ -882,6 +887,7 @@ class InvestCalc
         return cachedValue
       }else{
         // 3. Собираем индекс дат, суммы и др. для невалютных активов
+
         const {
           index,
           sums,
