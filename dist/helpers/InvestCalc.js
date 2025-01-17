@@ -9,7 +9,8 @@ import CurrencyConstants from "../constants/CurrencyConstants";
 import BuyTrade from "../models/BuyTrade";
 import SellTrade from "../models/SellTrade";
 import ActiveValueCalculator from "./Active/ActiveValueCalculator";
-import IndexedDBCache from "src/helpers/IndexedDBCache";
+import IndexedDBCache from "./IndexedDBCache";
+import CryptoJS from 'crypto-js';
 class InvestCalc {
   static getRoundPriceByValue(item, value) {
     let number = 2;
@@ -333,10 +334,11 @@ class InvestCalc {
    * Рассчитывает массив индексов валют (currencyIndex) и объект последних
    * оценок (lastValuations) для каждого типа валюты из списка активов
    */
-  static calculateCurrencyValuations(activesOnlyCurrency) {
+  static calculateCurrencyValuations(actives) {
     const currencyIndex = [];
     const lastValuations = [];
-    activesOnlyCurrency.forEach(active => {
+    console.log(actives);
+    actives.forEach(active => {
       // Фиксируем валютный символ в currencyIndex (чтобы понять, какой это индекс)
       if (!currencyIndex.includes(active.item.symbol)) {
         currencyIndex.push(active.item.symbol);
@@ -381,14 +383,270 @@ class InvestCalc {
 
     // Превращаем lastValuations в JSON-строку
     const lastValuationsJSON = JSON.stringify(lastValuations);
+    console.log(lastValuationsJSON);
 
     // Делаем хеш (md5 или любой другой)
-    const lastValuationsHash = crypto.createHash('md5').update(lastValuationsJSON).digest('hex');
+    const lastValuationsHash = CryptoJS.MD5(lastValuationsJSON).toString();
+    console.log(lastValuationsHash);
     return {
       currencyIndex,
       lastValuations,
       lastValuationsHash
     };
+  }
+
+  /**
+   * Заполняет данные (sums, values, sold и т.д.) для всех активов
+   * по датам, начиная с firstBuyDate и заканчивая сегодня
+   */
+  static fillActivesDataByDates(activesWithoutCurrency, firstBuyDate, index, sums, values, sold, grids, gridIndex) {
+    const nowDate = moment().startOf('day');
+
+    // Клонируем дату, чтобы позже использовать в расчёте прибыли
+    const cloneFirstBuyDate = firstBuyDate.clone();
+    while (firstBuyDate && firstBuyDate.isSameOrBefore(nowDate)) {
+      const formattedDate = firstBuyDate.format('DD.MM.YYYY');
+
+      // Инициализируем массивы для данного индекса даты
+      if (!index.includes(formattedDate)) {
+        index.push(formattedDate);
+      }
+      const dateIndex = index.indexOf(formattedDate);
+      if (typeof sums[dateIndex] === 'undefined') sums[dateIndex] = [];
+      if (typeof sold[dateIndex] === 'undefined') sold[dateIndex] = [];
+      if (typeof values[dateIndex] === 'undefined') values[dateIndex] = [];
+
+      // Для каждого активa считаем его оценку
+      activesWithoutCurrency.forEach(active => {
+        this.calculateActiveValuationForDate(active, firstBuyDate, dateIndex, sums, values, sold, gridIndex, grids);
+      });
+
+      // Идём к следующему дню
+      firstBuyDate.add(1, 'days');
+    }
+  }
+
+  /**
+   * Считает оценку конкретного актива на определённую дату (firstBuyDate)
+   */
+  static calculateActiveValuationForDate(active, currentDate, dateIndex, sums, values, sold, gridIndex, grids) {
+    // Инициализируем "ячейки" для данного актива
+    if (typeof values[dateIndex][active.id] === 'undefined') {
+      values[dateIndex][active.id] = {};
+    }
+    if (typeof sums[dateIndex][active.id] === 'undefined') {
+      sums[dateIndex][active.id] = 0;
+    }
+    if (typeof sold[dateIndex][active.id] === 'undefined') {
+      sold[dateIndex][active.id] = 0;
+    }
+    if (!gridIndex.includes(active.id)) {
+      gridIndex.push(active.id);
+    }
+    const gridKey = gridIndex.indexOf(active.id);
+    if (typeof grids[gridKey] === 'undefined') {
+      // Предполагаем, что InvestCalc.getGrid() вернёт сетку оценок для актива
+      grids[gridKey] = InvestCalc.getGrid(active, moment().startOf('day'));
+    }
+    if (ActiveConstants.isPackage(active.type_id)) {
+      this.calculatePackageActiveValuation(active, currentDate, dateIndex, sums, values, sold, grids[gridKey]);
+    } else {
+      this.calculateSingleActiveValuation(active, currentDate, dateIndex, sums, values, sold);
+    }
+  }
+
+  /**
+   * Подсчёт оценки для "пакета" (множественные покупки/продажи, переоценки и т.д.)
+   */
+  static calculatePackageActiveValuation(active, firstBuyDate, dateIndex, sums, values, sold, gridForActive) {
+    let count = 0;
+    let course = 0;
+    let tradePrice = 0;
+    let sell = false;
+    let tradeOriginalPrice = 0;
+    let lastTradeDate = null;
+    let valuePrice = 0;
+    let valueOriginalPrice = 0;
+    let lastValueDate = null;
+
+    // Покупки
+    active.attributes.buy_trades.forEach(trade => {
+      // Копия сделки с учётом комиссии
+      const copyTrade = new BuyTrade({
+        ...trade
+      });
+      copyTrade.price = trade.price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+      copyTrade.original_price = trade.original_price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+      const tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
+      if (!lastTradeDate) {
+        lastTradeDate = tradeDate;
+      }
+
+      // Если сделка раньше или в день firstBuyDate, прибавляем
+      if (tradeDate.isSameOrBefore(firstBuyDate)) {
+        count += copyTrade.count;
+        tradePrice = copyTrade.price;
+        tradeOriginalPrice = copyTrade.original_price;
+        course = copyTrade.price_course;
+      }
+    });
+
+    // Переоценки
+    active.attributes.valuations?.forEach(valuation => {
+      const valueDate = valuation.morph === 'active.user.valuation' ? moment() : moment(valuation.value_at_date, 'DD.MM.YYYY');
+      lastValueDate = valueDate;
+      if (valueDate.isSameOrBefore(firstBuyDate)) {
+        valuePrice = valuation.current_sum;
+        valueOriginalPrice = valuation.original_current_sum;
+        course = valuation.current_sum_course;
+      }
+    });
+
+    // Продажи
+    active.attributes.sell_trades.forEach(trade => {
+      const copyTrade = new SellTrade({
+        ...trade
+      });
+      copyTrade.price = trade.price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+      copyTrade.original_price = trade.original_price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
+      const tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
+      lastTradeDate = tradeDate;
+      if (tradeDate.isSameOrBefore(firstBuyDate)) {
+        tradePrice = copyTrade.price;
+        tradeOriginalPrice = copyTrade.original_price;
+        course = copyTrade.price_course;
+        sell = true;
+      }
+    });
+
+    // Если нет продаж и переоценок, но были покупки -> берём цену из последней покупки
+    if ((!active.attributes.valuations || active.attributes.valuations.length === 0) && active.attributes.sell_trades.length === 0 && active.attributes.buy_trades.length > 0) {
+      const lastTrade = active.attributes.buy_trades[active.attributes.buy_trades.length - 1];
+      const nowDate = moment().startOf('day');
+      if (nowDate.isSameOrBefore(firstBuyDate)) {
+        lastTradeDate = nowDate;
+        tradePrice = lastTrade.price;
+        tradeOriginalPrice = lastTrade.original_price;
+        course = lastTrade.price_course;
+      }
+    }
+
+    // Логика выбора цены: продажа / переоценка / покупка
+    if (sell) {
+      // Если актив продан, исключаем его из дальнейшей переоценки
+      // но учитываем цену продажи в дату продажи
+      sums[dateIndex][active.id] = sums[dateIndex][active.id] || 0;
+
+      // Если ещё не был помечен как "продан"
+      if (!sums[dateIndex][active.id]) {
+        sums[dateIndex][active.id] = tradePrice * count;
+      }
+    } else if (lastValueDate && lastValueDate.isAfter(lastTradeDate) && valuePrice > 0) {
+      // Оценка
+      sums[dateIndex][active.id] = count * valuePrice;
+    } else if (lastTradeDate && tradePrice > 0) {
+      // Покупка
+      sums[dateIndex][active.id] = count * tradePrice;
+    }
+  }
+
+  /**
+   * Подсчёт оценки для "единичного" актива (одна покупка/продажа)
+   */
+  static calculateSingleActiveValuation(active, firstBuyDate, dateIndex, sums, values, sold) {
+    let count = 0;
+    let tradePrice = 0;
+    let sell = false;
+    let tradeOriginalPrice = 0;
+    let lastTradeDate = null;
+    let valuePrice = 0;
+    let lastValueDate = null;
+    let paymentSum = 0;
+
+    // Данные о покупке
+    const buyTrade = {
+      price: active.buy_sum,
+      original_price: active.original_buy_sum,
+      price_course: active.buy_sum_course
+    };
+    const buyTradeDate = moment(active.buy_at_date, 'DD.MM.YYYY');
+    if (!lastTradeDate) {
+      lastTradeDate = buyTradeDate;
+    }
+
+    // Если покупка была до (или в) firstBuyDate
+    if (buyTradeDate.isSameOrBefore(firstBuyDate)) {
+      count += 1;
+      tradePrice = buyTrade.price;
+      tradeOriginalPrice = buyTrade.original_price;
+      // Примечание: здесь в вашем исходном коде, похоже, опечатка:
+      // course = buyTradeDate.price_course; ?
+    }
+
+    // Переоценки
+    active.attributes.valuations?.forEach(valuation => {
+      const valueDate = valuation.morph === 'active.user.valuation' ? moment() : moment(valuation.value_at_date, 'DD.MM.YYYY');
+      lastValueDate = valueDate;
+      if (valueDate.isSameOrBefore(firstBuyDate)) {
+        valuePrice = valuation.current_sum;
+      }
+    });
+
+    // Платежи (например, дивиденды, купоны и т.д.)
+    active.attributes?.payments?.forEach(payment => {
+      const paidDate = moment(payment.paid_at_date, 'DD.MM.YYYY');
+      if (paidDate.isSameOrBefore(firstBuyDate)) {
+        paymentSum += payment.sum;
+      }
+    });
+
+    // Продажа через sell_at
+    if (active.sell_at) {
+      const sellTrade = {
+        price: active.sell_sum,
+        original_price: active.original_sell_sum,
+        price_course: active.sell_sum_course
+      };
+      const tradeSellDate = moment(active.sell_at_date, 'DD.MM.YYYY');
+      lastTradeDate = tradeSellDate;
+      if (tradeSellDate.isSameOrBefore(firstBuyDate)) {
+        tradePrice = sellTrade.price;
+        tradeOriginalPrice = sellTrade.original_price;
+        sell = true;
+      }
+    }
+    // Продажа через active.attributes.sell
+    else if (active.attributes?.sell) {
+      const sellObj = active.attributes.sell.child_item;
+      const sellTrade = {
+        price: sellObj.sum,
+        original_price: sellObj.original_sum,
+        price_course: sellObj.price_course
+      };
+      const tradeSellDate = moment(sellObj.paid_at_date, 'DD.MM.YYYY');
+      lastTradeDate = tradeSellDate;
+      if (tradeSellDate.isSameOrBefore(firstBuyDate)) {
+        tradePrice = sellTrade.price;
+        tradeOriginalPrice = sellTrade.original_price;
+        sell = true;
+      }
+    }
+
+    // Логика выбора цены: продано / переоценка / покупка
+    if (sell) {
+      if (!sums[dateIndex][active.id]) {
+        // Если актив только что "продаём" в эту дату
+        sums[dateIndex][active.id] = active.sell_at ? active.sell_sum : active.attributes.sell.child_item.sum;
+      } else {
+        sums[dateIndex][active.id] = 0;
+      }
+    } else if (lastValueDate && lastValueDate.isAfter(lastTradeDate) && valuePrice > 0) {
+      // Оценка
+      sums[dateIndex][active.id] = count * valuePrice + paymentSum;
+    } else if (lastTradeDate && tradePrice > 0) {
+      // Покупка
+      sums[dateIndex][active.id] = count * tradePrice + paymentSum;
+    }
   }
 
   /**
@@ -404,332 +662,91 @@ class InvestCalc {
       return active.type_id === ActiveConstants.CURRENCY;
     });
 
-    // 2. Рассчитываем последние оценки (lastValuations) для валют
+    // // 2. Рассчитываем последние оценки (lastValuations) для валют
     const {
       currencyIndex,
       lastValuations,
       lastValuationsHash
-    } = InvestCalc.calculateCurrencyValuations(activesOnlyCurrency);
+    } = InvestCalc.calculateCurrencyValuations(activesWithoutCurrency);
     let cacheKey = 'active.fact_percent.' + lastValuationsHash;
     return IndexedDBCache.get(cacheKey).then(cachedValue => {
+      console.log(cachedValue);
       if (cachedValue) {
         return cachedValue;
       } else {
-        let index = [];
-        let sums = [];
-        let values = [];
-        let grids = [];
-        let sold = [];
-        let gridIndex = [];
-        let firstBuyDate = InvestCalc.getFirstBuyDate(activesWithoutCurrency);
-        let nowDate = moment().startOf('day');
-        if (firstBuyDate) {
-          let cloneFirstBuyDate = firstBuyDate.clone();
-          while (firstBuyDate && firstBuyDate.isSameOrBefore(nowDate)) {
-            let formatedDate = firstBuyDate.format('DD.MM.YYYY');
-            if (index.indexOf(formatedDate) === -1) {
-              index.push(formatedDate);
-            }
-            let dateIndex = index.indexOf(formatedDate);
-            if (typeof sums[dateIndex] === 'undefined') {
-              sums[dateIndex] = [];
-            }
-            if (typeof sold[dateIndex] === 'undefined') {
-              sold[dateIndex] = [];
-            }
-            if (typeof values[dateIndex] === 'undefined') {
-              values[dateIndex] = [];
-            }
-            activesWithoutCurrency.map(active => {
-              let count = 0;
-              let course = 0;
-              let tradePrice = 0;
-              let sell = false;
-              let tradeOriginalPrice = 0;
-              let lastTradeDate = null;
-              let valuePrice = 0;
-              let valueOriginalPrice = 0;
-              let lastValueDate = null;
-              let paymentSum = 0;
-              let lastValueValuation = {
-                valuation: 0,
-                count: 0,
-                price: 0,
-                original_price: 0,
-                course: 0
-              };
-              if (typeof values[dateIndex][active.id] === 'undefined') {
-                values[dateIndex][active.id] = {};
-              }
-              if (typeof sums[dateIndex][active.id] === 'undefined') {
-                sums[dateIndex][active.id] = 0;
-              }
-              if (typeof sold[dateIndex][active.id] === 'undefined') {
-                sold[dateIndex][active.id] = 0;
-              }
-              if (gridIndex.indexOf(active.id) === -1) {
-                gridIndex.push(active.id);
-              }
-              let gridKey = gridIndex.indexOf(active.id);
-              if (typeof grids[gridKey] === 'undefined') {
-                grids[gridKey] = InvestCalc.getGrid(active, moment().startOf('day'));
-              }
-              if (ActiveConstants.isPackage(active.type_id)) {
-                active.attributes.buy_trades.map(trade => {
-                  //для рассчёта оценки сделаем копию с ценой с учетом комиссии
-                  let copyTrade = new BuyTrade({
-                    ...trade
-                  });
-                  copyTrade.price = trade.price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
-                  copyTrade.original_price = trade.original_price + ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
-                  let tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
-                  if (lastTradeDate === null) {
-                    lastTradeDate = tradeDate;
-                  }
-                  if (tradeDate.isSameOrBefore(firstBuyDate)) {
-                    count += copyTrade.count;
-                    tradePrice = copyTrade.price;
-                    tradeOriginalPrice = copyTrade.original_price;
-                    course = copyTrade.price_course;
-                  }
-                });
-                active.attributes.valuations?.map(valuation => {
-                  let valueDate;
-                  if (valuation.morph === 'active.user.valuation') {
-                    valueDate = moment();
-                  } else {
-                    valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
-                  }
-                  lastValueDate = valueDate;
-                  if (valueDate.isSameOrBefore(firstBuyDate)) {
-                    valuePrice = valuation.current_sum;
-                    valueOriginalPrice = valuation.original_current_sum;
-                    course = valuation.current_sum_course;
-                  }
-                });
+        // 3. Собираем индекс дат, суммы и др. для невалютных активов
+        const {
+          index,
+          sums,
+          values,
+          sold,
+          grids,
+          gridIndex,
+          firstBuyDate
+        } = this.initActivesData(activesWithoutCurrency);
 
-                //TODO
-                // active.dividends.map((dividend) => {
-                //   let paidDate = moment(dividend.paid_at_date, 'DD.MM.YYYY');
-                //
-                //   if(paidDate.isSame(firstBuyDate))
-                //   {
-                //     sums[dateIndex][active.id] += dividend.sum * count;
-                //   }
-                // });
-
-                active.attributes.sell_trades.map(trade => {
-                  let copyTrade = new SellTrade({
-                    ...trade
-                  });
-                  copyTrade.price = trade.price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
-                  copyTrade.original_price = trade.original_price - ActiveValueCalculator.getCommissionSum([trade]) / trade.count;
-                  let tradeDate = moment(copyTrade.trade_at_date, 'DD.MM.YYYY');
-                  lastTradeDate = tradeDate;
-                  if (tradeDate.isSameOrBefore(firstBuyDate)) {
-                    tradePrice = copyTrade.price;
-                    tradeOriginalPrice = copyTrade.original_price;
-                    course = copyTrade.price_course;
-                    sell = true;
-                  }
-                });
-
-                //если нет продаж и оценок, то сравниваем цену покупки с ценой покупки увеличенной на комиссию
-                if (active.attributes.valuations?.length === 0 && active.attributes.sell_trades.length === 0 && active.attributes.buy_trades.length > 0) {
-                  let lastTrade = active.attributes.buy_trades[active.attributes.buy_trades.length - 1];
-                  if (nowDate.isSameOrBefore(firstBuyDate)) {
-                    lastTradeDate = nowDate;
-                    tradePrice = lastTrade.price;
-                    tradeOriginalPrice = lastTrade.original_price;
-                    course = lastTrade.price_course;
-                  }
-                }
-
-                //если оценка была позже чем последняя сделка, то берем цену из оценки
-                if (sell) {
-                  //проверяем чтобы актив не участвовал в оценке всего портфеля после продажи
-                  if (typeof sold[dateIndex][active.id] === 'undefined') {
-                    sold[dateIndex][active.id] = true;
-                    sums[dateIndex][active.id] = tradePrice * count;
-                  } else {
-                    sums[dateIndex][active.id] = 0;
-                  }
-                } else if (lastValueDate !== null && lastValueDate.isAfter(lastTradeDate) && valuePrice > 0) {
-                  //оценка
-                  let valuation = count * valuePrice;
-                  sums[dateIndex][active.id] = valuation;
-                } else if (lastTradeDate !== null && tradePrice > 0) {
-                  //покупка
-                  let valuation = count * tradePrice;
-                  sums[dateIndex][active.id] = valuation;
-                } else {}
-              } else {
-                //рассчет для единичных активов
-                let buyTrade = {};
-                buyTrade.price = active.buy_sum;
-                buyTrade.original_price = active.original_buy_sum;
-                buyTrade.price_course = active.buy_sum_course;
-                let buyTradeDate = moment(active.buy_at_date, 'DD.MM.YYYY');
-                if (lastTradeDate === null) {
-                  lastTradeDate = buyTradeDate;
-                }
-                if (buyTradeDate.isSameOrBefore(firstBuyDate)) {
-                  count += 1;
-                  tradePrice = buyTrade.price;
-                  tradeOriginalPrice = buyTrade.original_price;
-                  course = buyTradeDate.price_course;
-                }
-                active.attributes.valuations?.map(valuation => {
-                  let valueDate;
-                  if (valuation.morph === 'active.user.valuation') {
-                    valueDate = moment();
-                  } else {
-                    valueDate = moment(valuation.value_at_date, 'DD.MM.YYYY');
-                  }
-                  lastValueDate = valueDate;
-                  if (valueDate.isSameOrBefore(firstBuyDate)) {
-                    valuePrice = valuation.current_sum;
-                    valueOriginalPrice = valuation.original_current_sum;
-                    course = valuation.current_sum_course;
-                  }
-                });
-                active.attributes?.payments?.map(payment => {
-                  let paidDate = moment(payment.paid_at_date, 'DD.MM.YYYY');
-                  if (paidDate.isSameOrBefore(firstBuyDate)) {
-                    paymentSum += payment.sum;
-                  }
-                });
-                if (active.sell_at) {
-                  let sellTrade = {};
-                  sellTrade.price = active.sell_sum;
-                  sellTrade.original_price = active.original_sell_sum;
-                  let tradeSellDate = moment(active.sell_at_date, 'DD.MM.YYYY');
-                  lastTradeDate = tradeSellDate;
-                  if (tradeSellDate.isSameOrBefore(firstBuyDate)) {
-                    tradePrice = sellTrade.price;
-                    tradeOriginalPrice = sellTrade.original_price;
-                    course = sellTrade.price_course;
-                    sell = true;
-                  }
-                } else if (active.attributes.sell) {
-                  let sell = active.attributes.sell.child_item;
-                  let sellTrade = {};
-                  sellTrade.price = sell.sum;
-                  sellTrade.original_price = sell.original_sum;
-                  let tradeSellDate = moment(sell.paid_at_date, 'DD.MM.YYYY');
-                  lastTradeDate = tradeSellDate;
-                  if (tradeSellDate.isSameOrBefore(firstBuyDate)) {
-                    tradePrice = sellTrade.price;
-                    tradeOriginalPrice = sellTrade.original_price;
-                    course = sellTrade.price_course;
-                    sell = true;
-                  }
-                }
-
-                //если оценка была позже чем последняя сделка, то берем цену из оценки
-                if (sell) {
-                  //проверяем чтобы актив не участвовал в оценке всего портфеля после продажи
-                  if (typeof sold[active.id] === 'undefined') {
-                    sold[dateIndex][active.id] = true;
-                    if (active.sell_at) {
-                      sums[dateIndex][active.id] = active.sell_sum;
-                    } else if (active.sell) {
-                      let sell = active.sell.child_item;
-                      sums[dateIndex][active.id] = sell.sum;
-                    }
-                  } else {
-                    sums[dateIndex][active.id] = 0;
-                  }
-                } else if (lastValueDate !== null && lastValueDate.isAfter(lastTradeDate) && valuePrice > 0) {
-                  //оценка
-                  let valuation = count * valuePrice + paymentSum;
-                  sums[dateIndex][active.id] = valuation;
-                } else if (lastTradeDate !== null && tradePrice > 0) {
-                  //покупка
-                  let valuation = count * tradePrice + paymentSum;
-                  sums[dateIndex][active.id] = valuation;
-                } else {}
-              }
-            });
-            firstBuyDate.add(1, 'days');
-
-            // if(firstBuyDate.isSame(nowDate))
-            // {
-            //   activesWithoutCurrency.map((active) => {
-            //     if(active.buy_trades.length && active.sell_trades.length === 0)
-            //     {
-            //       //если не рубль, то ищем последнюю переоценку
-            //       if(active.buy_trades[0].currency_id !== 1)
-            //       {
-            //         let currencyKey = currencyIndex.indexOf(active.buy_trades[0].currency.code);
-            //
-            //         if(typeof lastValuations[currencyKey] !== 'undefined')
-            //         {
-            //           //отнимем оценку без валюты
-            //           sums[dateIndex] -= values[dateIndex][active.id]['valuation'];
-            //
-            //           values[dateIndex][active.id]['valuation'] = values[dateIndex][active.id]['original_price'] * values[dateIndex][active.id]['count'] * lastValuations[currencyKey].olderPrice;
-            //
-            //           sums[dateIndex] += values[dateIndex][active.id]['valuation']
-            //
-            //           let gridKey = gridIndex.indexOf(active.id);
-            //
-            //           if(typeof grids[gridKey] !== 'undefined')
-            //           {
-            //             //добавляем переоценку в сетку оценок
-            //             grids[gridKey].push({
-            //               item: {
-            //                 current_sum: values[dateIndex][active.id]['original_price'] * lastValuations[currencyKey].olderPrice,
-            //                 count: values[dateIndex][active.id]['count'],
-            //                 value_at_date: firstBuyDate.format('DD.MM.YYYY')
-            //               },
-            //               type: 'valuation'
-            //             })
-            //           }
-            //         }
-            //       }
-            //     }
-            //   });
-            // }
-          }
-          let profit = 1;
-          while (cloneFirstBuyDate && cloneFirstBuyDate.isSameOrBefore(nowDate)) {
-            let formatedDate = cloneFirstBuyDate.format('DD.MM.YYYY');
-            let dateIndex = index.indexOf(formatedDate);
-            let dateProfit = 0;
-            activesWithoutCurrency.map(active => {
-              let gridKey = gridIndex.indexOf(active.id);
-              let sum = 0;
-              for (const index in sums[dateIndex]) {
-                sum += sums[dateIndex][index]; //сумма на дату с учетом выплат и оценки
-              }
-              let activeProfitByDate = InvestCalc.getFactMultiplierByDate(grids[gridKey], cloneFirstBuyDate);
-              if (activeProfitByDate !== 1) {
-                try {
-                  //когда продали актив
-                  dateProfit = exactMath.add(dateProfit, activeProfitByDate * (sums[dateIndex][active.id] / sum));
-                } catch (e) {
-                  console.warn(e.message);
-                }
-              } else {
-                try {
-                  dateProfit = exactMath.add(dateProfit, sums[dateIndex][active.id] / sum);
-                } catch (e) {
-                  console.warn(e.message);
-                }
-              }
-            });
-            if (dateProfit !== 0) {
-              profit = exactMath.mul(profit, dateProfit);
-            }
-            cloneFirstBuyDate.add(1, 'days');
-          }
-          IndexedDBCache.set(cacheKey, profit);
-          return profit;
+        // Если не удалось определить дату покупки (нет покупок), возвращаем 0
+        if (!firstBuyDate) {
+          return 0;
         }
+
+        // 4. Идём по датам от первой покупки до текущей, считаем оценки
+        this.fillActivesDataByDates(activesWithoutCurrency, firstBuyDate, index, sums, values, sold, grids, gridIndex);
+
+        // 5. Считаем финальную доходность
+        let profit = this.calculateProfit(index, sums, activesWithoutCurrency, grids, gridIndex);
+        IndexedDBCache.set(cacheKey, profit, 1000 * 60 * 60 * 24 * 7); //запомним на неделю
+
+        return profit;
       }
     });
-    return 0;
+  }
+
+  /**
+   * Подсчёт итоговой "фактической" доходности (profit)
+   * с учётом накопленных сумм, оценок и выплат
+   */
+  static calculateProfit(index, sums, activesWithoutCurrency, grids, gridIndex) {
+    let profit = 1;
+    const nowDate = moment().startOf('day');
+    const cloneFirstBuyDate = moment(index[0], 'DD.MM.YYYY'); // Первая дата из массива index
+
+    while (cloneFirstBuyDate && cloneFirstBuyDate.isSameOrBefore(nowDate)) {
+      const formattedDate = cloneFirstBuyDate.format('DD.MM.YYYY');
+      const dateIndex = index.indexOf(formattedDate);
+      let dateProfit = 0;
+
+      // Сумма всех активов в эту дату
+      let totalSumInDate = 0;
+      for (const activeId in sums[dateIndex]) {
+        totalSumInDate += sums[dateIndex][activeId];
+      }
+
+      // Для каждого актива вычисляем вклад в доходность
+      activesWithoutCurrency.forEach(active => {
+        const gridKey = gridIndex.indexOf(active.id);
+        const activeProfitByDate = InvestCalc.getFactMultiplierByDate(grids[gridKey], cloneFirstBuyDate);
+        const activeSum = sums[dateIndex][active.id] || 0;
+        const fraction = totalSumInDate ? activeSum / totalSumInDate : 0;
+        try {
+          if (activeProfitByDate !== 1) {
+            // Когда актив продан, доходность != 1
+            dateProfit = exactMath.add(dateProfit, activeProfitByDate * fraction);
+          } else {
+            dateProfit = exactMath.add(dateProfit, fraction);
+          }
+        } catch (e) {
+          console.warn(e.message);
+        }
+      });
+
+      // Умножаем совокупную доходность
+      if (dateProfit !== 0) {
+        profit = exactMath.mul(profit, dateProfit);
+      }
+      cloneFirstBuyDate.add(1, 'days');
+    }
+    return profit;
   }
 
   /**

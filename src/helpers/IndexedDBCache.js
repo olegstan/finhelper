@@ -51,22 +51,27 @@ export default class IndexedDBCache {
 
   static async set(key, value, expirationTimeInMs = 1000 * 60 * 60 * 24) {
     await this.ensureDatabaseOpened();
-
     return new Promise((resolve, reject) => {
       const transaction = this._db.transaction([this._storeName], 'readwrite');
       const objectStore = transaction.objectStore(this._storeName);
-      const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null;//TODO нужно дописать проверку что дата установлена, так как без даты запись не удалится
-      const data = { key, value, expirationTime };
-      const request = objectStore.put(data);
+      const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null;
 
-      request.onsuccess = () => {
-        resolve();
-      };
+      try {
+        // Ensure the value is serializable
+        const sanitizedValue = JSON.parse(JSON.stringify(value));
+        const data = {
+          key,
+          value: sanitizedValue,
+          expirationTime
+        };
 
-      request.onerror = (event) => {
-        reject(new Error(`Error putting JSON data: ${event.target.error}`));
-      };
-    })
+        const request = objectStore.put(data);
+        request.onsuccess = () => resolve();
+        request.onerror = event => reject(new Error(`Error putting JSON data: ${event.target.error}`));
+      } catch (error) {
+        reject(new Error(`Data serialization failed: ${error.message}`));
+      }
+    });
   }
 
   static async get(key) {
