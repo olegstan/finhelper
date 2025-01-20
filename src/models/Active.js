@@ -360,16 +360,10 @@ export default class Active extends BaseModel
     return this['tmp_factPercent'];
   }
 
-  // get factPercent()
-  // {
-  //   if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
-  //   {
-  //     this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
-  //     this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
-  //   }
-  //
-  //   return this['tmp_factPercent'];
-  // }
+  get factPercent()
+  {
+    return this['tmp_factPercent'];
+  }
 
   set factPercent(x)
   {
@@ -387,16 +381,10 @@ export default class Active extends BaseModel
     return this['tmp_annuallyPercent'];
   }
 
-  // get annuallyPercent()
-  // {
-  //   if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
-  //   {
-  //     this['tmp_factPercent'] = InvestCalc.getFactPercentByItem(this);
-  //     this['tmp_annuallyPercent'] = InvestCalc.getAnnuallyPercentByItem(this);
-  //   }
-  //
-  //   return this['tmp_annuallyPercent'];
-  // }
+  get annuallyPercent()
+  {
+    return this['tmp_annuallyPercent'];
+  }
 
   set annuallyPercent(x)
   {

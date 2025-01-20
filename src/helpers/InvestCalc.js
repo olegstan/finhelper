@@ -460,8 +460,6 @@ class InvestCalc
     const currencyIndex = [];
     const lastValuations = [];
 
-    console.log(actives)
-
     actives.forEach((active) => {
       // Фиксируем валютный символ в currencyIndex (чтобы понять, какой это индекс)
       if (!currencyIndex.includes(active.item.symbol)) {
@@ -508,12 +506,8 @@ class InvestCalc
     // Превращаем lastValuations в JSON-строку
     const lastValuationsJSON = JSON.stringify(lastValuations);
 
-    console.log(lastValuationsJSON)
-
     // Делаем хеш (md5 или любой другой)
     const lastValuationsHash = CryptoJS.MD5(lastValuationsJSON).toString();
-
-    console.log(lastValuationsHash)
 
     return { currencyIndex, lastValuations, lastValuationsHash };
   }
