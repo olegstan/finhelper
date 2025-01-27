@@ -229,7 +229,7 @@ export default class Active extends BaseModel {
   }
   get valuation() {
     if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined') {
-      let obj = ActiveValuer.getValuation(this.attributes);
+      let obj = ActiveValuer.getValuation(this.attributes, moment());
       if (obj) {
         this['tmp_valuation'] = obj.sum;
       } else {
