@@ -345,7 +345,7 @@ export default class Active {
         }).wherePropertyType(true);
       });
     }).all(response => {
-      state[bindString] = ActiveModel.load(response.data);
+      state[bindString] = response.data;
 
       // let items = AccountConstants.appendCurrencyActives(accounts, {id: CurrencyConstants.RUBBLE_ID, name: 'RUB'});
       //
