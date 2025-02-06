@@ -91,9 +91,13 @@ export default class IndexedDBCache {
   }
   static async clearAll() {
     await this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this._storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this._storeName);
-    objectStore.clear();
+    return new Promise((resolve, reject) => {
+      const transaction = this._db.transaction([this._storeName], 'readwrite');
+      const objectStore = transaction.objectStore(this._storeName);
+      const request = objectStore.clear();
+      request.onsuccess = () => resolve();
+      request.onerror = event => reject(new Error(`Error clearing store: ${event.target.error}`));
+    });
   }
   static async clearByPattern(pattern) {
     await this.ensureDatabaseOpened();
