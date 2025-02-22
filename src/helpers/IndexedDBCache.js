@@ -3,164 +3,222 @@ export default class IndexedDBCache {
   static _storeName;
 
   /**
-   *
-   * @param databaseName
-   * @param storeName
+   * Гарантирует, что база данных открыта.
+   * @param {string} databaseName
+   * @param {string} storeName
    */
-  static async ensureDatabaseOpened(databaseName = 'AppStorage', storeName= 'DataStore') {
+  static async ensureDatabaseOpened(databaseName = 'AppStorage', storeName = 'DataStore') {
     if (!this._db) {
-      await this.openDatabase(databaseName, storeName);
+      await this.openDatabase(databaseName, storeName).catch(error => {
+        console.error("Ошибка при открытии БД:", error);
+      });
     }
   }
 
   /**
-   *
-   * @param databaseName
-   * @param storeName
-   * @return {Promise<unknown>}
+   * Открывает IndexedDB и создаёт хранилище при необходимости.
+   * @param {string} databaseName
+   * @param {string} storeName
+   * @returns {Promise<void>}
    */
   static openDatabase(databaseName, storeName) {
-
-    return new Promise((resolve, reject) =>
-    {
-      const request = indexedDB.open(databaseName, 1);
-
-      request.onerror = (event) =>
-      {
-        throw new Error('Error opening IndexedDB');
-      };
-
-      request.onupgradeneeded = (event) =>
-      {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains(storeName))
-        {
-          db.createObjectStore(storeName, {keyPath: 'key'});
-        }
-      };
-
-      request.onsuccess = () =>
-      {
-        // Store the DB reference here instead
-        this._db = request.result;
-        this._storeName = storeName;
-        resolve();
-      };
-    });
-  }
-
-  static async set(key, value, expirationTimeInMs = 1000 * 60 * 60 * 24) {
-    await this.ensureDatabaseOpened();
     return new Promise((resolve, reject) => {
-      const transaction = this._db.transaction([this._storeName], 'readwrite');
-      const objectStore = transaction.objectStore(this._storeName);
-      const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null;
-
       try {
-        // Ensure the value is serializable
-        const sanitizedValue = JSON.parse(JSON.stringify(value));
-        const data = {
-          key,
-          value: sanitizedValue,
-          expirationTime
+        const request = indexedDB.open(databaseName, 1);
+
+        request.onerror = (event) => {
+          const errorMessage = 'Ошибка при открытии IndexedDB';
+          console.error(errorMessage, event.target.error);
+          reject(new Error(errorMessage));
         };
 
-        const request = objectStore.put(data);
-        request.onsuccess = () => resolve();
-        request.onerror = event => reject(new Error(`Error putting JSON data: ${event.target.error}`));
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, { keyPath: 'key' });
+          }
+        };
+
+        request.onsuccess = () => {
+          this._db = request.result;
+          this._storeName = storeName;
+          resolve();
+        };
       } catch (error) {
-        reject(new Error(`Data serialization failed: ${error.message}`));
+        console.error("Ошибка в openDatabase:", error);
+        reject(error);
       }
     });
   }
 
-  static async get(key) {
-    await this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this._storeName], 'readonly');
-    const objectStore = transaction.objectStore(this._storeName);
-    const request = objectStore.get(key);
-
-    let result = null;
-
-    request.onsuccess = (event) => {
-      const data = event.target.result;
-
-      if (data && (!data.expirationTime || data.expirationTime > Date.now())) {
-        result = data.value;
-      }
-    };
-
-    // Wait for the transaction to complete
-    return new Promise(resolve => {
-      transaction.oncomplete = () => {
-        resolve(result);
-      };
-    });
-  }
-
-  static async delete(key) {
-    await this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this._storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this._storeName);
-    objectStore.delete(key);
-  }
-
-  static async clearAll() {
+  /**
+   * Вспомогательный метод для выполнения операций с хранилищем.
+   * Обеспечивает создание транзакции, обработку ошибок и вызов переданной операции.
+   *
+   * @param {IDBTransactionMode} mode - режим транзакции ('readonly' или 'readwrite')
+   * @param {function} operation - функция, получающая (store, transaction, resolve, reject)
+   * @returns {Promise<any>}
+   */
+  static async _executeOperation(mode, operation) {
     await this.ensureDatabaseOpened();
     return new Promise((resolve, reject) => {
-      const transaction = this._db.transaction([this._storeName], 'readwrite');
-      const objectStore = transaction.objectStore(this._storeName);
-      const request = objectStore.clear();
+      try {
+        const transaction = this._db.transaction([this._storeName], mode);
+        const store = transaction.objectStore(this._storeName);
 
-      request.onsuccess = () => resolve();
-      request.onerror = event => reject(new Error(`Error clearing store: ${event.target.error}`));
+        // Назначаем обработку ошибок транзакции
+        transaction.onerror = (event) => {
+          console.error('Ошибка транзакции:', event.target.error);
+          reject(event.target.error);
+        };
+
+        operation(store, transaction, resolve, reject);
+      } catch (error) {
+        console.error("Ошибка в _executeOperation:", error);
+        reject(error);
+      }
     });
   }
 
-  static async clearByPattern(pattern) {
-    await this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this._storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this._storeName);
-
-    objectStore.openCursor().onsuccess = (event) => {
-      const cursor = event.target.result;
-      if (cursor) {
-        if (cursor.key.includes(pattern)) {
-          cursor.delete();
-        }
-        cursor.continue();
+  /**
+   * Сохраняет данные с указанием времени истечения.
+   * @param {string} key
+   * @param {*} value
+   * @param {number} expirationTimeInMs - время жизни в миллисекундах (по умолчанию 1 день)
+   * @returns {Promise<void>}
+   */
+  static async set(key, value, expirationTimeInMs = 1000 * 60 * 60 * 24) {
+    return this._executeOperation('readwrite', (store, transaction, resolve, reject) => {
+      let sanitizedValue;
+      try {
+        // Проверяем, что значение можно сериализовать
+        sanitizedValue = JSON.parse(JSON.stringify(value));
+      } catch (error) {
+        console.error(`Ошибка сериализации данных: ${error.message}`);
+        return reject(error);
       }
-    };
+
+      const expirationTime = expirationTimeInMs ? Date.now() + expirationTimeInMs : null;
+      const data = { key, value: sanitizedValue, expirationTime };
+
+      const request = store.put(data);
+      request.onsuccess = () => resolve();
+      request.onerror = (event) =>
+          reject(new Error(`Ошибка записи данных: ${event.target.error}`));
+    }).catch(error => {
+      console.error("Ошибка в методе set:", error);
+    });
   }
 
-  static async clearExpiredData()
-  {
-    await this.ensureDatabaseOpened();
-    const transaction = this._db.transaction([this._storeName], 'readwrite');
-    const objectStore = transaction.objectStore(this._storeName);
-    const currentTime = Date.now();
-
-    const request = objectStore.openCursor();
-
-    request.onsuccess = (event) => {
-      const cursor = event.target.result;
-
-      if (cursor) {
-        const data = cursor.value;
-
-        // Check if the data has an expiry property and if it is expired
-        if (data.expiry && data.expiry <= currentTime) {
-          // If expired, delete the item
-          objectStore.delete(cursor.primaryKey);
+  /**
+   * Получает данные по ключу, если они не устарели.
+   * @param {string} key
+   * @returns {Promise<*>} значение или null
+   */
+  static async get(key) {
+    return this._executeOperation('readonly', (store, transaction, resolve, reject) => {
+      const request = store.get(key);
+      request.onsuccess = (event) => {
+        const data = event.target.result;
+        if (data && (!data.expirationTime || data.expirationTime > Date.now())) {
+          resolve(data.value);
+        } else {
+          resolve(null);
         }
+      };
+      request.onerror = (event) => {
+        console.error(`Ошибка чтения данных: ${event.target.error}`);
+        resolve(null);
+      };
+    }).catch(error => {
+      console.error("Ошибка в методе get:", error);
+      return null;
+    });
+  }
 
-        // Move to the next item
-        cursor.continue();
-      }
-    };
+  /**
+   * Удаляет запись по ключу.
+   * @param {string} key
+   * @returns {Promise<void>}
+   */
+  static async delete(key) {
+    return this._executeOperation('readwrite', (store, transaction, resolve, reject) => {
+      const request = store.delete(key);
+      request.onsuccess = () => resolve();
+      request.onerror = (event) => {
+        console.error(`Ошибка удаления ключа "${key}":`, event.target.error);
+        resolve();
+      };
+    }).catch(error => {
+      console.error("Ошибка в методе delete:", error);
+    });
+  }
 
-    request.onerror = (event) => {
-      console.error('Error clearing expired data:', event.target.error);
-    };
+  /**
+   * Очищает всё хранилище.
+   * @returns {Promise<void>}
+   */
+  static async clearAll() {
+    return this._executeOperation('readwrite', (store, transaction, resolve, reject) => {
+      const request = store.clear();
+      request.onsuccess = () => resolve();
+      request.onerror = (event) =>
+          reject(new Error(`Ошибка очистки хранилища: ${event.target.error}`));
+    }).catch(error => {
+      console.error("Ошибка в методе clearAll:", error);
+    });
+  }
+
+  /**
+   * Удаляет записи, ключи которых содержат указанный паттерн.
+   * @param {string} pattern
+   * @returns {Promise<void>}
+   */
+  static async clearByPattern(pattern) {
+    return this._executeOperation('readwrite', (store, transaction, resolve, reject) => {
+      const request = store.openCursor();
+      request.onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          if (cursor.key.includes(pattern)) {
+            cursor.delete();
+          }
+          cursor.continue();
+        } else {
+          resolve();
+        }
+      };
+      request.onerror = (event) =>
+          reject(new Error(`Ошибка при очистке по паттерну "${pattern}": ${event.target.error}`));
+    }).catch(error => {
+      console.error("Ошибка в методе clearByPattern:", error);
+    });
+  }
+
+  /**
+   * Удаляет устаревшие данные.
+   * @returns {Promise<void>}
+   */
+  static async clearExpiredData() {
+    return this._executeOperation('readwrite', (store, transaction, resolve, reject) => {
+      const currentTime = Date.now();
+      const request = store.openCursor();
+      request.onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          const data = cursor.value;
+          if (data.expirationTime && data.expirationTime <= currentTime) {
+            cursor.delete();
+          }
+          cursor.continue();
+        } else {
+          resolve();
+        }
+      };
+      request.onerror = (event) =>
+          reject(new Error(`Ошибка при очистке устаревших данных: ${event.target.error}`));
+    }).catch(error => {
+      console.error("Ошибка в методе clearExpiredData:", error);
+    });
   }
 }
