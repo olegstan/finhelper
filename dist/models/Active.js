@@ -227,60 +227,95 @@ export default class Active extends BaseModel {
   set sell_trades(x) {
     this['tmp_sell_trades'] = x;
   }
-  get valuation() {
-    if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined') {
-      let obj = ActiveValuer.getValuation(this.attributes, moment());
-      if (obj) {
-        this['tmp_valuation'] = obj.sum;
-      } else {
-        this['tmp_valuation'] = 0;
-      }
-    }
-    return this['tmp_valuation'];
-  }
-  set valuation(x) {
-    this['tmp_valuation'] = x;
-  }
-  get originValuation() {
-    if (this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined') {
-      let obj = ActiveValuer.getOriginalValuation(this.attributes, moment());
-      if (obj) {
-        this['tmp_originValuation'] = obj.sum;
-      } else {
-        this['tmp_originValuation'] = 0;
-      }
-    }
-    return this['tmp_originValuation'];
-  }
-  set originValuation(x) {
-    this['tmp_originValuation'] = x;
-  }
-  async getFactPercent() {
-    if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined')) {
-      this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
-      this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
-    }
-    return this['tmp_factPercent'];
-  }
-  get factPercent() {
-    return this['tmp_factPercent'];
-  }
-  set factPercent(x) {
-    this['tmp_factPercent'] = x;
-  }
-  async getAnnuallyPercent() {
-    if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined')) {
-      this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
-      this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
-    }
-    return this['tmp_annuallyPercent'];
-  }
-  get annuallyPercent() {
-    return this['tmp_annuallyPercent'];
-  }
-  set annuallyPercent(x) {
-    this['tmp_annuallyPercent'] = x;
-  }
+
+  // get valuation()
+  // {
+  //   if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined')
+  //   {
+  //     let obj = ActiveValuer.getValuation(this.attributes, moment());
+  //
+  //     if (obj)
+  //     {
+  //       this['tmp_valuation'] = obj.sum;
+  //     } else
+  //     {
+  //       this['tmp_valuation'] = 0;
+  //     }
+  //   }
+  //
+  //   return this['tmp_valuation'];
+  // }
+  //
+  // set valuation(x)
+  // {
+  //   this['tmp_valuation'] = x;
+  // }
+  //
+  // get originValuation()
+  // {
+  //   if (this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined')
+  //   {
+  //     let obj = ActiveValuer.getOriginalValuation(this.attributes, moment());
+  //
+  //     if (obj)
+  //     {
+  //       this['tmp_originValuation'] = obj.sum;
+  //     } else
+  //     {
+  //       this['tmp_originValuation'] = 0;
+  //     }
+  //   }
+  //
+  //   return this['tmp_originValuation'];
+  // }
+  //
+  // set originValuation(x)
+  // {
+  //   this['tmp_originValuation'] = x;
+  // }
+
+  // async getFactPercent()
+  // {
+  //   if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
+  //   {
+  //     this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
+  //     this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
+  //   }
+  //
+  //   return this['tmp_factPercent'];
+  // }
+  //
+  // get factPercent()
+  // {
+  //   return this['tmp_factPercent'];
+  // }
+  //
+  // set factPercent(x)
+  // {
+  //   this['tmp_factPercent'] = x;
+  // }
+  //
+  // async getAnnuallyPercent()
+  // {
+  //   if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined'))
+  //   {
+  //     this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
+  //     this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
+  //   }
+  //
+  //   return this['tmp_annuallyPercent'];
+  // }
+  //
+  // get annuallyPercent()
+  // {
+  //   return this['tmp_annuallyPercent'];
+  // }
+  //
+  // set annuallyPercent(x)
+  // {
+  //   this['tmp_annuallyPercent'] = x;
+  // }
+
   set buy_trades(x) {
     this['tmp_buy_trades'] = x;
   }

@@ -44,34 +44,36 @@ class InvestCalc
   {
     let number = 2;
     let smallestNumberPrice = null;
+    let hasWholeNumber = false;
+
+    const checkTrade = (trade) => {
+      const value = trade[field];
+      if (value >= 1) hasWholeNumber = true;
+      if (smallestNumberPrice === null || value < smallestNumberPrice) {
+        smallestNumberPrice = value;
+      }
+    };
 
     if (item?.buy_trades?.length) {
-      item.buy_trades.forEach(trade => {
-        if (smallestNumberPrice > trade[field] || smallestNumberPrice === null) {
-          smallestNumberPrice = trade[field];
-        }
-      });
+      for (const trade of item.buy_trades) {
+        checkTrade(trade);
+        if (hasWholeNumber) break; // Прерываем цикл при нахождении целого числа
+      }
     }
 
-    if (item?.sell_trades?.length) {
-      item.sell_trades.forEach(trade => {
-        if (smallestNumberPrice > trade[field] || smallestNumberPrice === null) {
-          smallestNumberPrice = trade[field];
-        }
-      });
+    if (!hasWholeNumber && item?.sell_trades?.length) {
+      for (const trade of item.sell_trades) {
+        checkTrade(trade);
+        if (hasWholeNumber) break; // Прерываем цикл при нахождении целого числа
+      }
     }
+
+    if (hasWholeNumber) return 2;
 
     if (smallestNumberPrice !== null) {
-      let parts = String(smallestNumberPrice).split('.');
-      if (parts.length > 1) {
-        if (parseInt(parts[0]) === 0) {
-          return parts[1].length;
-        } else {
-          return number;
-        }
-      } else {
-        return number;
-      }
+      const [integerPart, decimalPart] = String(smallestNumberPrice).split('.');
+      if (integerPart === "0" && decimalPart) return decimalPart.length;
+      return number;
     }
 
     if (item.type_id === ActiveConstants.CRYPTO || (item.item && item.item.type === 'CRYPTOCURRENCY')) {

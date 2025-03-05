@@ -149,7 +149,7 @@ export default class ActiveConstants {
   static DEBT_GROUP = [ActiveConstants.DEBT, ActiveConstants.DEPOSIT];
   static SPENDING_GROUP = [ActiveConstants.PRODUCTS_SPEND, ActiveConstants.CAFE_SPEND, ActiveConstants.CAR_SPEND, ActiveConstants.TRANSPORT_SPEND, ActiveConstants.MEDICINE_SPEND, ActiveConstants.BEAUTY_SPEND, ActiveConstants.CLOTHES_ADULT_SPEND, ActiveConstants.CLOTHES_CHILD_SPEND, ActiveConstants.TOYS_SPEND, ActiveConstants.VACATION_SPEND, ActiveConstants.EDUCATION_SPEND, ActiveConstants.RENT_SPEND, ActiveConstants.FUN_SPEND, ActiveConstants.PRESENTS_SPEND, ActiveConstants.SPORT_SPEND, ActiveConstants.TELECOM_SPEND];
   static INCOME_GROUP = [ActiveConstants.SALARY_INCOME, ActiveConstants.BONUS_INCOME, ActiveConstants.RETIRE_INCOME, ActiveConstants.RENT_INCOME, ActiveConstants.RELATIVES_INCOME, ActiveConstants.PASSIVE_INCOME, ActiveConstants.AGENT_INCOME];
-  static CREDIT_GROUP = [ActiveConstants.CAR_CREDIT, ActiveConstants.FLAT_CREDIT, ActiveConstants.CREDIT
+  static CREDIT_GROUP = [ActiveConstants.CAR_CREDIT, ActiveConstants.FLAT_CREDIT, ActiveConstants.CREDIT, ActiveConstants.ALIMONY, ActiveConstants.LOAN
   // ActiveConstants.CUSTOM_OBLIGATION не должно быть тут, так как форма создания обязательств отличается
   ];
   static OBLIGATION_GROUP = [ActiveConstants.RENT_CAR, ActiveConstants.RENT_FLAT, ActiveConstants.SPEND_LIFE];

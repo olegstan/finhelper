@@ -242,6 +242,8 @@ export default class ActiveConstants
     ActiveConstants.CAR_CREDIT,
     ActiveConstants.FLAT_CREDIT,
     ActiveConstants.CREDIT,
+    ActiveConstants.ALIMONY,
+    ActiveConstants.LOAN,
     // ActiveConstants.CUSTOM_OBLIGATION не должно быть тут, так как форма создания обязательств отличается
   ];
 
