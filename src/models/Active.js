@@ -8,6 +8,7 @@ import moment from "moment/moment";
 import ActiveValuer from "./../helpers/Active/ActiveValuer";
 import Catalog from "./Catalog";
 import {Money} from "../helpers";
+import {CurrencyConstants} from "../constants";
 
 export default class Active extends BaseModel
 {
@@ -348,6 +349,11 @@ export default class Active extends BaseModel
   set originValuation(x)
   {
     this['tmp_originValuation'] = x;
+  }
+
+  get originValuationWithCurrency()
+  {
+    return Money.format(this.originValuation) + ' ' + CurrencyConstants.getCurrencySignByActive(this)
   }
 
   async getFactPercent()
