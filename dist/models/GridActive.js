@@ -8,39 +8,12 @@ import moment from "moment/moment";
 import ActiveValuer from "./../helpers/Active/ActiveValuer";
 import Catalog from "./Catalog";
 import { Money } from "../helpers";
-export default class Active extends BaseModel {
+export default class GridActive extends BaseModel {
   /**
    *
    * @type {string}
    */
   controller = 'active';
-
-  /**
-   *
-   * @type {{payments: BaseModel.load}}
-   */
-  related = {
-    'payments': {
-      func: Payment.create,
-      loaded: false
-    },
-    'buy_trades': {
-      func: BuyTrade.create,
-      loaded: false
-    },
-    'sell_trades': {
-      func: SellTrade.create,
-      loaded: false
-    },
-    'item': {
-      func: Catalog.create,
-      loaded: false
-    },
-    'trades': {
-      loaded: false
-    }
-  };
-  currencyFields = ['buy_currency', 'income_currency', 'sell_currency'];
 
   /**
    *
@@ -229,59 +202,35 @@ export default class Active extends BaseModel {
     this['tmp_sell_trades'] = x;
   }
   get valuation() {
-    if (this['tmp_valuation'] === null || typeof this['tmp_valuation'] === 'undefined') {
-      let obj = ActiveValuer.getValuation(this.attributes, moment());
-      if (obj) {
-        this['tmp_valuation'] = obj.sum;
-      } else {
-        this['tmp_valuation'] = 0;
-      }
+    if (this.attributes.valuation) {
+      return this.attributes?.valuation?.sum;
     }
-    return this['tmp_valuation'];
-  }
-  set valuation(x) {
-    this['tmp_valuation'] = x;
+    return 0;
   }
   get originValuation() {
-    if (this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined') {
-      let obj = ActiveValuer.getOriginalValuation(this.attributes, moment());
-      if (obj) {
-        this['tmp_originValuation'] = obj.sum;
-      } else {
-        this['tmp_originValuation'] = 0;
-      }
+    if (this.attributes.origin_valuation) {
+      return this.attributes?.origin_valuation?.sum;
     }
-    return this['tmp_originValuation'];
+    return 0;
   }
   set originValuation(x) {
     this['tmp_originValuation'] = x;
   }
-  async getFactPercent() {
-    if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined')) {
-      this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
-      this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
+  get originValuationWithCurrency() {
+    //проверим что в аттрибутах уже есть поле valuation или origin_valuation
+    if (this.attributes.origin_valuation) {
+      return Money.format(this.attributes?.origin_valuation?.sum) + ' ' + this.attributes?.origin_valuation?.sign;
     }
-    return this['tmp_factPercent'];
+    return '';
   }
-  get factPercent() {
-    return this['tmp_factPercent'];
-  }
+  async getFactPercent() {}
+  get factPercent() {}
   set factPercent(x) {
     this['tmp_factPercent'] = x;
   }
-  async getAnnuallyPercent() {
-    if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined')) {
-      this['tmp_factPercent'] = await InvestCalc.getFactPercentByItem(this);
-      this['tmp_annuallyPercent'] = await InvestCalc.getAnnuallyPercentByItem(this);
-    }
-    return this['tmp_annuallyPercent'];
-  }
-  get annuallyPercent() {
-    return this['tmp_annuallyPercent'];
-  }
-  set annuallyPercent(x) {
-    this['tmp_annuallyPercent'] = x;
-  }
+  async getAnnuallyPercent() {}
+  get annuallyPercent() {}
+  set annuallyPercent(x) {}
   set buy_trades(x) {
     this['tmp_buy_trades'] = x;
   }
