@@ -328,6 +328,18 @@ export default class Active extends BaseModel
     this['tmp_valuation'] = x;
   }
 
+  get originDiff()
+  {
+    const now = moment();
+    return ActiveValuer.getDiffCurrency(this, now)?.sum;
+  }
+
+  get diff()
+  {
+    const now = moment();
+    return ActiveValuer.getDiff(this, now, '', '')?.sum;
+  }
+
   get originValuation()
   {
     if (this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined')

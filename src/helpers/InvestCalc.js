@@ -705,8 +705,8 @@ class InvestCalc
 
     // Если нет продаж и переоценок, но были покупки -> берём цену из последней покупки
     if (
-      (!active.attributes.valuations ||
-        active.attributes.valuations.length === 0) &&
+      (!active?.attributes?.valuations ||
+        active?.attributes?.valuations?.length === 0) &&
       active.attributes.sell_trades.length === 0 &&
       active.attributes.buy_trades.length > 0
     ) {
@@ -1169,7 +1169,7 @@ class InvestCalc
       }
     } else
     {
-      if (active.attributes.valuations.length)
+      if (active?.attributes?.valuations?.length)
       {
         active.attributes.valuations?.map((valuation) =>
         {

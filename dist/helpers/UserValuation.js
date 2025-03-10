@@ -40,7 +40,6 @@ export default class UserValuation {
    */
   static getInvestActivesSum(state) {
     let sum = 0;
-    console.log(InvestCalc.getValuation(state.invests));
     sum += InvestCalc.getValuation(state.invests);
     return sum;
   }
@@ -101,15 +100,9 @@ export default class UserValuation {
             currency_id: currencyId,
             user_id: clientId
           };
-          console.log(1);
           Active.getAccountsByDate(component, 'accounts', currencyData, clientId, accountBanks, now, () => {
-            console.log(2);
             Active.getInvestsByDate(component.state, [], 'invests', currencyData, clientId, accountBanks, now, () => {
-              console.log(3);
-              console.log(component.state);
               let valuation = UserValuation.getInvestActivesSum(component.state);
-              console.log('valuation');
-              console.log(valuation);
               if (valuation > 0) {
                 Cache.setItem('client.valuation.' + clientId, valuation);
               }

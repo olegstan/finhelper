@@ -8,6 +8,7 @@ import moment from "moment/moment";
 import ActiveValuer from "./../helpers/Active/ActiveValuer";
 import Catalog from "./Catalog";
 import { Money } from "../helpers";
+import { CurrencyConstants } from "../constants";
 export default class Active extends BaseModel {
   /**
    *
@@ -242,6 +243,14 @@ export default class Active extends BaseModel {
   set valuation(x) {
     this['tmp_valuation'] = x;
   }
+  get originDiff() {
+    const now = moment();
+    return ActiveValuer.getDiffCurrency(this, now)?.sum;
+  }
+  get diff() {
+    const now = moment();
+    return ActiveValuer.getDiff(this, now, '', '')?.sum;
+  }
   get originValuation() {
     if (this['tmp_originValuation'] === null || typeof this['tmp_originValuation'] === 'undefined') {
       let obj = ActiveValuer.getOriginalValuation(this.attributes, moment());
@@ -255,6 +264,9 @@ export default class Active extends BaseModel {
   }
   set originValuation(x) {
     this['tmp_originValuation'] = x;
+  }
+  get originValuationWithCurrency() {
+    return Money.format(this.originValuation) + ' ' + CurrencyConstants.getCurrencySignByActive(this);
   }
   async getFactPercent() {
     if ((this['tmp_factPercent'] === null || typeof this['tmp_factPercent'] === 'undefined') && (this['tmp_annuallyPercent'] === null || typeof this['tmp_annuallyPercent'] === 'undefined')) {

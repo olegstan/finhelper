@@ -517,7 +517,7 @@ class InvestCalc {
     });
 
     // Если нет продаж и переоценок, но были покупки -> берём цену из последней покупки
-    if ((!active.attributes.valuations || active.attributes.valuations.length === 0) && active.attributes.sell_trades.length === 0 && active.attributes.buy_trades.length > 0) {
+    if ((!active?.attributes?.valuations || active?.attributes?.valuations?.length === 0) && active.attributes.sell_trades.length === 0 && active.attributes.buy_trades.length > 0) {
       const lastTrade = active.attributes.buy_trades[active.attributes.buy_trades.length - 1];
       const nowDate = moment().startOf('day');
       if (nowDate.isSameOrBefore(firstBuyDate)) {
@@ -902,7 +902,7 @@ class InvestCalc {
         });
       }
     } else {
-      if (active.attributes.valuations.length) {
+      if (active?.attributes?.valuations?.length) {
         active.attributes.valuations?.map(valuation => {
           grid.push({
             item: valuation,

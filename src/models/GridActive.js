@@ -296,6 +296,16 @@ export default class GridActive extends BaseModel
     return 0;
   }
 
+  get originDiff()
+  {
+    return this.attributes?.diff;
+  }
+
+  get diff()
+  {
+    return this.attributes?.diff;
+  }
+
   get originValuation()
   {
     if(this.attributes.origin_valuation)

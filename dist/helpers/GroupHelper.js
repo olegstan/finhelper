@@ -9,9 +9,10 @@ class GroupHelper {
    *
    * @param actives
    * @param groupType
-   * @return {*[]}
+   * @param modelClass
+   * @returns {*[]}
    */
-  static prepareArchiveActives(actives, groupType) {
+  static prepareArchiveActives(actives, groupType, modelClass = ActiveModel) {
     try {
       let activeSortedItems = [];
       let sortedItems = [];
@@ -25,7 +26,7 @@ class GroupHelper {
         item.keyId = keyId;
         item.attributes.keyId = keyId;
         if (typeof activeSortedItems[keyId] === 'undefined') {
-          activeSortedItems[keyId] = ActiveModel.create({
+          activeSortedItems[keyId] = modelClass.create({
             ...item.attributes
           });
           activeSortedItems[keyId].attributes.buy_trades = [];
@@ -60,7 +61,7 @@ class GroupHelper {
               item.keyId = keyId;
               item.attributes.keyId = keyId;
               if (typeof sortedItems[keyId] === 'undefined') {
-                sortedItems[keyId] = ActiveModel.create({
+                sortedItems[keyId] = modelClass.create({
                   ...item.attributes
                 });
                 sortedItems[keyId].attributes.buy_trades = [];
@@ -82,7 +83,7 @@ class GroupHelper {
               item.keyId = keyId;
               item.attributes.keyId = keyId;
               if (typeof sortedItems[keyId] === 'undefined') {
-                sortedItems[keyId] = ActiveModel.create({
+                sortedItems[keyId] = modelClass.create({
                   ...item.attributes
                 });
                 sortedItems[keyId].attributes.buy_trades = [];
@@ -123,7 +124,7 @@ class GroupHelper {
             item.keyId = keyId;
             item.attributes.keyId = keyId;
             if (typeof sortedItems[keyId] === 'undefined') {
-              sortedItems[keyId] = ActiveModel.create({
+              sortedItems[keyId] = modelClass.create({
                 ...item.attributes
               });
               sortedItems[keyId].attributes.buy_trades = [];
@@ -148,8 +149,10 @@ class GroupHelper {
    * @param sortedItems
    * @param activeIndex
    * @param groupType
+   * @param modelClass
+   * @returns {string}
    */
-  static groupByAccount(item, accountId, sortedItems, activeIndex, groupType) {
+  static groupByAccount(item, accountId, sortedItems, activeIndex, groupType, modelClass = ActiveModel) {
     let name = '';
     let subName = '';
     let account = null;
@@ -171,7 +174,7 @@ class GroupHelper {
       activeIndex.push(key);
     }
     if (typeof sortedItems[activeIndex.indexOf(key)] === 'undefined') {
-      sortedItems[activeIndex.indexOf(key)] = ActiveModel.create({
+      sortedItems[activeIndex.indexOf(key)] = modelClass.create({
         ...item.attributes
       });
       sortedItems[activeIndex.indexOf(key)].attributes.trades = [];
@@ -185,9 +188,10 @@ class GroupHelper {
    *
    * @param actives
    * @param groupType
-   * @return {unknown[]|*[]}
+   * @param modelClass
+   * @returns {*[]}
    */
-  static prepareActives(actives, groupType) {
+  static prepareActives(actives, groupType, modelClass = ActiveModel) {
     try {
       let sortedItems = [];
       let activeIndex = [];
@@ -195,19 +199,19 @@ class GroupHelper {
       actives.map(item => {
         if (ActiveConstants.isPackage(item.type_id)) {
           item.attributes?.buy_trades?.map(trade => {
-            key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
+            key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType, modelClass);
             sortedItems[activeIndex.indexOf(key)].attributes.buy_trades.push({
               ...trade
             });
           });
           item.attributes?.sell_trades?.map(trade => {
-            key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType);
+            key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType, modelClass);
             sortedItems[activeIndex.indexOf(key)].attributes.sell_trades.push({
               ...trade
             });
           });
         } else {
-          key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType);
+          key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType, modelClass);
         }
       });
       GroupHelper.setValuation(sortedItems);
