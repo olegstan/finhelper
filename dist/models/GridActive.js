@@ -201,17 +201,46 @@ export default class GridActive extends BaseModel {
   set sell_trades(x) {
     this['tmp_sell_trades'] = x;
   }
+  get buySum() {
+    //если сумма в миллионах, то копейки отбросим
+    let round = 2;
+    if (this.buy_valuation > 1000000) {
+      round = 0;
+    }
+    return Money.format(this.buy_valuation, round);
+  }
+  get buyOriginalSum() {
+    //если сумма в миллионах, то копейки отбросим
+    let round = 2;
+    if (this.buy_valuation > 1000000) {
+      round = 0;
+    }
+    return Money.format(this.buy_valuation, round);
+  }
   get valuation() {
     if (this.attributes.valuation) {
       return this.attributes?.valuation?.sum;
     }
     return 0;
   }
+  get period() {
+    return this?.attributes?.period;
+  }
   get originDiff() {
-    return this.attributes?.diff;
+    //если сумма в миллионах, то копейки отбросим
+    let round = 2;
+    if (this?.attributes?.diff > 1000000) {
+      round = 0;
+    }
+    return Math.round(this?.attributes?.diff, round);
   }
   get diff() {
-    return this.attributes?.diff;
+    //если сумма в миллионах, то копейки отбросим
+    let round = 2;
+    if (this?.attributes?.diff > 1000000) {
+      round = 0;
+    }
+    return Math.round(this?.attributes?.diff, round);
   }
   get originValuation() {
     if (this.attributes.origin_valuation) {

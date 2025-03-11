@@ -323,6 +323,21 @@ export default class Active extends BaseModel
     return this['tmp_valuation'];
   }
 
+  get period()
+  {
+    return InvestCalc.getPeriod(this, moment());
+  }
+
+  get buySum()
+  {
+    return InvestCalc.getBuySum(this, '');
+  }
+
+  get buyOriginalSum()
+  {
+    return InvestCalc.getBuyOriginalSum(this);
+  }
+
   set valuation(x)
   {
     this['tmp_valuation'] = x;
