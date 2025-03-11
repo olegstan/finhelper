@@ -5,3 +5,4 @@ export default class CreditLogConstants {
   static TAX = 'tax';
   static COMMISSION = 'commission';
 }
+//# sourceMappingURL=CreditLogConstants.js.map

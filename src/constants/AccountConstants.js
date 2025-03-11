@@ -79,10 +79,13 @@ export default class AccountConstants
    *
    * @param accounts
    * @param currency
-   * @return {*[]}
+   * @param courses
+   * @returns {*[]}
    */
   static appendCurrencyActives(accounts, currency)
   {
+    console.log(CurrencyConstants.courses)
+
     let preparedAccounts = [];
     let index = [];
 
@@ -109,7 +112,14 @@ export default class AccountConstants
 
         //объединяем все остатки по одному счету, если одна валюта, то субсчета просуммируются
         let accountId = account.id;
-        let sum = subAccount.sum;
+        let sum;
+
+        if(currency.id === 'none')
+        {
+          sum = subAccount.sum
+        }else{
+          sum = Money.convert(Money.toDigits(subAccount.sum), account.currency_id, currency.id);
+        }
 
         // let cbCurrency = subAccount?.currency?.cb_currency;
         let cbCurrency = CurrencyConstants.getCurrencyById(subAccount?.currency_id)?.cb_currency;
@@ -215,6 +225,221 @@ export default class AccountConstants
                 item: cbCurrency,
                 item_id: cbCurrency?.id,
                 item_type: cbCurrency?.ticker,
+              }
+
+              preparedAccounts[key] = newItem;
+              break;
+          }
+        } else
+        {
+          let key = index.indexOf(keyName);
+
+          preparedAccounts[key]['buy_trades'][0]['original_sum'] += sum;
+          preparedAccounts[key]['buy_trades'][0]['sum'] += sum;
+          preparedAccounts[key]['buy_trades'][0]['count'] += subAccount.sum;
+        }
+      })
+    })
+
+    return preparedAccounts;
+  }
+
+  /**
+   *
+   * @param accounts
+   * @param currency
+   * @returns {*[]}
+   */
+  static appendCurrencyGridActives(accounts, currency)
+  {
+    let preparedAccounts = [];
+    let index = [];
+
+    accounts.filter((account) =>
+    {
+      return AccountConstants.BROKER_ACCOUNT === account.type_id;
+    }).map((account) =>
+    {
+      account.accounts.filter((subAccount) =>
+      {
+        let code = CurrencyConstants.getCurrencyCodeById(subAccount.currency_id)
+
+        switch (code)
+        {
+          case 'GLD':
+          case 'SLV':
+            return false;
+        }
+
+        return parseInt(subAccount.sum) !== 0;
+      }).map((subAccount) =>
+      {
+        let date = moment();
+
+        let code = CurrencyConstants.getCurrencyCodeById(subAccount.currency_id)
+        let sign = CurrencyConstants.getCurrencySignById(subAccount.currency_id)
+        let name = CurrencyConstants.getCurrencyNameById(subAccount.currency_id)
+
+        //объединяем все остатки по одному счету, если одна валюта, то субсчета просуммируются
+        let accountId = account.id;
+        let buyValuation;
+        let originValuation;
+        let valuation;
+        let factPercent;
+        let annualyPercent;
+        let diff;
+        let convertedSum;
+
+
+        if(currency.id === 'none')
+        {
+          buyValuation = subAccount.sum;
+          originValuation = {
+            sum: subAccount.sum,
+            sign: sign,
+            code: code,
+          };
+          diff = 0;
+          factPercent = 1;
+          annualyPercent = 0;
+        }else{
+          convertedSum = Money.convert(Money.toDigits(subAccount.sum), currency.id, subAccount.currency_id)
+          let convertedSign = CurrencyConstants.getCurrencySignById(currency.id)
+          let convertedCode = CurrencyConstants.getCurrencyCodeById(currency.id)
+
+
+          buyValuation = convertedSum;
+          valuation = {
+            sum: convertedSum,
+            sign: convertedSign,
+            code: convertedCode
+          };
+          originValuation = {
+            sum: subAccount.sum,
+            sign: sign,
+            code: code
+          };
+
+
+          console.log(subAccount.currency_id)
+          console.log(currency.id)
+          console.log(valuation)
+          console.log(originValuation)
+          debugger
+
+          diff = 0;
+          factPercent = 1;
+          annualyPercent = 0;
+        }
+
+        // let cbCurrency = subAccount?.currency?.cb_currency;
+        let cbCurrency = CurrencyConstants.getCurrencyById(subAccount?.currency_id)?.cb_currency;
+
+        let keyName = accountId + '-' + code + '-' + cbCurrency?.id;
+
+        if (index.indexOf(keyName) === -1)
+        {
+          index.push(keyName)
+
+          let key = index.indexOf(keyName);
+
+          let newItem = {};
+          switch (code)
+          {
+            case 'GLD':
+            case 'SLV':
+              // newItem = {
+              //   id: subAccount.id,
+              //   type_id: ActiveConstants.PRECIOUS_METAL,
+              //   type_text: 'Драгоценные металлы',
+              //   name_text: name,
+              //   user_id: account.user_id,
+              //   valuations: [],
+              //   sell_trades: [],
+              //   buy_trades: [
+              //     {
+              //       "id": null,
+              //       "active_id": subAccount.id,
+              //       "from_account_id": subAccount.id,
+              //       "currency_id": subAccount.currency_id,
+              //       "type_id": 1,
+              //       "original_price": 0,
+              //       "price": 0,
+              //       "original_sum": sum,
+              //       "sum": sum,
+              //       "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
+              //       "trade_at_date": date.format('DD.MM.YYYY'),
+              //       "trade_at_datetime": date.format('DD.MM.YYYY HH:mm:ss'),
+              //       "count": subAccount.sum,
+              //       "morph": "active.trade",
+              //       "sum_course": 1,
+              //       "sum_rub_course": 1,
+              //       "price_course": 1,
+              //       "price_rub_course": 1,
+              //       "currency": {
+              //         "id": 1,
+              //         "name": "Российский рубль",
+              //         "code": "RUB",
+              //         "sign": "₽",
+              //         "order": 1
+              //       },
+              //     }
+              //   ],
+              //   item: cbCurrency,
+              //   item_id: cbCurrency?.id,
+              //   item_type: cbCurrency?.ticker,
+              // }
+              //
+              // preparedAccounts[key] = newItem;
+              break;
+            default:
+              newItem = {
+                id: subAccount.id,
+                type_id: ActiveConstants.CURRENCY,
+                type_text: 'Валюта',
+                group_type_text: 'Валюта',
+                name_text: name,
+                user_id: account.user_id,
+                valuations: [],
+                sell_trades: [],
+                buy_trades: [
+                  {
+                    "id": null,
+                    "active_id": subAccount.id,
+                    "from_account_id": subAccount.id,
+                    "currency_id": subAccount.currency_id,
+                    "type_id": 1,
+                    "original_price": 0,
+                    "price": 0,
+                    "sum": currency.id !== 'none' ? convertedSum : subAccount.sum,
+                    "original_sum": subAccount.sum,
+                    "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
+                    "trade_at_date": date.format('DD.MM.YYYY'),
+                    "trade_at_datetime": date.format('DD.MM.YYYY HH:mm:ss'),
+                    "count": subAccount.sum,
+                    "morph": "active.trade",
+                    "sum_course": 1,
+                    "sum_rub_course": 1,
+                    "price_course": 1,
+                    "price_rub_course": 1,
+                    "currency": {
+                      "id": 1,
+                      "name": "Российский рубль",
+                      "code": "RUB",
+                      "sign": "₽",
+                      "order": 1
+                    },
+                  }
+                ],
+                item: cbCurrency,
+                item_id: cbCurrency?.id,
+                item_type: cbCurrency?.ticker,
+                buy_valuation: buyValuation,
+                valuation: valuation,
+                origin_valuation: originValuation,
+                fact_percent: factPercent,
+                annualy_percent: annualyPercent,
+                diff: diff
               }
 
               preparedAccounts[key] = newItem;

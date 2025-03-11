@@ -305,3 +305,4 @@ export default class Active extends BaseModel {
     return this['tmp_item'] ? this['tmp_item'] : new Catalog({});
   }
 }
+//# sourceMappingURL=Active.js.map

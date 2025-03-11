@@ -101,3 +101,4 @@ export default class Account {
     return preparedAccounts;
   }
 }
+//# sourceMappingURL=Account.js.map

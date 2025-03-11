@@ -21,3 +21,4 @@ export default class UserNotificationConstants {
   static ATON_DEPOSIT_MONEY = 2006;
   static ATON_NO_ACTIVITY = 2007;
 }
+//# sourceMappingURL=UserNotificationConstants.js.map

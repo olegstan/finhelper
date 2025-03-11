@@ -6,3 +6,4 @@ export default class SellTrade extends Trade {
     this.setGetters(attributes);
   }
 }
+//# sourceMappingURL=SellTrade.js.map

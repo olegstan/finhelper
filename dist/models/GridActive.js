@@ -248,3 +248,4 @@ export default class GridActive extends BaseModel {
     return this['tmp_item'] ? this['tmp_item'] : new Catalog({});
   }
 }
+//# sourceMappingURL=GridActive.js.map

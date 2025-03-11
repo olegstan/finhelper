@@ -47,3 +47,4 @@ export default class NewActive {
     }
   }
 }
+//# sourceMappingURL=NewActive.js.map

@@ -16,3 +16,4 @@ export default (async (fonts = [], callback = () => {}) => {
     callback();
   });
 });
+//# sourceMappingURL=FontLoad.js.map

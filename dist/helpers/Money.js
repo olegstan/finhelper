@@ -218,3 +218,4 @@ export default class Money {
     }
   }
 }
+//# sourceMappingURL=Money.js.map

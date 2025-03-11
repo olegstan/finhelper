@@ -26,3 +26,4 @@ export default class Catalog extends BaseModel {
     return this.attributes?.symbol ?? '';
   }
 }
+//# sourceMappingURL=Catalog.js.map

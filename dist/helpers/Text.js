@@ -102,3 +102,4 @@ export default class Text {
     }).join("");
   }
 }
+//# sourceMappingURL=Text.js.map

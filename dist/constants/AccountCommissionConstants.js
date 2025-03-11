@@ -7,3 +7,4 @@ export default class AccountCommissionConstants {
   static OPERATION = 3;
   static CUSTOM = 4;
 }
+//# sourceMappingURL=AccountCommissionConstants.js.map

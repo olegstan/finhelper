@@ -128,3 +128,4 @@ export default class BaseModel {
     this.attributes[prop] = value;
   }
 }
+//# sourceMappingURL=BaseModel.js.map

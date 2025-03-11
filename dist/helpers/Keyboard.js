@@ -47,3 +47,4 @@ export default class Keyboard {
     window.removeEventListener("keydown", Keyboard.func);
   }
 }
+//# sourceMappingURL=Keyboard.js.map

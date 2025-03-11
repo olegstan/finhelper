@@ -62,3 +62,4 @@ export default class TradeConstants {
     return type;
   }
 }
+//# sourceMappingURL=TradeConstants.js.map

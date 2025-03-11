@@ -14,7 +14,7 @@
     "url": "https://github.com/olegstan/finhelper/issues"
   },
   "scripts": {
-    "build": "babel ./src -d dist && copyfiles -u 1 ./src/assets/**/* dist/"
+    "build": "babel ./src -d dist --source-maps && copyfiles -u 1 ./src/assets/**/* dist/"
   },
   "eslintConfig": {
     "extends": "react-app"

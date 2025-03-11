@@ -212,3 +212,4 @@ export default class ActiveValueCalculator {
     return this.getCommissionSum(items, true);
   }
 }
+//# sourceMappingURL=ActiveValueCalculator.js.map

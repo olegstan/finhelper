@@ -114,3 +114,4 @@ export default class UserValuation {
     }
   }
 }
+//# sourceMappingURL=UserValuation.js.map
