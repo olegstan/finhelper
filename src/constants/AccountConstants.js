@@ -84,8 +84,6 @@ export default class AccountConstants
    */
   static appendCurrencyActives(accounts, currency)
   {
-    console.log(CurrencyConstants.courses)
-
     let preparedAccounts = [];
     let index = [];
 
@@ -319,13 +317,6 @@ export default class AccountConstants
             sign: sign,
             code: code
           };
-
-
-          console.log(subAccount.currency_id)
-          console.log(currency.id)
-          console.log(valuation)
-          console.log(originValuation)
-          debugger
 
           diff = 0;
           factPercent = 1;
