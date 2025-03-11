@@ -14,6 +14,27 @@ export default class GridActive extends BaseModel {
    * @type {string}
    */
   controller = 'active';
+  related = {
+    'payments': {
+      func: Payment.create,
+      loaded: false
+    },
+    'buy_trades': {
+      func: BuyTrade.create,
+      loaded: false
+    },
+    'sell_trades': {
+      func: SellTrade.create,
+      loaded: false
+    },
+    'item': {
+      func: Catalog.create,
+      loaded: false
+    },
+    'trades': {
+      loaded: false
+    }
+  };
 
   /**
    *
@@ -126,6 +147,7 @@ export default class GridActive extends BaseModel {
     this['tmp_avg_own_date'] = x;
   }
   get trades() {
+    console.log(this);
     if (!this.related.trades.loaded) {
       this['tmp_trades'] = [];
       if (this.attributes['sell_trades'] && this.attributes['sell_trades'].length) {
@@ -217,19 +239,13 @@ export default class GridActive extends BaseModel {
     }
     return Money.format(this.buy_valuation, round);
   }
-  get valuation() {
-    if (this.attributes.valuation) {
-      return this.attributes?.valuation?.sum;
-    }
-    return 0;
-  }
   get period() {
     return this?.attributes?.period;
   }
   get originDiff() {
     //если сумма в миллионах, то копейки отбросим
     let round = 2;
-    if (this?.attributes?.diff > 1000000) {
+    if (this?.attributes?.diff > 1000000 || this?.attributes?.diff < -1000000) {
       round = 0;
     }
     return Math.round(this?.attributes?.diff, round);
@@ -237,14 +253,30 @@ export default class GridActive extends BaseModel {
   get diff() {
     //если сумма в миллионах, то копейки отбросим
     let round = 2;
-    if (this?.attributes?.diff > 1000000) {
+    if (this?.attributes?.diff > 1000000 || this?.attributes?.diff < -1000000) {
       round = 0;
     }
     return Math.round(this?.attributes?.diff, round);
   }
+  get valuation() {
+    if (this.attributes.valuation) {
+      //если сумма в миллионах, то копейки отбросим
+      let round = 2;
+      if (this.attributes?.valuation?.sum > 1000000 || this?.attributes?.valuation?.sum < -1000000) {
+        round = 0;
+      }
+      return Math.round(this.attributes?.valuation?.sum, round);
+    }
+    return 0;
+  }
   get originValuation() {
     if (this.attributes.origin_valuation) {
-      return this.attributes?.origin_valuation?.sum;
+      //если сумма в миллионах, то копейки отбросим
+      let round = 2;
+      if (this.attributes?.origin_valuation?.sum > 1000000 || this?.attributes?.origin_valuation?.sum < -1000000) {
+        round = 0;
+      }
+      return Math.round(this.attributes?.origin_valuation?.sum, round);
     }
     return 0;
   }
