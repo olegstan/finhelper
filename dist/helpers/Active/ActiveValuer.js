@@ -69,9 +69,12 @@ export default class ActiveValuer {
         buy_trades,
         sell_at_datetime,
         rate_type_id,
-        last_valuation,
         payments
       } = item;
+      let last_valuation = null;
+      if (item?.valuations?.length) {
+        last_valuation = item?.valuations[item?.valuations.length - 1];
+      }
       let buy_sum = original ? item.original_buy_sum : item.buy_sum;
       let sell_sum = original ? item.original_sell_sum : item.sell_sum;
       let income = original ? item.original_income : item.income;

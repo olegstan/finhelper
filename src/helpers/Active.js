@@ -233,10 +233,11 @@ export default class Active
     let code = '';
     let sign = '';
 
-    if (item.last_valuation)
+    if (item?.valuations.length)
     {
-      code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-      sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+      let lastValuation = item?.valuations[item?.valuations.length - 1];
+      code = CurrencyConstants.getCurrencyCodeById(lastValuation.currency_id);
+      sign = CurrencyConstants.getCurrencySignById(lastValuation.currency_id);
     }
 
     if (!code && !sign)

@@ -177,9 +177,10 @@ export default class Active {
   static getCodeAndSign(item) {
     let code = '';
     let sign = '';
-    if (item.last_valuation) {
-      code = CurrencyConstants.getCurrencyCodeById(item.last_valuation.currency_id);
-      sign = CurrencyConstants.getCurrencySignById(item.last_valuation.currency_id);
+    if (item?.valuations.length) {
+      let lastValuation = item?.valuations[item?.valuations.length - 1];
+      code = CurrencyConstants.getCurrencyCodeById(lastValuation.currency_id);
+      sign = CurrencyConstants.getCurrencySignById(lastValuation.currency_id);
     }
     if (!code && !sign) {
       code = CurrencyConstants.getCurrencyCodeByActive(item);
