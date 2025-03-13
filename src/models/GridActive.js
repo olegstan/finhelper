@@ -182,8 +182,6 @@ export default class GridActive extends BaseModel
 
   get trades()
   {
-    console.log(this)
-
     if (!this.related.trades.loaded)
     {
       this['tmp_trades'] = [];
@@ -323,7 +321,7 @@ export default class GridActive extends BaseModel
     return this?.attributes?.period;
   }
 
-  get originDiff()
+  get originDiffSum()
   {
     //если сумма в миллионах, то копейки отбросим
     let round = 2;
@@ -334,7 +332,7 @@ export default class GridActive extends BaseModel
     return Math.round(this?.attributes?.diff, round);
   }
 
-  get diff()
+  get diffSum()
   {
     //если сумма в миллионах, то копейки отбросим
     let round = 2;

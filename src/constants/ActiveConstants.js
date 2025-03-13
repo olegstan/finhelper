@@ -90,6 +90,7 @@ export default class ActiveConstants
   static STRATEGY_DU = 3207;
   static OPTION = 3208;
   static FUTURES = 3209;
+  static FUND = 3210;
 
   static RENT_CAR = 9001;
   static RENT_FLAT = 9002;

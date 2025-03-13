@@ -286,14 +286,15 @@ export default class AccountConstants
         let factPercent;
         let annualyPercent;
         let diff;
-        let convertedSum;
+        let sum;
 
 
         if(currency.id === 'none')
         {
-          buyValuation = subAccount.sum;
+          sum = subAccount.sum;
+          buyValuation = sum;
           originValuation = {
-            sum: subAccount.sum,
+            sum: sum,
             sign: sign,
             code: code,
           };
@@ -301,14 +302,14 @@ export default class AccountConstants
           factPercent = 1;
           annualyPercent = 0;
         }else{
-          convertedSum = Money.convert(Money.toDigits(subAccount.sum), currency.id, subAccount.currency_id)
+          sum = Money.convert(Money.toDigits(subAccount.sum), currency.id, subAccount.currency_id)
           let convertedSign = CurrencyConstants.getCurrencySignById(currency.id)
           let convertedCode = CurrencyConstants.getCurrencyCodeById(currency.id)
 
 
-          buyValuation = convertedSum;
+          buyValuation = sum;
           valuation = {
-            sum: convertedSum,
+            sum: sum,
             sign: convertedSign,
             code: convertedCode
           };
@@ -402,7 +403,7 @@ export default class AccountConstants
                     "type_id": 1,
                     "original_price": 0,
                     "price": 0,
-                    "sum": currency.id !== 'none' ? convertedSum : subAccount.sum,
+                    "sum": currency.id !== 'none' ? sum : subAccount.sum,
                     "original_sum": subAccount.sum,
                     "trade_at": date.format('DD.MM.YYYY HH:mm:ss'),
                     "trade_at_date": date.format('DD.MM.YYYY'),

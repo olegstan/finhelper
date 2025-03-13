@@ -252,11 +252,11 @@ export default class Active extends BaseModel {
   set valuation(x) {
     this['tmp_valuation'] = x;
   }
-  get originDiff() {
+  get originDiffSum() {
     const now = moment();
     return ActiveValuer.getDiffCurrency(this, now)?.sum;
   }
-  get diff() {
+  get diffSum() {
     const now = moment();
     return ActiveValuer.getDiff(this, now, '', '')?.sum;
   }

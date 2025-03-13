@@ -147,7 +147,6 @@ export default class GridActive extends BaseModel {
     this['tmp_avg_own_date'] = x;
   }
   get trades() {
-    console.log(this);
     if (!this.related.trades.loaded) {
       this['tmp_trades'] = [];
       if (this.attributes['sell_trades'] && this.attributes['sell_trades'].length) {
@@ -242,7 +241,7 @@ export default class GridActive extends BaseModel {
   get period() {
     return this?.attributes?.period;
   }
-  get originDiff() {
+  get originDiffSum() {
     //если сумма в миллионах, то копейки отбросим
     let round = 2;
     if (this?.attributes?.diff > 1000000 || this?.attributes?.diff < -1000000) {
@@ -250,7 +249,7 @@ export default class GridActive extends BaseModel {
     }
     return Math.round(this?.attributes?.diff, round);
   }
-  get diff() {
+  get diffSum() {
     //если сумма в миллионах, то копейки отбросим
     let round = 2;
     if (this?.attributes?.diff > 1000000 || this?.attributes?.diff < -1000000) {

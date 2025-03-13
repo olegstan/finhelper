@@ -18,7 +18,8 @@ import Plan from './Plan';
 import Text from './Text';
 import Tracker from './Tracker';
 import Url from './Url';
-import GroupHelper from './GroupHelper';
+import GroupArchiveHelper from './Group/GroupArchiveHelper';
+import GroupHelper from './Group/GroupHelper';
 import CaseGroupHelper from './CaseGroupHelper';
 import UserValuation from './UserValuation';
 import Cache from './Cache';
@@ -46,6 +47,7 @@ export {
   Tracker,
   Url,
   GroupHelper,
+  GroupArchiveHelper,
   CaseGroupHelper,
   UserValuation,
   Cache,
