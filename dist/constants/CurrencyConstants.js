@@ -3,6 +3,8 @@ export default class CurrencyConstants {
   static RUBBLE_ID = 1;
   static DOLLAR_ID = 12;
   static EURO_ID = 13;
+  static RUBBLE_SIGN = '₽';
+  static DOLLAR_SIGN = '$';
   static DEFAULT_CODES = ['RUB', 'USD', 'EUR'];
 
   /**
