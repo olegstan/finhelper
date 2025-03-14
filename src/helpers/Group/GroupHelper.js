@@ -73,7 +73,6 @@ class GroupHelper
   {
     try
     {
-      console.log(actives)
       let sortedItems = [];
       let activeIndex = [];
       let key = '';
@@ -84,7 +83,12 @@ class GroupHelper
         {
           if(item.attributes?.buy_trades?.length === 0 && item.attributes?.sell_trades?.length === 0 && item.type_id === ActiveConstants.FUND)
           {
+            //тут ключ нужен чтобы показать в списке активов, если ещё нет трейдов
             key = 'fund-' + item.id;
+            key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType, modelClass);
+
+            sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
+            sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
           }
 
           item.attributes?.buy_trades?.map((trade) =>
@@ -154,8 +158,6 @@ class GroupHelper
       //     })
       //   })
       // });
-
-      console.log(groups)
 
       return groups;
     } catch (e)
@@ -291,8 +293,6 @@ class GroupHelper
       groups[nameIndex].groups[nameSubIndex].sum += item.valuation;
       groups[nameIndex].groups[nameSubIndex].paid_sum += paidSum;
       groups[nameIndex].groups[nameSubIndex].actives.push(item);
-
-
     });
 
     return groups;

@@ -1004,6 +1004,7 @@ export default class ActiveConstants
       case ActiveConstants.STRUCTURE_PRODUCT:
       case ActiveConstants.EXCHANGE_NOTE:
       case ActiveConstants.OBLIGATION_NOTE:
+      case ActiveConstants.FUND:
         return true;
     }
     return false;

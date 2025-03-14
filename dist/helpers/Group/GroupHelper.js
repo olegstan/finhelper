@@ -56,14 +56,17 @@ class GroupHelper {
    */
   static prepareActives(actives, groupType, modelClass = ActiveModel) {
     try {
-      console.log(actives);
       let sortedItems = [];
       let activeIndex = [];
       let key = '';
       actives.map(item => {
         if (ActiveConstants.isPackage(item.type_id)) {
           if (item.attributes?.buy_trades?.length === 0 && item.attributes?.sell_trades?.length === 0 && item.type_id === ActiveConstants.FUND) {
+            //тут ключ нужен чтобы показать в списке активов, если ещё нет трейдов
             key = 'fund-' + item.id;
+            key = GroupHelper.groupByAccount(item, item.buy_account_id, sortedItems, activeIndex, groupType, modelClass);
+            sortedItems[activeIndex.indexOf(key)].attributes.buy_trades = [];
+            sortedItems[activeIndex.indexOf(key)].attributes.sell_trades = [];
           }
           item.attributes?.buy_trades?.map(trade => {
             key = GroupHelper.groupByAccount(item, trade.from_account_id, sortedItems, activeIndex, groupType, modelClass);
@@ -125,7 +128,6 @@ class GroupHelper {
       //   })
       // });
 
-      console.log(groups);
       return groups;
     } catch (e) {
       console.log(e);
