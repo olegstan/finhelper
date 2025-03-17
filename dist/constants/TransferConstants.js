@@ -14,6 +14,7 @@ export default class TransferConstants {
   static ADD_PAYMENT = 13;
   static ADD_OBLIGATION_PAYMENT = 14;
   static CONNECT_PAYMENT = 15;
+  static COMMISSION = 18;
   static FIX = 1;
   static PERCENT = 2;
   static TRANSACTION = 1;

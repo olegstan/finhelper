@@ -21,6 +21,8 @@ export default class TransferConstants
 
   static CONNECT_PAYMENT = 15;
 
+  static COMMISSION = 18;
+
   static FIX = 1;
   static PERCENT = 2;
 
