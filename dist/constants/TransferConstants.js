@@ -29,6 +29,9 @@ export default class TransferConstants {
       id: TransferConstants.TAX,
       name: 'Уплата налога'
     }, {
+      id: TransferConstants.COMMISSION,
+      name: 'Комиссия'
+    }, {
       id: TransferConstants.SPENDING,
       name: 'Расход'
     }, {

@@ -30,8 +30,6 @@ export default class Catalog extends BaseModel
     let isin = '';
     let catalog = this.attributes?.ticker;
 
-    console.log(this.attributes)
-
     switch (catalog)
     {
       case ActiveConstants.CB_CATALOG:

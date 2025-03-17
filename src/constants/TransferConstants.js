@@ -36,6 +36,7 @@ export default class TransferConstants
     let variants = [
       {id: TransferConstants.BETWEEN_ACCOUNTS, name: 'Перевод между счетами'},
       {id: TransferConstants.TAX, name: 'Уплата налога'},
+      {id: TransferConstants.COMMISSION, name: 'Комиссия'},
       {id: TransferConstants.SPENDING, name: 'Расход'},
       {id: TransferConstants.INCOME, name: 'Доход'},
       {id: TransferConstants.CHANGE, name: 'Перевод на другой счет с конвертацией'},

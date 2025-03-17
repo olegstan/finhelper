@@ -21,7 +21,6 @@ export default class Catalog extends BaseModel {
   getSymbol(allowedCatalog = ActiveConstants.CATALOGS) {
     let isin = '';
     let catalog = this.attributes?.ticker;
-    console.log(this.attributes);
     switch (catalog) {
       case ActiveConstants.CB_CATALOG:
         isin = this.attributes?.char_code;
