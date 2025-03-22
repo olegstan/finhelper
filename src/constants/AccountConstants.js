@@ -112,7 +112,7 @@ export default class AccountConstants
         let accountId = account.id;
         let sum;
 
-        if(currency.id === 'none')
+        if(!currency || currency.id === 'none')
         {
           sum = subAccount.sum
         }else{

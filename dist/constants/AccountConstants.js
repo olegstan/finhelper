@@ -83,7 +83,7 @@ export default class AccountConstants {
         //объединяем все остатки по одному счету, если одна валюта, то субсчета просуммируются
         let accountId = account.id;
         let sum;
-        if (currency.id === 'none') {
+        if (!currency || currency.id === 'none') {
           sum = subAccount.sum;
         } else {
           sum = Money.convert(Money.toDigits(subAccount.sum), account.currency_id, currency.id);
