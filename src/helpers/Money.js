@@ -45,57 +45,73 @@ export default class Money
   {
     try
     {
-      if (typeof amount === 'number')
-      {
+// 1) Переводим входные данные в число
+      if (typeof amount === 'number') {
+        // Если уже число, переведём в строку для единообразия
         amount = amount.toString();
       }
-
-      if (typeof amount === 'string')
-      {
+      if (typeof amount === 'string') {
+        // Заменяем запятые на точки, убираем лишние пробелы
         amount = parseFloat(amount.replace(/,/g, '.').replace(/ /g, ''));
       }
 
-      if (amount === '')
-      {
+      // 2) Спец. случаи
+      if (amount === '') {
         return '';
       }
-
-      if (amount === 0)
-      {
-        return 0;
+      if (amount === 0) {
+        // Явный ноль (считаем, что хотим вернуть "0" как строку)
+        return '0';
       }
-
-      if (isNaN(amount))
-      {
-        try
-        {
+      if (isNaN(amount)) {
+        // Ошибка, число не распарсилось
+        try {
           throw new Error('Error number is NaN');
-        } catch (e)
-        {
+        } catch (e) {
           // console.warn(e.stack);
         }
-        return 0;
+        return '0';
       }
-
-      if (!isFinite(amount))
-      {
+      if (!isFinite(amount)) {
+        // Бесконечность
         return '∞';
       }
 
+      // 3) Определяем знак и работаем с модулем числа
+      const negativeSign = amount < 0 ? "-" : "";
+      const absAmount = Math.abs(amount);
 
-      const __ret = Money.getDecimal(decimalCount, amount);
-      decimalCount = __ret.decimalCount;
-      const negativeSign = __ret.negativeSign;
+      // 4) "Округляем" или "обрезаем" дробную часть с помощью toFixed,
+      //    чтобы число точно не ушло в экспоненциальный формат (e.g. 1e-7).
+      //    Сразу получим строку обычного формата (без экспоненты).
+      let strVal = absAmount.toFixed(decimalCount);
+      // например, при decimalCount=2 из 1234.5678 получим "1234.57"
+      // а из 1e-7 при decimalCount=7 получим "0.0000001"
 
-      let amountInt = parseInt(amount = Math.abs(Number(amount) || '')).toString();
+      // 5) Разделяем целую и дробную части
+      let [intPart, fractionPart] = strVal.split('.');
 
-      let amountFloat = Money.toFixed(Math.abs(exactMath.sub(amount, amountInt)), decimalCount).slice(2);//убрали 0. ноль и точку
+      // 6) Убираем хвостовые нули из дробной части
+      if (fractionPart) {
+        fractionPart = fractionPart.replace(/0+$/, '');
+      }
 
-      amountFloat = amountFloat.replace(/([0]{0,100})$/, '');
+      // 7) Формируем группу тысяч в целой части
+      //    (т.е. 12345 -> "12 345", если thousands=" ")
+      if (intPart.length > 3) {
+        const j = intPart.length % 3;
+        // кусочек от начала, если он не кратен 3, плюс регулярка для остального
+        intPart = (j ? intPart.slice(0, j) + thousands : '')
+            + intPart.slice(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands);
+      }
 
-      let j = (amountInt.length > 3) ? amountInt.length % 3 : 0;
+      // 8) Склеиваем результат: знак + целая часть + (точка + дробная часть) если есть
+      let result = negativeSign + intPart;
+      if (fractionPart) {
+        result += decimalSign + fractionPart;
+      }
 
-      return (negativeSign + (j ? amountInt.substr(0, j) + thousands : '') + amountInt.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount && amountFloat > 0 ? decimalSign + amountFloat : ""));
+      return result;
     } catch (e)
     {
       console.error(e)
