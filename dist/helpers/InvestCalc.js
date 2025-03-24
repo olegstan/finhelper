@@ -37,38 +37,43 @@ class InvestCalc {
     return number;
   }
   static getRoundPrice(item, field) {
-    let number = 2;
     let smallestNumberPrice = null;
-    let hasWholeNumber = false;
-    const checkTrade = trade => {
-      const value = trade[field];
-      if (value >= 1) hasWholeNumber = true;
-      if (smallestNumberPrice === null || value < smallestNumberPrice) {
-        smallestNumberPrice = value;
+
+    // Для криптовалют возвращаем 8 знаков после запятой
+    if (item.type_id === ActiveConstants.CRYPTO || item.item && item.item.type === 'CRYPTOCURRENCY') {
+      return 8;
+    }
+
+    // Вспомогательная функция для проверки значений
+    const checkTrades = trades => {
+      for (const trade of trades) {
+        const value = trade[field];
+        if (smallestNumberPrice === null || value < smallestNumberPrice) {
+          smallestNumberPrice = value;
+        }
       }
     };
-    if (item?.buy_trades?.length) {
-      for (const trade of item.buy_trades) {
-        checkTrade(trade);
-        if (hasWholeNumber) break; // Прерываем цикл при нахождении целого числа
-      }
-    }
-    if (!hasWholeNumber && item?.sell_trades?.length) {
-      for (const trade of item.sell_trades) {
-        checkTrade(trade);
-        if (hasWholeNumber) break; // Прерываем цикл при нахождении целого числа
-      }
-    }
-    if (hasWholeNumber) return 2;
+
+    // Проверяем buy_trades и sell_trades
+    if (item?.buy_trades?.length) checkTrades(item.buy_trades);
+    if (item?.sell_trades?.length) checkTrades(item.sell_trades);
+
+    // Если минимальное значение найдено, определяем длину десятичной части
     if (smallestNumberPrice !== null) {
+      if (smallestNumberPrice >= 0.01) {
+        return 2; // Для чисел ≥ 0.01 всегда возвращаем 2
+      }
       const [integerPart, decimalPart] = String(smallestNumberPrice).split('.');
-      if (integerPart === "0" && decimalPart) return decimalPart.length;
-      return number;
+      if (decimalPart) {
+        // Убираем конечные нули
+        const trimmedDecimal = decimalPart.replace(/0+$/, '');
+        return trimmedDecimal.length;
+      }
+      return 0; // Если нет дробной части
     }
-    if (item.type_id === ActiveConstants.CRYPTO || item.item && item.item.type === 'CRYPTOCURRENCY') {
-      number = 8;
-    }
-    return number;
+
+    // Значение по умолчанию
+    return 2;
   }
   static getRound(item) {
     let number = 2;
