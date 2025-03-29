@@ -42,4 +42,3 @@ export default class Catalog extends BaseModel {
     return isin;
   }
 }
-//# sourceMappingURL=Catalog.js.map

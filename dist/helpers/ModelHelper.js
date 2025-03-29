@@ -32,4 +32,3 @@ export default class ModelHelper {
     return res;
   }
 }
-//# sourceMappingURL=ModelHelper.js.map

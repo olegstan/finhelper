@@ -218,4 +218,3 @@ export default class IndexedDBCache {
     });
   }
 }
-//# sourceMappingURL=IndexedDBCache.js.map

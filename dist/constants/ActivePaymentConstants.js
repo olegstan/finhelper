@@ -9,4 +9,3 @@ export default class ActivePaymentConstants {
   static CLOSE_INSURANCE_PAYMENT_RENT = 3008;
   static INSURANCE_PAYMENT = 3009;
 }
-//# sourceMappingURL=ActivePaymentConstants.js.map

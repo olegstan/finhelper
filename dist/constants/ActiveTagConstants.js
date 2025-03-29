@@ -3,4 +3,3 @@ export default class ActiveTagConstants {
   static SPEND = 2;
   static INVEST = 3;
 }
-//# sourceMappingURL=ActiveTagConstants.js.map

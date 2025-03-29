@@ -121,4 +121,3 @@ export default class TransferConstants {
     return type;
   }
 }
-//# sourceMappingURL=TransferConstants.js.map

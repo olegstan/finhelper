@@ -67,8 +67,6 @@ export default class CurrencyConstants
       {
         currency = item;
       }
-
-
     });
 
     return currency;

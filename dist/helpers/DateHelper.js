@@ -20,4 +20,3 @@ export default class DateHelper {
     }
   }
 }
-//# sourceMappingURL=DateHelper.js.map

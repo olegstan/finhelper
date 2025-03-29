@@ -37,4 +37,3 @@ export default class BuyTrade extends Trade {
     }
   }
 }
-//# sourceMappingURL=BuyTrade.js.map

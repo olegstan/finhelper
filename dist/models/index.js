@@ -7,4 +7,3 @@ import ClientModel from './Client';
 import PaymentModel from './Payment';
 import Catalog from './Catalog';
 export { ActiveModel, GridActiveModel, TradeModel, BuyTradeModel, SellTradeModel, ClientModel, PaymentModel, Catalog };
-//# sourceMappingURL=index.js.map

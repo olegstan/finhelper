@@ -3,4 +3,3 @@ export default class IntegerHelper {
     return Math.floor(Math.random() * max);
   }
 }
-//# sourceMappingURL=IntegerHelper.js.map

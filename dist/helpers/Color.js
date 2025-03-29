@@ -119,4 +119,3 @@ export default class Color {
     return (usePound ? "#" : "") + (g | b << 8 | r << 16).toString(16);
   }
 }
-//# sourceMappingURL=Color.js.map

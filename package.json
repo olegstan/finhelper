@@ -14,7 +14,10 @@
     "url": "https://github.com/olegstan/finhelper/issues"
   },
   "scripts": {
-    "build": "babel ./src -d dist --source-maps && copyfiles -u 1 ./src/assets/**/* dist/"
+    "build": "npm run build:types && npm run build:js && npm run copy:assets",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src -d dist --extensions \".ts,.tsx,.js,.jsx\"",
+    "copy:assets": "copyfiles -u 1 src/assets/* dist/"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -26,14 +29,18 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.0.0",
     "copyfiles": "^2.4.1",
-    "moment": "^2.30.1",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
-    "exact-math": "^2.2.3"
+    "exact-math": "^2.2.3",
+    "moment": "^2.30.1"
   },
   "babel": {
     "presets": [
       "@babel/preset-react"
     ]
+  },
+  "devDependencies": {
+    "dts-gen": "^0.10.4",
+    "typescript": "^5.8.2"
   }
 }

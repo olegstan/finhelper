@@ -15,4 +15,3 @@ export default class FixDate {
     }
   }
 }
-//# sourceMappingURL=FixDate.js.map

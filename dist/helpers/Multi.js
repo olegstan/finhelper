@@ -12,4 +12,3 @@ export default class Multi {
     return extender(...args);
   }
 }
-//# sourceMappingURL=Multi.js.map

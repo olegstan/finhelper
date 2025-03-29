@@ -25,4 +25,3 @@ export default class Cache {
     }
   }
 }
-//# sourceMappingURL=Cache.js.map

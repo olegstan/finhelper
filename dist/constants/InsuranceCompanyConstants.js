@@ -99,4 +99,3 @@ export default class InsuranceCompanyConstants {
     }
   }
 }
-//# sourceMappingURL=InsuranceCompanyConstants.js.map

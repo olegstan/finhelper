@@ -24,4 +24,3 @@ export default class Url {
     return parts.length > 1 && parts[1].length === 2 ? parts[1] : 'ru';
   }
 }
-//# sourceMappingURL=Url.js.map

@@ -330,4 +330,3 @@ export default class ActiveGoalConstants {
     }
   }
 }
-//# sourceMappingURL=ActiveGoalConstants.js.map

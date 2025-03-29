@@ -11,4 +11,3 @@ export default class Client extends BaseModel {
     this.setGetters(attributes);
   }
 }
-//# sourceMappingURL=Client.js.map

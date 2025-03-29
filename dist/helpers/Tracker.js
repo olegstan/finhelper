@@ -41,4 +41,3 @@ export default class Tracker {
     }
   }
 }
-//# sourceMappingURL=Tracker.js.map

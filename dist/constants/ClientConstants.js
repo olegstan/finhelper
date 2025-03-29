@@ -30,4 +30,3 @@ export default class ClientConstants {
     }
   };
 }
-//# sourceMappingURL=ClientConstants.js.map

@@ -77,4 +77,3 @@ export default class Plan {
   }
 }
 export { Plan };
-//# sourceMappingURL=Plan.js.map

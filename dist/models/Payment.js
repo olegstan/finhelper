@@ -40,4 +40,3 @@ export default class Payment extends BaseModel {
     return this.attributes['account'] = x;
   }
 }
-//# sourceMappingURL=Payment.js.map

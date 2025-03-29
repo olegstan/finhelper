@@ -30,4 +30,3 @@ export default class TradeCommissionConstants {
     return type;
   }
 }
-//# sourceMappingURL=TradeCommissionConstants.js.map

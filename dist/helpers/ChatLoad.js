@@ -20,4 +20,3 @@ export default class ChatLoad {
     }
   }
 }
-//# sourceMappingURL=ChatLoad.js.map
