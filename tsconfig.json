@@ -1,13 +1,15 @@
 {
     "compilerOptions": {
         "emitDeclarationOnly": true,
-        "declaration": true, // Enable this to generate declaration files
+        "declaration": true,
         "outDir": "./dist",
         "rootDir": "./src",
         "module": "commonjs",
         "target": "es6",
-        "typeRoots": ["node_modules/@types", "@types"],
-        "strict": true
+        "typeRoots": ["node_modules/@types"],
+        "strict": true,
+        "allowJs": true // Разрешить обработку .js файлов
     },
-    "include": ["./src/**/*", "./@types/**/*"]
+    "include": ["./src/**/*"],
+    "exclude": ["node_modules"]
 }
