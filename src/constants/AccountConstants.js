@@ -640,71 +640,71 @@ export default class AccountConstants
       switch (item.type_id)
       {
         case AccountConstants.CASH:
-          return require('../../dist/assets/icons/cash.svg').default
+          return require('../assets/icons/cash.svg').default
         case AccountConstants.BANK_ACCOUNT:
           switch (item.bank_id)
           {
             case AccountConstants.ALPHA_BANK:
-              return require('../../dist/assets/banks/alfa.png')
+              return require('../assets/banks/alfa.png')
             case AccountConstants.SBER_BANK:
-              return require('../../dist/assets/banks/sber.png')
+              return require('../assets/banks/sber.png')
             case AccountConstants.VTB_BANK:
-              return require('../../dist/assets/banks/vtb.png')
+              return require('../assets/banks/vtb.png')
             case AccountConstants.MOSCOW_CREDIT_BANK:
-              return require('../../dist/assets/banks/mkb.png')
+              return require('../assets/banks/mkb.png')
             case AccountConstants.OTKRITIE_BANK:
-              return require('../../dist/assets/banks/otkrytie.png')
+              return require('../assets/banks/otkrytie.png')
             case AccountConstants.ROS_SEL_HOZ_BANK:
-              return require('../../dist/assets/banks/rshb.png')
+              return require('../assets/banks/rshb.png')
             case AccountConstants.SOVCOM_BANK:
-              return require('../../dist/assets/banks/sovcom.png')
+              return require('../assets/banks/sovcom.png')
             case AccountConstants.RAIFFAIZEN_BANK:
-              return require('../../dist/assets/banks/reiff.png')
+              return require('../assets/banks/reiff.png')
             case AccountConstants.TINKOFF_BANK:
-              return require('../../dist/assets/banks/tinkoff.png')
+              return require('../assets/banks/tinkoff.png')
             case AccountConstants.HOME_CREDIT_BANK:
-              return require('../../dist/assets/banks/home.png')
+              return require('../assets/banks/home.png')
             case AccountConstants.ROS_BANK:
-              return require('../../dist/assets/banks/rosbank.png')
+              return require('../assets/banks/rosbank.png')
             default:
-              return require('../../dist/assets/icons/wallet.svg').default
+              return require('../assets/icons/wallet.svg').default
           }
         case AccountConstants.BROKER_ACCOUNT:
           switch (item.bank_id)
           {
             case AccountConstants.ALPHA_BROKER:
-              return require('../../dist/assets/banks/alfa.png')
+              return require('../assets/banks/alfa.png')
             case AccountConstants.SBER_BROKER:
-              return require('../../dist/assets/banks/sber.png')
+              return require('../assets/banks/sber.png')
             case AccountConstants.VTB_BROKER:
-              return require('../../dist/assets/banks/vtb.png')
+              return require('../assets/banks/vtb.png')
             case AccountConstants.OTKRITIE_BROKER:
-              return require('../../dist/assets/banks/otkrytie.png')
+              return require('../assets/banks/otkrytie.png')
             case AccountConstants.TINKOFF_BROKER:
-              return require('../../dist/assets/banks/tinkoff.png')
+              return require('../assets/banks/tinkoff.png')
             case AccountConstants.BCS_BROKER:
-              return require('../../dist/assets/banks/bks.png')
+              return require('../assets/banks/bks.png')
             case AccountConstants.FINAM_BROKER:
-              return require('../../dist/assets/banks/finam.png')
+              return require('../assets/banks/finam.png')
             case AccountConstants.ATON_BROKER:
-              return require('../../dist/assets/banks/aton.png')
+              return require('../assets/banks/aton.png')
             case AccountConstants.ALOR_BROKER:
-              return require('../../dist/assets/banks/alor.png')
+              return require('../assets/banks/alor.png')
             case AccountConstants.FREEDOM_BROKER:
-              return require('../../dist/assets/banks/fridom.png')
+              return require('../assets/banks/fridom.png')
             default:
-              return require('../../dist/assets/icons/wallet.svg').default
+              return require('../assets/icons/wallet.svg').default
           }
 
         case AccountConstants.DIGIT_MONEY:
-          return require('../../dist/assets/icons/wallet.svg').default
+          return require('../assets/icons/wallet.svg').default
         case AccountConstants.TEMP:
-          return require('../../dist/assets/icons/wallet.svg').default
+          return require('../assets/icons/wallet.svg').default
 
       }
     }
 
-    return require('../../dist/assets/icons/cash.svg').default
+    return require('../assets/icons/cash.svg').default
   }
 
   static getImage(item)
@@ -714,66 +714,66 @@ export default class AccountConstants
       switch (item.type_id)
       {
         case AccountConstants.CASH:
-          return <img className='cash' src={require('../../dist/assets/icons/cash.svg').default} alt=''/>
+          return <img className='cash' src={require('../assets/icons/cash.svg').default} alt=''/>
         case AccountConstants.BANK_ACCOUNT:
           switch (item.bank_id)
           {
             case AccountConstants.ALPHA_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/alfa.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/alfa.png')} alt=''/>
             case AccountConstants.SBER_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/sber.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/sber.png')} alt=''/>
             case AccountConstants.VTB_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/vtb.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/vtb.png')} alt=''/>
             case AccountConstants.MOSCOW_CREDIT_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/mkb.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/mkb.png')} alt=''/>
             case AccountConstants.OTKRITIE_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/otkrytie.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/otkrytie.png')} alt=''/>
             case AccountConstants.ROS_SEL_HOZ_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/rshb.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/rshb.png')} alt=''/>
             case AccountConstants.SOVCOM_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/sovcom.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/sovcom.png')} alt=''/>
             case AccountConstants.RAIFFAIZEN_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/reiff.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/reiff.png')} alt=''/>
             case AccountConstants.TINKOFF_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/tinkoff.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/tinkoff.png')} alt=''/>
             case AccountConstants.HOME_CREDIT_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/home.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/home.png')} alt=''/>
             case AccountConstants.ROS_BANK:
-              return <img className='bank' src={require('../../dist/assets/banks/rosbank.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/rosbank.png')} alt=''/>
             default:
-              return <img className='user' src={require('../../dist/assets/icons/wallet.svg').default} alt=''/>
+              return <img className='user' src={require('../assets/icons/wallet.svg').default} alt=''/>
           }
         case AccountConstants.BROKER_ACCOUNT:
           switch (item.bank_id)
           {
             case AccountConstants.ALPHA_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/alfa.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/alfa.png')} alt=''/>
             case AccountConstants.SBER_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/sber.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/sber.png')} alt=''/>
             case AccountConstants.VTB_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/vtb.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/vtb.png')} alt=''/>
             case AccountConstants.OTKRITIE_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/otkrytie.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/otkrytie.png')} alt=''/>
             case AccountConstants.TINKOFF_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/tinkoff.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/tinkoff.png')} alt=''/>
             case AccountConstants.BCS_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/bks.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/bks.png')} alt=''/>
             case AccountConstants.FINAM_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/finam.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/finam.png')} alt=''/>
             case AccountConstants.ATON_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/aton.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/aton.png')} alt=''/>
             case AccountConstants.ALOR_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/alor.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/alor.png')} alt=''/>
             case AccountConstants.FREEDOM_BROKER:
-              return <img className='bank' src={require('../../dist/assets/banks/fridom.png')} alt=''/>
+              return <img className='bank' src={require('../assets/banks/fridom.png')} alt=''/>
             default:
-              return <img className='user' src={require('../../dist/assets/icons/wallet.svg').default} alt=''/>
+              return <img className='user' src={require('../assets/icons/wallet.svg').default} alt=''/>
           }
 
         case AccountConstants.DIGIT_MONEY:
-          return <img className='user' src={require('../../dist/assets/icons/wallet.svg').default} alt=''/>
+          return <img className='user' src={require('../assets/icons/wallet.svg').default} alt=''/>
         case AccountConstants.TEMP:
-          return <img className='user' src={require('../../dist/assets/icons/wallet.svg').default} alt=''/>
+          return <img className='user' src={require('../assets/icons/wallet.svg').default} alt=''/>
 
       }
     }
