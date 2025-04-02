@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default class InsuranceCompanyConstants
 {
@@ -15,42 +14,4 @@ export default class InsuranceCompanyConstants
   static SBER_INS = 1011;
   static TINKOFF_INS = 1012;
   static CUSTOM_INS = 2001;
-
-
-  static getImage(item)
-  {
-    if (item)
-    {
-      switch (item.company_id)
-      {
-        case InsuranceCompanyConstants.ALPHA_INS:
-          return <img className='insurance' src={require('../assets/insurance/alfa_strah.svg').default} alt=''/>
-        case InsuranceCompanyConstants.INGOS_INS:
-          return <img className='insurance' src={require('../assets/insurance/ingosstrah.svg').default} alt=''/>
-        case InsuranceCompanyConstants.ROSGOS_INS:
-          return <img className='insurance' src={require('../assets/insurance/rosgosstrah.svg').default} alt=''/>
-        case InsuranceCompanyConstants.VSK_INS:
-          return <img className='insurance' src={require('../assets/insurance/vsk.svg').default} alt=''/>
-        case InsuranceCompanyConstants.RESO_INS:
-          return <img className='insurance' src={require('../assets/insurance/reso.svg').default} alt=''/>
-        case InsuranceCompanyConstants.SOGAZ_INS:
-          return <img className='shield' src={require('../assets/icons/shield.svg').default} alt=''/>
-        case InsuranceCompanyConstants.MAKS_INS:
-          return <img className='insurance' src={require('../assets/insurance/maks.svg').default} alt=''/>
-        case InsuranceCompanyConstants.RENESANS_INS:
-          return <img className='insurance' src={require('../assets/insurance/renessans.svg').default} alt=''/>
-        case InsuranceCompanyConstants.CAPITAL_LIFE_INS:
-          return <img className='insurance' src={require('../assets/insurance/caplife.svg').default} alt=''/>
-        case InsuranceCompanyConstants.SOGLASIE_INS:
-          return <img className='insurance' src={require('../assets/insurance/soglasie.svg').default} alt=''/>
-        case InsuranceCompanyConstants.SBER_INS:
-          return <img className='insurance' src={require('../assets/banks/sber.png')} alt=''/>
-        case InsuranceCompanyConstants.TINKOFF_INS:
-          return <img className='insurance' src={require('../assets/banks/tinkoff.png')} alt=''/>
-        case InsuranceCompanyConstants.CUSTOM_INS:
-        default:
-          return <img className='shield' src={require('../assets/icons/shield.svg').default} alt=''/>
-      }
-    }
-  }
 }

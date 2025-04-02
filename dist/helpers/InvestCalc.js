@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var _react = _interopRequireDefault(require("react"));
 var _Money = _interopRequireDefault(require("./Money"));
 var _moment = _interopRequireDefault(require("moment/moment"));
 var _ActiveConstants = _interopRequireDefault(require("../constants/ActiveConstants"));

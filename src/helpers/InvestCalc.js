@@ -1,4 +1,3 @@
-import React from 'react';
 import Money from "./Money";
 import moment from 'moment/moment';
 import ActiveConstants from "../constants/ActiveConstants";

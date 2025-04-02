@@ -12,5 +12,4 @@ export default class InsuranceCompanyConstants {
     static SBER_INS: number;
     static TINKOFF_INS: number;
     static CUSTOM_INS: number;
-    static getImage(item: any): any;
 }

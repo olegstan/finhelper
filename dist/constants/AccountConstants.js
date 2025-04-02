@@ -552,52 +552,52 @@ var AccountConstants = exports["default"] = /*#__PURE__*/function () {
           case AccountConstants.BANK_ACCOUNT:
             switch (item.bank_id) {
               case AccountConstants.ALPHA_BANK:
-                return require('../assets/banks/alfa.png');
+                return require('../../../finclient/src/assets/banks/alfa.png');
               case AccountConstants.SBER_BANK:
-                return require('../assets/banks/sber.png');
+                return require('../../../finclient/src/assets/banks/sber.png');
               case AccountConstants.VTB_BANK:
-                return require('../assets/banks/vtb.png');
+                return require('../../../finclient/src/assets/banks/vtb.png');
               case AccountConstants.MOSCOW_CREDIT_BANK:
-                return require('../assets/banks/mkb.png');
+                return require('../../../finclient/src/assets/banks/mkb.png');
               case AccountConstants.OTKRITIE_BANK:
-                return require('../assets/banks/otkrytie.png');
+                return require('../../../finclient/src/assets/banks/otkrytie.png');
               case AccountConstants.ROS_SEL_HOZ_BANK:
-                return require('../assets/banks/rshb.png');
+                return require('../../../finclient/src/assets/banks/rshb.png');
               case AccountConstants.SOVCOM_BANK:
-                return require('../assets/banks/sovcom.png');
+                return require('../../../finclient/src/assets/banks/sovcom.png');
               case AccountConstants.RAIFFAIZEN_BANK:
-                return require('../assets/banks/reiff.png');
+                return require('../../../finclient/src/assets/banks/reiff.png');
               case AccountConstants.TINKOFF_BANK:
-                return require('../assets/banks/tinkoff.png');
+                return require('../../../finclient/src/assets/banks/tinkoff.png');
               case AccountConstants.HOME_CREDIT_BANK:
-                return require('../assets/banks/home.png');
+                return require('../../../finclient/src/assets/banks/home.png');
               case AccountConstants.ROS_BANK:
-                return require('../assets/banks/rosbank.png');
+                return require('../../../finclient/src/assets/banks/rosbank.png');
               default:
                 return require('../assets/icons/wallet.svg')["default"];
             }
           case AccountConstants.BROKER_ACCOUNT:
             switch (item.bank_id) {
               case AccountConstants.ALPHA_BROKER:
-                return require('../assets/banks/alfa.png');
+                return require('../../../finclient/src/assets/banks/alfa.png');
               case AccountConstants.SBER_BROKER:
-                return require('../assets/banks/sber.png');
+                return require('../../../finclient/src/assets/banks/sber.png');
               case AccountConstants.VTB_BROKER:
-                return require('../assets/banks/vtb.png');
+                return require('../../../finclient/src/assets/banks/vtb.png');
               case AccountConstants.OTKRITIE_BROKER:
-                return require('../assets/banks/otkrytie.png');
+                return require('../../../finclient/src/assets/banks/otkrytie.png');
               case AccountConstants.TINKOFF_BROKER:
-                return require('../assets/banks/tinkoff.png');
+                return require('../../../finclient/src/assets/banks/tinkoff.png');
               case AccountConstants.BCS_BROKER:
-                return require('../assets/banks/bks.png');
+                return require('../../../finclient/src/assets/banks/bks.png');
               case AccountConstants.FINAM_BROKER:
-                return require('../assets/banks/finam.png');
+                return require('../../../finclient/src/assets/banks/finam.png');
               case AccountConstants.ATON_BROKER:
-                return require('../assets/banks/aton.png');
+                return require('../../../finclient/src/assets/banks/aton.png');
               case AccountConstants.ALOR_BROKER:
-                return require('../assets/banks/alor.png');
+                return require('../../../finclient/src/assets/banks/alor.png');
               case AccountConstants.FREEDOM_BROKER:
-                return require('../assets/banks/fridom.png');
+                return require('../../../finclient/src/assets/banks/fridom.png');
               default:
                 return require('../assets/icons/wallet.svg')["default"];
             }
@@ -625,67 +625,67 @@ var AccountConstants = exports["default"] = /*#__PURE__*/function () {
               case AccountConstants.ALPHA_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/alfa.png'),
+                  src: require('../../../finclient/src/assets/banks/alfa.png'),
                   alt: ""
                 });
               case AccountConstants.SBER_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/sber.png'),
+                  src: require('../../../finclient/src/assets/banks/sber.png'),
                   alt: ""
                 });
               case AccountConstants.VTB_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/vtb.png'),
+                  src: require('../../../finclient/src/assets/banks/vtb.png'),
                   alt: ""
                 });
               case AccountConstants.MOSCOW_CREDIT_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/mkb.png'),
+                  src: require('../../../finclient/src/assets/banks/mkb.png'),
                   alt: ""
                 });
               case AccountConstants.OTKRITIE_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/otkrytie.png'),
+                  src: require('../../../finclient/src/assets/banks/otkrytie.png'),
                   alt: ""
                 });
               case AccountConstants.ROS_SEL_HOZ_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/rshb.png'),
+                  src: require('../../../finclient/src/assets/banks/rshb.png'),
                   alt: ""
                 });
               case AccountConstants.SOVCOM_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/sovcom.png'),
+                  src: require('../../../finclient/src/assets/banks/sovcom.png'),
                   alt: ""
                 });
               case AccountConstants.RAIFFAIZEN_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/reiff.png'),
+                  src: require('../../../finclient/src/assets/banks/reiff.png'),
                   alt: ""
                 });
               case AccountConstants.TINKOFF_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/tinkoff.png'),
+                  src: require('../../../finclient/src/assets/banks/tinkoff.png'),
                   alt: ""
                 });
               case AccountConstants.HOME_CREDIT_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/home.png'),
+                  src: require('../../../finclient/src/assets/banks/home.png'),
                   alt: ""
                 });
               case AccountConstants.ROS_BANK:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/rosbank.png'),
+                  src: require('../../../finclient/src/assets/banks/rosbank.png'),
                   alt: ""
                 });
               default:
@@ -700,61 +700,61 @@ var AccountConstants = exports["default"] = /*#__PURE__*/function () {
               case AccountConstants.ALPHA_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/alfa.png'),
+                  src: require('../../../finclient/src/assets/banks/alfa.png'),
                   alt: ""
                 });
               case AccountConstants.SBER_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/sber.png'),
+                  src: require('../../../finclient/src/assets/banks/sber.png'),
                   alt: ""
                 });
               case AccountConstants.VTB_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/vtb.png'),
+                  src: require('../../../finclient/src/assets/banks/vtb.png'),
                   alt: ""
                 });
               case AccountConstants.OTKRITIE_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/otkrytie.png'),
+                  src: require('../../../finclient/src/assets/banks/otkrytie.png'),
                   alt: ""
                 });
               case AccountConstants.TINKOFF_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/tinkoff.png'),
+                  src: require('../../../finclient/src/assets/banks/tinkoff.png'),
                   alt: ""
                 });
               case AccountConstants.BCS_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/bks.png'),
+                  src: require('../../../finclient/src/assets/banks/bks.png'),
                   alt: ""
                 });
               case AccountConstants.FINAM_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/finam.png'),
+                  src: require('../../../finclient/src/assets/banks/finam.png'),
                   alt: ""
                 });
               case AccountConstants.ATON_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/aton.png'),
+                  src: require('../../../finclient/src/assets/banks/aton.png'),
                   alt: ""
                 });
               case AccountConstants.ALOR_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/alor.png'),
+                  src: require('../../../finclient/src/assets/banks/alor.png'),
                   alt: ""
                 });
               case AccountConstants.FREEDOM_BROKER:
                 return /*#__PURE__*/_react["default"].createElement("img", {
                   className: "bank",
-                  src: require('../assets/banks/fridom.png'),
+                  src: require('../../../finclient/src/assets/banks/fridom.png'),
                   alt: ""
                 });
               default:
