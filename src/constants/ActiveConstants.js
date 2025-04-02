@@ -1,4 +1,3 @@
-import React from 'react';
 import AccountConstants from "./AccountConstants";
 import Active from "../helpers/Active";
 import CurrencyConstants from "./CurrencyConstants";
@@ -1135,54 +1134,6 @@ export default class ActiveConstants
         return 'Ведение дел по страховому случаю в судебных органах';
       case ActiveConstants.INSURANCE_RISK_EXPENSES_INCURRED:
         return 'Расходы; произведенные страхователем в целях уменьшения убытков';
-    }
-  }
-
-
-  static getImage(item)
-  {
-    if (item)
-    {
-      switch (item.type_id)
-      {
-        case ActiveConstants.FLAT:
-          return <img className='flat' src={require('../assets/icons/house.svg').default}/>
-        case ActiveConstants.HOUSE:
-          return <img className='house' src={require('../assets/icons/renta.svg').default}/>
-        case ActiveConstants.CAR:
-          return <img className='car' src={require('../assets/icons/car.svg').default}/>
-        case ActiveConstants.MOTO:
-        case ActiveConstants.LAND:
-        case ActiveConstants.TECHNIC:
-        case ActiveConstants.JEWELRY:
-        case ActiveConstants.PERSONAL_TECHNIC:
-        case ActiveConstants.CUSTOM_PROPERTY:
-          return <img className='cash' src={require('../assets/icons/cash.svg').default}/>
-        case ActiveConstants.CAR_CREDIT:
-          return <img className='car' src={require('../assets/icons/car.svg').default}/>
-        case ActiveConstants.FLAT_CREDIT:
-          return <img className='flat' src={require('../assets/icons/house.svg').default}/>
-        case ActiveConstants.CREDIT:
-        case ActiveConstants.LOAN:
-        case ActiveConstants.ALIMONY:
-          return <img className='cash' src={require('../assets/icons/cash.svg').default}/>
-        case ActiveConstants.CUSTOM_OBLIGATION:
-          return <img className='cash' src={require('../assets/icons/cash.svg').default}/>
-        case ActiveConstants.CAR_INSURANCE:
-        case ActiveConstants.PROPERTY_INSURANCE:
-        case ActiveConstants.HEALTH_INSURANCE:
-        case ActiveConstants.VMI_INSURANCE:
-        case ActiveConstants.TRAVEL_INSURANCE:
-        case ActiveConstants.SPORT_INSURANCE:
-        case ActiveConstants.UNIT_LINKED_INSURANCE:
-        case ActiveConstants.LOSE_JOB_INSURANCE:
-        case ActiveConstants.RESPONSIBILITY_INSURANCE:
-        case ActiveConstants.PET_INSURANCE:
-        case ActiveConstants.CUSTOM_INSURANCE:
-          return <img className='cash' src={require('../assets/icons/shield.svg').default}/>
-        default:
-          return <img className='cash' src={require('../assets/icons/cash.svg').default}/>
-      }
     }
   }
 }

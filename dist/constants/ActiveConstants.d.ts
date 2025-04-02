@@ -342,5 +342,4 @@ export default class ActiveConstants {
      * @return {string}
      */
     static getRiskName(id: any): string;
-    static getImage(item: any): any;
 }

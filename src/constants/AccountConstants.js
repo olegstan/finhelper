@@ -1,4 +1,3 @@
-import React from 'react';
 import Money from '../helpers/Money'
 import ModelHelper from "../helpers/ModelHelper";
 import moment from "moment/moment";

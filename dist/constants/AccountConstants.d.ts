@@ -81,6 +81,4 @@ export default class AccountConstants {
         name: string;
     }[];
     static getVariantById(id: any): null;
-    static getSrc(item: any): any;
-    static getImage(item: any): any;
 }

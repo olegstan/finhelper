@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var _react = _interopRequireDefault(require("react"));
 var _AccountConstants = _interopRequireDefault(require("./AccountConstants"));
 var _Active = _interopRequireDefault(require("../helpers/Active"));
 var _CurrencyConstants = _interopRequireDefault(require("./CurrencyConstants"));
@@ -825,81 +824,6 @@ var ActiveConstants = exports["default"] = /*#__PURE__*/function () {
           return 'Ведение дел по страховому случаю в судебных органах';
         case ActiveConstants.INSURANCE_RISK_EXPENSES_INCURRED:
           return 'Расходы; произведенные страхователем в целях уменьшения убытков';
-      }
-    }
-  }, {
-    key: "getImage",
-    value: function getImage(item) {
-      if (item) {
-        switch (item.type_id) {
-          case ActiveConstants.FLAT:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "flat",
-              src: require('../assets/icons/house.svg')["default"]
-            });
-          case ActiveConstants.HOUSE:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "house",
-              src: require('../assets/icons/renta.svg')["default"]
-            });
-          case ActiveConstants.CAR:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "car",
-              src: require('../assets/icons/car.svg')["default"]
-            });
-          case ActiveConstants.MOTO:
-          case ActiveConstants.LAND:
-          case ActiveConstants.TECHNIC:
-          case ActiveConstants.JEWELRY:
-          case ActiveConstants.PERSONAL_TECHNIC:
-          case ActiveConstants.CUSTOM_PROPERTY:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "cash",
-              src: require('../assets/icons/cash.svg')["default"]
-            });
-          case ActiveConstants.CAR_CREDIT:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "car",
-              src: require('../assets/icons/car.svg')["default"]
-            });
-          case ActiveConstants.FLAT_CREDIT:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "flat",
-              src: require('../assets/icons/house.svg')["default"]
-            });
-          case ActiveConstants.CREDIT:
-          case ActiveConstants.LOAN:
-          case ActiveConstants.ALIMONY:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "cash",
-              src: require('../assets/icons/cash.svg')["default"]
-            });
-          case ActiveConstants.CUSTOM_OBLIGATION:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "cash",
-              src: require('../assets/icons/cash.svg')["default"]
-            });
-          case ActiveConstants.CAR_INSURANCE:
-          case ActiveConstants.PROPERTY_INSURANCE:
-          case ActiveConstants.HEALTH_INSURANCE:
-          case ActiveConstants.VMI_INSURANCE:
-          case ActiveConstants.TRAVEL_INSURANCE:
-          case ActiveConstants.SPORT_INSURANCE:
-          case ActiveConstants.UNIT_LINKED_INSURANCE:
-          case ActiveConstants.LOSE_JOB_INSURANCE:
-          case ActiveConstants.RESPONSIBILITY_INSURANCE:
-          case ActiveConstants.PET_INSURANCE:
-          case ActiveConstants.CUSTOM_INSURANCE:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "cash",
-              src: require('../assets/icons/shield.svg')["default"]
-            });
-          default:
-            return /*#__PURE__*/_react["default"].createElement("img", {
-              className: "cash",
-              src: require('../assets/icons/cash.svg')["default"]
-            });
-        }
       }
     }
   }]);
