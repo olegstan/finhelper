@@ -77,45 +77,51 @@ export default class Money
         return '∞';
       }
 
-      let strVal;
-      if (Math.abs(numberValue) < 1e-6 || Math.abs(numberValue) >= 1e15) {
-        // Для очень маленьких или очень больших чисел используем toFixed с максимальным количеством знаков
-        strVal = numberValue.toFixed(20).replace(/\.?0+$/, '');
-      } else {
-        // Для обычных чисел просто преобразуем в строку
-        strVal = numberValue.toString();
-      }
-
-      if (strVal.includes('e')) {
-        strVal = numberValue.toFixed(decimalCount);
-      }
-
-      // 3) Определяем знак и работаем с модулем числа
-      const negativeSign = numberValue < 0 ? "-" : "";
+      const isNegative = numberValue < 0;
       const absAmount = Math.abs(numberValue);
 
-      // Разделяем целую и дробную части
+      // 4) Преобразуем число в строку без экспоненциальной записи
+      let strVal;
+      if (absAmount < 1e-6 || absAmount >= 1e15) {
+        // Для очень маленьких или больших чисел
+        strVal = absAmount.toFixed(decimalCount);
+      } else {
+        // Для обычных чисел
+        strVal = absAmount.toString();
+      }
+
+      // Если все еще есть экспоненциальная запись
+      if (strVal.includes('e')) {
+        strVal = absAmount.toFixed(decimalCount);
+      }
+
+      // 5) Разделяем целую и дробную части
       let [intPart, fractionPart = ''] = strVal.split('.');
 
-      // 5) Обрезаем дробную часть до нужного количества знаков без округления
+      // 6) Обрезаем дробную часть
       if (fractionPart && decimalCount > 0) {
         fractionPart = fractionPart.substring(0, decimalCount);
       } else {
         fractionPart = '';
       }
 
-      // 6) Формируем группу тысяч в целой части
+      // 7) Формируем группу тысяч
       if (intPart.length > 3) {
         const j = intPart.length % 3;
-        intPart = (j ? intPart.slice(0, j) + thousands : '') + intPart.slice(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands);
+        intPart = (j ? intPart.slice(0, j) + thousands : '') +
+            intPart.slice(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands);
       }
 
-      // 7) Склеиваем результат: знак + целая часть + (точка + дробная часть) если есть
-      let result = negativeSign + intPart;
+      // 8) Собираем результат
+      let result = intPart;
       if (fractionPart && decimalCount > 0) {
         result += decimalSign + fractionPart;
       }
-      return result;
+
+      const isZero = parseFloat(result) === 0;
+
+      // Возвращаем результат с учетом знака (если не ноль)
+      return isZero ? '0' : (isNegative ? '-' : '') + result;
     } catch (e) {
       console.error(e);
       return '';
