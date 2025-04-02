@@ -45,24 +45,25 @@ export default class Money
   {
     try {
       // 1) Переводим входные данные в число
+      let numberValue;
       if (typeof amount === 'number') {
-        // Если уже число, переведём в строку для единообразия
-        amount = amount.toString();
-      }
-      if (typeof amount === 'string') {
+        numberValue = amount;
+      } else if (typeof amount === 'string') {
         // Заменяем запятые на точки, убираем лишние пробелы
-        amount = parseFloat(amount.replace(/,/g, '.').replace(/ /g, ''));
+        numberValue = parseFloat(amount.replace(/,/g, '.').replace(/ /g, ''));
+      } else {
+        numberValue = parseFloat(amount);
       }
 
       // 2) Спец. случаи
-      if (amount === '') {
+      if (numberValue === '') {
         return '';
       }
-      if (amount === 0) {
+      if (numberValue === 0) {
         // Явный ноль (считаем, что хотим вернуть "0" как строку)
         return '0';
       }
-      if (isNaN(amount)) {
+      if (isNaN(numberValue)) {
         // Ошибка, число не распарсилось
         try {
           throw new Error('Error number is NaN');
@@ -71,20 +72,30 @@ export default class Money
         }
         return '0';
       }
-      if (!isFinite(amount)) {
+      if (!isFinite(numberValue)) {
         // Бесконечность
         return '∞';
       }
 
-      // 3) Определяем знак и работаем с модулем числа
-      const negativeSign = amount < 0 ? "-" : "";
-      const absAmount = Math.abs(amount);
+      let strVal;
+      if (Math.abs(numberValue) < 1e-6 || Math.abs(numberValue) >= 1e15) {
+        // Для очень маленьких или очень больших чисел используем toFixed с максимальным количеством знаков
+        strVal = numberValue.toFixed(20).replace(/\.?0+$/, '');
+      } else {
+        // Для обычных чисел просто преобразуем в строку
+        strVal = numberValue.toString();
+      }
 
-      // 4) Преобразуем число в строку без автоматического округления
-      let strVal = absAmount.toString();
+      if (strVal.includes('e')) {
+        strVal = numberValue.toFixed(decimalCount);
+      }
+
+      // 3) Определяем знак и работаем с модулем числа
+      const negativeSign = numberValue < 0 ? "-" : "";
+      const absAmount = Math.abs(numberValue);
 
       // Разделяем целую и дробную части
-      let [intPart, fractionPart] = strVal.split('.');
+      let [intPart, fractionPart = ''] = strVal.split('.');
 
       // 5) Обрезаем дробную часть до нужного количества знаков без округления
       if (fractionPart && decimalCount > 0) {
@@ -101,7 +112,7 @@ export default class Money
 
       // 7) Склеиваем результат: знак + целая часть + (точка + дробная часть) если есть
       let result = negativeSign + intPart;
-      if (fractionPart) {
+      if (fractionPart && decimalCount > 0) {
         result += decimalSign + fractionPart;
       }
       return result;

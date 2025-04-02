@@ -231,24 +231,25 @@ _defineProperty(Money, "format", function (amount) {
   var thousands = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : " ";
   try {
     // 1) Переводим входные данные в число
+    var numberValue;
     if (typeof amount === 'number') {
-      // Если уже число, переведём в строку для единообразия
-      amount = amount.toString();
-    }
-    if (typeof amount === 'string') {
+      numberValue = amount;
+    } else if (typeof amount === 'string') {
       // Заменяем запятые на точки, убираем лишние пробелы
-      amount = parseFloat(amount.replace(/,/g, '.').replace(/ /g, ''));
+      numberValue = parseFloat(amount.replace(/,/g, '.').replace(/ /g, ''));
+    } else {
+      numberValue = parseFloat(amount);
     }
 
     // 2) Спец. случаи
-    if (amount === '') {
+    if (numberValue === '') {
       return '';
     }
-    if (amount === 0) {
+    if (numberValue === 0) {
       // Явный ноль (считаем, что хотим вернуть "0" как строку)
       return '0';
     }
-    if (isNaN(amount)) {
+    if (isNaN(numberValue)) {
       // Ошибка, число не распарсилось
       try {
         throw new Error('Error number is NaN');
@@ -257,23 +258,32 @@ _defineProperty(Money, "format", function (amount) {
       }
       return '0';
     }
-    if (!isFinite(amount)) {
+    if (!isFinite(numberValue)) {
       // Бесконечность
       return '∞';
     }
+    var strVal;
+    if (Math.abs(numberValue) < 1e-6 || Math.abs(numberValue) >= 1e15) {
+      // Для очень маленьких или очень больших чисел используем toFixed с максимальным количеством знаков
+      strVal = numberValue.toFixed(20).replace(/\.?0+$/, '');
+    } else {
+      // Для обычных чисел просто преобразуем в строку
+      strVal = numberValue.toString();
+    }
+    if (strVal.includes('e')) {
+      strVal = numberValue.toFixed(decimalCount);
+    }
 
     // 3) Определяем знак и работаем с модулем числа
-    var negativeSign = amount < 0 ? "-" : "";
-    var absAmount = Math.abs(amount);
-
-    // 4) Преобразуем число в строку без автоматического округления
-    var strVal = absAmount.toString();
+    var negativeSign = numberValue < 0 ? "-" : "";
+    var absAmount = Math.abs(numberValue);
 
     // Разделяем целую и дробную части
     var _strVal$split = strVal.split('.'),
       _strVal$split2 = _slicedToArray(_strVal$split, 2),
       intPart = _strVal$split2[0],
-      fractionPart = _strVal$split2[1];
+      _strVal$split2$ = _strVal$split2[1],
+      fractionPart = _strVal$split2$ === void 0 ? '' : _strVal$split2$;
 
     // 5) Обрезаем дробную часть до нужного количества знаков без округления
     if (fractionPart && decimalCount > 0) {
@@ -290,7 +300,7 @@ _defineProperty(Money, "format", function (amount) {
 
     // 7) Склеиваем результат: знак + целая часть + (точка + дробная часть) если есть
     var result = negativeSign + intPart;
-    if (fractionPart) {
+    if (fractionPart && decimalCount > 0) {
       result += decimalSign + fractionPart;
     }
     return result;
