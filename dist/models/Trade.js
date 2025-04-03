@@ -74,7 +74,7 @@ var Trade = exports["default"] = /*#__PURE__*/function (_BaseModel) {
   }], [{
     key: "getById",
     value: function getById(id, callback) {
-      _laravelRequest.Api.get('active-trade', 'index').setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('id', id).first(callback);
+      _laravelRequest.Api.get('active-trade', 'index').setDomain(process.env.REACT_APP_API_WHITESWAN_URL).where('id', id)["with"]('active', 'active.item').first(callback);
     }
   }]);
 }(_BaseModel2["default"]);

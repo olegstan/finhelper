@@ -61,6 +61,7 @@ export default class Trade extends BaseModel
     Api.get('active-trade', 'index')
       .setDomain(process.env.REACT_APP_API_WHITESWAN_URL)
       .where('id', id)
+      .with('active', 'active.item')
       .first(callback);
   }
 }
